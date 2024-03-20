@@ -22,6 +22,7 @@ export class HttpClient {
 
     async getById(endpoint: string, id?: number, options?: any): Promise<Response> {
         let url = `${this._baseUrl}/${endpoint}`;
+        console.log(id)
         if (id) {
             url = `${url}/${id}`;
         }
@@ -31,13 +32,34 @@ export class HttpClient {
         });
     }
 
+    async put(endpoint: string, body: any, options?: any): Promise<Response> {
+
+        const headers = this._buildHeaders(options)
+
+        const requestBody = options && options["Content-Type"] != "application/json" ? new URLSearchParams(body) : JSON.stringify(body);
+
+        console.log(`${this._baseUrl}/${endpoint}`);
+        console.log(headers);
+        console.log(requestBody);
+
+        return fetch(`${this._baseUrl}/${endpoint}`, {
+            method: "PUT",
+            body: requestBody,
+            headers: headers
+        });
+    }
+
     async post(endpoint: string, body: any, options?: any): Promise<Response> {
 
         const headers = this._buildHeaders(options)
 
         const requestBody = options && options["Content-Type"] != "application/json" ? new URLSearchParams(body) : JSON.stringify(body);
 
-        return fetch(`${this._baseUrl}${endpoint}`, {
+        console.log(`${this._baseUrl}/${endpoint}`);
+        console.log(headers);
+        console.log(requestBody);
+
+        return fetch(`${this._baseUrl}/${endpoint}`, {
             method: "POST",
             body: requestBody,
             headers: headers

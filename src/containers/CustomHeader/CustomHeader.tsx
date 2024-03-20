@@ -12,7 +12,7 @@ import { AuthService } from "../../services/AuthService";
 
 const authService = new AuthService();
 
-export default function CustomHeader() {
+export default function CustomHeader({children, ...style}: { children?: React.ReactNode, style?: {} }) {
   const router = useRouter();
   const [logged, setLogged] = useState<Boolean>(false);
   const [open, setOpen] = useState(false);
@@ -59,7 +59,7 @@ export default function CustomHeader() {
   }
 
   return (
-    <StyledHeader>
+    <StyledHeader {...style}>
       <Container>
 
 
@@ -68,11 +68,14 @@ export default function CustomHeader() {
 
             <BrandWrapper sx={{ flexGrow: 1 }}>
               <Logo />
+            {!!children?children:<></>}
             </BrandWrapper>
+
 
             {!logged ? <LoginRegisterButtons /> :
               <Row>
-                <UserNameColumn sx={{ width: "50vw" }}>
+                {/* <UserNameColumn sx={{ width: "50vw" }}> */}
+                <UserNameColumn >
                   <UserNameColumnText textAlign={"right"}>Olá,</UserNameColumnText>
 
                   {isLoading ?
@@ -89,7 +92,7 @@ export default function CustomHeader() {
                     {isLoading ?
                       <Skeleton variant="circular" width={45} height={45} /> : <StyledAvatar photoUrl={user?.photo} size={45} />}
                   </IconButton>
-                  {isLoading ? <Skeleton variant="text" sx={{ fontSize: '.8rem', width: "50%" }} /> : <AvatarText textAlign={"center"} marginRight="0">R$: {balance}</AvatarText>}
+                  {/* {isLoading ? <Skeleton variant="text" sx={{ fontSize: '.8rem', width: "50%" }} /> : <AvatarText textAlign={"center"} marginRight="0">R$: {balance}</AvatarText>} */}
                 </Column>
 
                 <Menu

@@ -19,6 +19,10 @@ import { BookmakerService } from "../services/BookmakerService";
 import { Column } from "../styles/shared-styles";
 import Bookmakers from "../containers/Bookmakers";
 import Divider from '@mui/material/Divider';
+import FAB, { FloatingButtonFAB } from "../components/Dropdown/Fab";
+
+import CasinoIcon from '@mui/icons-material/Casino';
+import { useRouter } from "next/router";
 
 const betService = new BetService();
 const genericService = new GenericService();
@@ -35,7 +39,7 @@ const Home: NextPage = () => {
   const { isLoading, error, data: mostRequested } = useQuery(['getGenericByPageAndSize',page,listSize,queryStr], 
   () => {return genericService.getGenericByPageAndSize(page,listSize,queryStr)});
   //const {data: bookmakers } = useQuery(['getBookmakers'], bookmakerService.getBookmakers);
-  
+  const { push } = useRouter();
 
   const seeMoreHandler = () => {
     setListSize(listSize + 5);
@@ -45,8 +49,14 @@ const Home: NextPage = () => {
     console.log(text.toUpperCase());
     if (text !== "") {
       setQueryStr(text.toUpperCase());
+    }else{
+      setQueryStr("");
     }
   };
+
+  const newMatch = () => {
+    push('create-match');
+  }
 
   return (
     <div>
@@ -60,6 +70,8 @@ const Home: NextPage = () => {
       <Container>
         <HomePageItem>
           <SearchBets
+
+          queryStr={queryStr}
           search={search}
           />
         </HomePageItem>
@@ -76,6 +88,9 @@ const Home: NextPage = () => {
             <RequestedGenerics requestedGenerics={mostRequested} size={listSize} page={page} queryStr={queryStr} />
             
           </Column>}
+        </HomePageItem>
+        <HomePageItem>
+        <FloatingButtonFAB/>
         </HomePageItem>
         {/* <HomePageItem
           title="Bookmakers"

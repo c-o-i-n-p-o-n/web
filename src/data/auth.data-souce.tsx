@@ -1,5 +1,6 @@
 import { Endpoints } from "../core/constants/endpoints";
 import { HttpClient } from "../core/http-client-adapter";
+import Bookmaker from "../models/Bookmaker";
 import { Credentials } from "../models/Credentials";
 import { User } from "../models/User";
 
@@ -21,7 +22,10 @@ export class AuthDataSource {
         }
     }
 
-    public async getUserById(id: number): Promise<User> {
+    public async getUserById(id?: number): Promise<User> {
+        if(id == null){
+            throw Error("User id is null.");
+        }
         const response = await this.http.getById(Endpoints.USERS, id);
         console.log(response);
         if (response.ok) {
@@ -29,6 +33,20 @@ export class AuthDataSource {
             return userResponse as User;
         } else {
             throw Error("Fail to fecth user data.");
+        }
+    }
+
+    public async getBookmakersById(id?: number): Promise<Bookmaker> {
+        if(id == null){
+            throw Error("Bookmaker id is null.");
+        }
+        const response = await this.http.getById(Endpoints.BOOKMAKERS, id);
+        console.log(response);
+        if (response.ok) {
+            const bookmakerResponse = await response.json();
+            return bookmakerResponse as Bookmaker;
+        } else {
+            throw Error("Fail to fecth bookmaker data.");
         }
     }
 

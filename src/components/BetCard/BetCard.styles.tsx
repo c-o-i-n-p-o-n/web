@@ -122,3 +122,13 @@ export const Odd = styled("div")({
 
 
 
+export const TypeButton = styled("a")({
+    color: "white",
+    background: '#6B61F5',
+    borderRadius: "15px",
+    padding: ".5rem",
+    margin: "5px"
+})
+
+
+

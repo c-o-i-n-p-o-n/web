@@ -24,11 +24,11 @@ const SignupForm = () => {
             .required("Nome obrigatório."),
         lastName: yup
             .string()
-            .required("Sobrenome obrigatório.")
-            .test("cpf-test", "CPF inválido", (_value) => true),
+            .required("Sobrenome obrigatório."),
         cpf: yup
             .string()
-            .required("CPF obrigatório."),
+            .required("CPF obrigatório.")
+            .test("cpf-test", "CPF inválido", (_value) => true),
         birthDate: yup
             .date()
             .required("Data de nascimento obrigatória."),

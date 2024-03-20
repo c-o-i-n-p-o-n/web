@@ -4,9 +4,10 @@ import Search from "@mui/icons-material/Search";
 import { ISearchProps } from "../types/SearchProps";
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useState } from "react";
 
 export default function SearchBets(props: ISearchProps) {
-  
+  //const [queryStr, setQueryStr]  = useState(props.queryStr);
   const SearchInput = styled(TextField)({
     display: "flex",
     justifyContent: "space-between",
@@ -27,11 +28,10 @@ export default function SearchBets(props: ISearchProps) {
     },
   });
 
-  let queryStr:string;
-
+  let queryStr:string | undefined=props.queryStr;
   
   const onTextChange = (e: React.ChangeEvent<HTMLInputElement>  ) => {
-    queryStr = e.target.value;
+    queryStr = e.target.value
   };
 
   const onKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -44,9 +44,10 @@ export default function SearchBets(props: ISearchProps) {
     <ThemeProvider theme={theme}>
       <SearchInput
         id="outlined-basic"
-        placeholder="Busque matches e bookmakers"
+        placeholder={props.placeHolder || "Busque vale cupons, apostas, eventos, etc"}
         variant="outlined"
         onKeyUp={onKeyUp}
+        defaultValue={queryStr}
         onChange={onTextChange}
         sx={{ input: { color: "#ffffff" }, outline: { color: "#ffffff" }, background: "linear-gradient(108.8deg, rgba(255, 255, 255, 0.2) 14.74%, rgba(0, 0, 0, 0) 97.96%)", borderRadius: '25px 25px', }}
         InputProps={{

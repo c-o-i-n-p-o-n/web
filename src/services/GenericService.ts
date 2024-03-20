@@ -13,5 +13,11 @@ export class GenericService  {
         return this.genericDataSource.getGenericByPageAndSize(page,size,query);
     }
 
+    public async getGenericByEventPageAndSize(eventId:number, page: number, size: number, query?:String): Promise<Generic[]>{
+        //return new Promise(resolve => setTimeout(() => {
+        //    resolve([{ id: 1, description: "description" } as Generic]);
+        //}, 3000));
+        return this.genericDataSource.getGenericByEventPageAndSize(eventId,page,size,query);
+    }
 
 }

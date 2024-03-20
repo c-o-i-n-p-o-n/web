@@ -2,6 +2,7 @@ import {styled, Typography} from "@mui/material";
 import MostRequestedMatchCard from "../components/BetCard/BetCard";
 import { Types } from "../core/constants/types";
 import { Generic } from "../models/Generic";
+import MostRequestedEventCard from "../components/EventCard/EventCard";
 
 interface RequestedGenericsProps {
     requestedGenerics?: Array<Generic>;
@@ -24,6 +25,9 @@ function RequestedGenerics({requestedGenerics, size, page, queryStr}: RequestedG
                     console.log(genericItem)
                     if(genericItem.type == Types.MATCHES){
                         return <MostRequestedMatchCard key={index} match={genericItem}/>
+                    }
+                    if(genericItem.type == Types.EVENTS){
+                        return <MostRequestedEventCard key={index} event={genericItem}/>
                     }
                 })}
             </StyledBetsList> : <div><Typography sx={{color:"white", textAlign: "center", marginTop: "10vh", marginBottom: "10vh"}}>nenhuma resultado disponível</Typography></div>

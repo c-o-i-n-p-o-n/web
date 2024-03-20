@@ -1,6 +1,6 @@
 export default interface Option  {
   id: number;
-  name: string;
+  hid: string;
   description: string;
   createdAt: Date;
   status: number;

@@ -16,6 +16,15 @@ export const Row = styled.div<{ width?: string }>(props => ({
     width: props.width
 }));
 
+export const RowFlex = styled.div<{ width?: string }>(props => ({
+    display: "flex",
+    
+    flexDirection: "row",
+    width: props.width,
+    justifyContent: "space-between"
+}));
+
+
 export const SpaceBetweenRow = styled(Row)({
     justifyContent: "space-between",
 });

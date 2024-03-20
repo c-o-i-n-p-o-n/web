@@ -91,7 +91,7 @@ export default function Login() {
         if (useSecurityStore.getState().logged) {
           router.push("/");
         } else {
-          setErrorMessage("AJEITAR ISSO!")
+          setErrorMessage("Erro interno")
         }
       })
       .catch((err) => setErrorMessage(err.error_description))
