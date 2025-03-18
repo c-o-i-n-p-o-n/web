@@ -38,6 +38,29 @@ export const StyledTypographyData = styled(Typography)({
     paddingLeft: "20px"
 });
 
+export const StyledButton = styled(IconButton)({
+    display: "flex",
+    color: "white",
+    flexDirection: "column",
+    ".form-field": {
+        margin: "1vh 0"
+    },
+    ".submit-button-terms": {
+        margin: "2vh 0",
+    },
+    //background: "#370365",
+    borderRadius: "50px",
+
+
+
+
+    fontSize: "16px",
+
+    fontWeight: "bold",
+
+
+})
+
 export const StyledCardContentHeader = styled(CardContent)({
     backgroundColor: '#1A1A1A',
     padding: "0 16px",
@@ -129,3 +152,6 @@ export const TypeButton = styled("a")({
     padding: ".5rem",
     margin: "5px"
 })
+
+
+

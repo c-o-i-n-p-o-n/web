@@ -27,7 +27,7 @@ export class AuthDataSource {
             throw Error("User id is null.");
         }
         const response = await this.http.getById(Endpoints.USERS, id);
-        console.log(response);
+        //console.log(response);
         if (response.ok) {
             const userResponse = await response.json();
             return userResponse as User;
@@ -41,7 +41,7 @@ export class AuthDataSource {
             throw Error("Bookmaker id is null.");
         }
         const response = await this.http.getById(Endpoints.BOOKMAKERS, id);
-        console.log(response);
+        //console.log(response);
         if (response.ok) {
             const bookmakerResponse = await response.json();
             return bookmakerResponse as Bookmaker;

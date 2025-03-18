@@ -18,7 +18,7 @@ import {
     StyledTypographyTitle,
     StyledTypographyData,
     TypeButton
-} from "./BetCard.styles";
+} from "./FullMatchCard.styles";
 import { Column, Row } from "../../styles/shared-styles";
 import { Generic } from "../../models/Generic";
 import { MatchService } from "../../services/MatchService";
@@ -26,10 +26,12 @@ import { useQuery } from "react-query";
 import { format } from "date-fns";
 import { StyledAvatar } from "../StyledAvatar/StyledAvatar";
 import Option from "../../models/Option";
+import Match from "../../models/Match";
 
 
 interface MatchCardProps {
-    match: Generic
+    match: Match;
+    key: number;
 }
 
 const TitleOdd = ({options, ...style}: { options?: Option[], style?: {} }) => {
@@ -89,13 +91,13 @@ const DescriptionOdd = ({description, name, odd, ...style}: { description: strin
     );
 }
 
-const betService = new MatchService();
+//const betService = new MatchService();
 
-export default function MostRequestedBetCard({match}: MatchCardProps) {
+export default function FullMatchCard({match}: MatchCardProps) {
 
     const [expanded, setExpanded] = useState(false);
 
-    const {id, name, description, photo} = match;
+    const {id, hid, description, expiredAt, options, score, status, currencies, events } = match;
 
     const convertdate = (myDate?:Date) => {
         return !!myDate ? format(myDate, "'finaliza ' dd/MM/yyyy', às' H:mm"): ""
@@ -104,22 +106,22 @@ export default function MostRequestedBetCard({match}: MatchCardProps) {
     
 
     //mostRequested: { createdAt, expiredAt, options }
-    const { isLoading, error, data } = useQuery(['getMatchById',id], () => {return betService.getMatchById(id);});
-    console.log(data)
+    //const { isLoading, error, data } = useQuery(['getMatchById',id], () => {return betService.getMatchById(id);});
+    //console.log(data)
 
-    var expiredAt:Date | undefined = data?.events?.beginningAt ;
+    var expiredAtVar:Date | undefined = events?.beginningAt ;
 
-    if(typeof expiredAt == 'string'){
-        expiredAt = new Date(expiredAt)
+    if(typeof expiredAtVar == 'string'){
+        expiredAtVar = new Date(expiredAtVar)
     }
     
-    console.log(typeof expiredAt)
-    if(!!expiredAt && !!data?.expiredAt){
-        console.log(typeof expiredAt)
-        let expiredAtAux = data?.expiredAt
+    console.log(typeof expiredAtVar)
+    if(!!expiredAtVar){
+        console.log(typeof expiredAtVar)
+        let expiredAtAux = expiredAt
         console.log(expiredAtAux)
         if(!!expiredAtAux)
-            expiredAt.setMilliseconds(expiredAt.getUTCMilliseconds() - (expiredAtAux))
+            expiredAtVar.setMilliseconds(expiredAtVar.getUTCMilliseconds() - (expiredAtAux))
     }
 
     const handleExpandClick = () => {
@@ -129,17 +131,17 @@ export default function MostRequestedBetCard({match}: MatchCardProps) {
     return (
         <StyledCard>
             <StyledCardContentHeader onClick={handleExpandClick}>
-                    <TypeButton href={`/match-created?matchId=${id}`}>
-                        {"Apostar"}
+                    <TypeButton href={`/match-stats-view?matchId=${id}`}>
+                        {"Estatísticas"}
                     </TypeButton>
                 <HeaderButton>
                     {/* <SportsVolleyballOutlinedIcon style={{backgroundColor: "#6B61F5", borderRadius: "20px", fontSize: "35px", padding: "5px", color: "white"}}></SportsVolleyballOutlinedIcon> */}
                     
                     
-                    <StyledAvatar photoUrl={data?.logo} size={35} name={!!data?.hid?data.hid[0]:"M"} />
+                    <StyledAvatar photoUrl={events?.logo} size={35} name={!!hid?hid[0]:"M"} />
                     <Column>
                         <StyledTypographyTitle variant="body2">
-                            {data?.hid}
+                            {hid}
                         </StyledTypographyTitle>
                     </Column>
                     <EventTimeAndExpandMore>
@@ -157,13 +159,13 @@ export default function MostRequestedBetCard({match}: MatchCardProps) {
             {
                     <Collapse in={expanded} timeout="auto" unmountOnExit>
                         <StyledTypographyData paragraph={true}>
-                            {data?.description}
+                            {description}
                         </StyledTypographyData>
                         <StyledTypographyData>
-                            { convertdate(expiredAt) }
+                            { convertdate(expiredAtVar) }
                         </StyledTypographyData>
                         <BodyCardContent>
-                        {!!data && !!data.options ? data.options.map(({id, hid, description, odd}) => {
+                        {!!options ? options.map(({id, hid, description, odd}) => {
                                             return (
                                                 <DescriptionOdd
                                                     key={id}
@@ -171,7 +173,7 @@ export default function MostRequestedBetCard({match}: MatchCardProps) {
                                                         marginBottom: '5px'
                                                     }}
                                                     description={description}
-                                                    name={name}
+                                                    name={hid}
                                                     odd={odd}/>
                                             )
                                         }) : null}
@@ -184,7 +186,7 @@ export default function MostRequestedBetCard({match}: MatchCardProps) {
                     style={{
                         marginBottom: '5px'
                     }}
-                    options={data?.options}/>
+                    options={options}/>
             </BodyCardContent>
         </StyledCard>
     );

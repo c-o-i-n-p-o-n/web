@@ -1,0 +1,229 @@
+import type { NextPage } from "next";
+import Head from "next/head";
+
+import CustomHeader from "../containers/CustomHeader/CustomHeader";
+
+import Container from "@mui/material/Container";
+
+import HomePageItem from "../components/HomePageItem";
+import Match from "../models/Match";
+
+import { CircularProgress } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
+import CenteredComponent from "../components/CenteredComponent";
+import { BetService } from "../services/BetService";
+import { BookmakerService } from "../services/BookmakerService";
+import { MatchService } from "../services/MatchService";
+import { AuthService } from "../services/AuthService";
+import { Column } from "../styles/shared-styles";
+import Bookmakers from "../containers/Bookmakers";
+import Divider from '@mui/material/Divider';
+import FAB, { FloatingButtonFAB } from "../components/Dropdown/Fab";
+
+import CasinoIcon from '@mui/icons-material/Casino';
+import { useRouter } from "next/router";
+import ItemProperty from "../components/ItemProperty";
+import AvatarImage from "../components/AvatarImage";
+import PromoImage from "../components/PromoImage";
+import ShareButtons from "../components/ShareButtons";
+import ServerError from "../models/ServerError";
+import Alert from "../components/Alert/Alert";
+import Currency from "../models/Currency";
+import Bet from "../models/Bet";
+import { CurrencyService } from "../services/CurrencyService";
+import RequestedMatches from "../containers/RequestedMatches";
+import RequestedCurrencies from "../containers/RequestedCurrencies";
+import RequestedBets from "../containers/RequestedBets";
+
+const bookmakerService = new BookmakerService();
+const authService = new AuthService();
+const matchService = new MatchService();
+const betService = new BetService();
+const currencyService = new CurrencyService();
+
+const Balances: NextPage = () => {
+
+
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+
+  const [matchListSize, setMatchListSize] = useState(5);
+  const [matchPage, setMatchPage] = useState(0);
+
+  const [currencyListSize, setCurrencyListSize] = useState(5);
+  const [currencyPage, setCurrencyPage] = useState(0);
+
+  const [myCurrencyListSize, setMyCurrencyListSize] = useState(5);
+  const [myCurrencyPage, setMyCurrencyPage] = useState(0);
+
+  const [betListSize, setBetListSize] = useState(5);
+  const [betPage, setBetPage] = useState(0);
+  
+  const { isLoading: isLoadingMatches, error: matchError, data: mostRequestedMatches } = 
+    useQuery(['getMatchs',matchPage,matchListSize], 
+    () => {return matchService.getMatchs(matchPage,matchListSize)});
+  
+  const { isLoading: isLoadingMyCurrencies, error: myCurrencyError, data: mostRequestedMyCurrencies } = 
+    useQuery(['getMyCurrencies',myCurrencyPage,myCurrencyListSize], 
+    () => {return currencyService.getMyCurrencies(myCurrencyPage,myCurrencyListSize)});
+  
+  const { isLoading: isLoadingCurrencies, error: currencyError, data: mostRequestedCurrencies } = 
+    useQuery(['getCurrencies',currencyPage,currencyListSize], 
+    () => {return currencyService.getCurrencies(currencyPage,currencyListSize)});
+  
+  const { isLoading: isLoadingBets, error: betError, data: mostRequestedBets } = 
+    useQuery(['getMyBets',betPage,betListSize], 
+    () => {return betService.getBets(betPage,betListSize)});
+
+  //const router = useRouter();
+  const { push } = useRouter();
+  
+  const [logged, setLogged] = useState<Boolean>(authService.isLogged);
+
+  //const loading = !!!match;
+  //const matchId = Number(query.matchId)
+  
+  const { isLoading, error, data: bookmaker, isSuccess } = useQuery(['getBookmaker'], authService.getBookmaker);
+
+  
+  useEffect(() => {
+    setLogged(authService.isLogged);
+    }, [authService.isLogged, bookmaker]);
+
+    if(!logged && !isLoading && (!!isSuccess || !!error)){
+        push('login')
+    }
+
+  //const owner = match?.bookmaker?.id === bookmaker?.id;
+  
+
+  useEffect(() => {
+    setLogged(authService.isLogged);
+  }, [authService.isLogged, bookmaker]);
+
+  const discountCurrency = (id: number) => {
+    push({ pathname: "discount-currency", query: { currencyId: id }} );
+  }
+
+  const rescueCurrency = (id: number) => {
+    push({ pathname: "rescue-currency", query: { currencyId: id }} );
+  }
+
+  const finalizeBet = (id: number) => {
+    push({ pathname: "finalize-bet", query: { currencyId: id }} );
+  }
+
+  const seeMoreMatchesHandler = () => {
+    setMatchListSize(matchListSize + 5);
+  };
+
+  const seeMoreCurrenciesHandler = () => {
+    setCurrencyListSize(currencyListSize + 5);
+  };
+
+  const seeMoreMyCurrenciesHandler = () => {
+    setMyCurrencyListSize(myCurrencyListSize + 5);
+  };
+
+  const seeMoreBetsHandler = () => {
+    setBetListSize(betListSize + 5);
+  };
+
+  return (
+    <div>
+      <Head>
+        <title>{bookmaker?.hid}</title>
+        <meta name="description" content="Generated by create next app" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <CustomHeader />
+      {isLoading ? <CenteredComponent>
+            <CircularProgress />
+          </CenteredComponent> :
+          <Container>
+
+            <HomePageItem
+            //title="Matches"
+            showSeeMore
+            seeMoreHandler={seeMoreMatchesHandler}
+            >
+          {isLoadingMatches ? <CenteredComponent>
+            <CircularProgress />
+          </CenteredComponent> : 
+          <Column>
+            <RequestedMatches requested={mostRequestedMatches} size={matchListSize} page={matchPage} />
+            
+          </Column>}
+        </HomePageItem >
+          <HomePageItem 
+            showSeeMore
+            seeMoreHandler={seeMoreMyCurrenciesHandler}>
+                {isLoadingMyCurrencies ? <CenteredComponent>
+            <CircularProgress />
+            </CenteredComponent> : 
+            <Column>
+                <RequestedCurrencies setErrorMessage={setErrorMessage} requested={mostRequestedMyCurrencies} size={myCurrencyListSize} page={myCurrencyPage} />
+                
+            </Column>}
+          </HomePageItem>
+          <HomePageItem 
+            showSeeMore
+            seeMoreHandler={seeMoreCurrenciesHandler}>
+                {isLoadingCurrencies ? <CenteredComponent>
+            <CircularProgress />
+            </CenteredComponent> : 
+            <Column>
+                <RequestedCurrencies setErrorMessage={setErrorMessage} requested={mostRequestedCurrencies} size={currencyListSize} page={currencyPage} />
+                
+            </Column>}
+          </HomePageItem>
+          <HomePageItem 
+            showSeeMore
+            seeMoreHandler={seeMoreBetsHandler}>
+                {isLoadingBets ? <CenteredComponent>
+            <CircularProgress />
+            </CenteredComponent> : 
+            <Column>
+                <RequestedBets requested={mostRequestedBets} size={betListSize} page={betPage} />
+                
+            </Column>}
+          </HomePageItem>
+          <HomePageItem>
+            {/* <MatchLink/> com botão de compartilhamento*/}
+          </HomePageItem>
+          <HomePageItem>
+            {/* <MatchQRCode/> com botão de compartilhamento*/}
+          </HomePageItem>
+          <HomePageItem>
+            {/* <MatchStatistics/> com botão de compartilhamento*/}
+          </HomePageItem>
+          <Alert type="success" show={!!successMessage} closeAll={()=> setSuccessMessage("")}>
+              <p>{successMessage}</p>
+          </Alert>
+          <Alert type="error" show={!!errorMessage} closeAll={()=> setErrorMessage("")}>
+              <p>{errorMessage}</p>
+          </Alert>
+  
+          <HomePageItem>
+          <FloatingButtonFAB/>
+          </HomePageItem>
+          {/* <HomePageItem
+            title="Bookmakers"
+            showSeeMore
+            seeMoreHandler={seeMoreHandler}
+          >
+          <Bookmakers bookmakers={bookmakers} size={listSize}></Bookmakers>
+          </HomePageItem> */}
+        </Container>
+        }
+      
+
+      {/* <CreateBet/> */}
+    </div>
+  );
+};
+
+export default Balances;

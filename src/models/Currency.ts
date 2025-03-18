@@ -2,7 +2,7 @@ import Bookmaker from "./Bookmaker";
 
 
 export default interface Currency {
-  id?: number;
+  id: number;
   acronym: string;
   description: string;
   logo?: string;
@@ -11,5 +11,7 @@ export default interface Currency {
   expiredAt?: number;
   type?: number;
   maxAmount?: number;	
+  validAmount?: number;	
+  expiredAmount?: number;	
   isOwner?: boolean
 }

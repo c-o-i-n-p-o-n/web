@@ -6,6 +6,40 @@ import {MatchCreation} from "../models/MatchCreation";
 export class MatchDataSource {
 
     private http: HttpClient = new HttpClient();
+    
+    public async getMatchs(page: number, size: number): Promise<Match[]> {
+        let params:any = {page:page, size:size};
+        
+        console.log(params);
+        const response = await this.http.get(Endpoints.MATCHES_MY, params);
+        if (response.ok) {
+            const matchsResponse = await response.json();
+            console.log(matchsResponse);
+            if(!!matchsResponse["_embedded"] && !!matchsResponse["_embedded"]["matches"]){
+                console.log(matchsResponse["_embedded"]["matches"]);
+                return matchsResponse["_embedded"]["matches"] as Match[];
+            }else{
+                return [];
+            }
+        } else {
+            throw Error(response.statusText);
+        }
+    }
+
+    public async getMatchByOptionId(optionId: number): Promise<Match> {
+        console.log(optionId)
+        const response = await this.http.getById(Endpoints.MATCHES_OPTION, optionId);
+        if (response.ok) {
+            const matchResponse = await response.json();
+            console.log(matchResponse);
+            //matchResponse["expiredAt"] = matchResponse["expiredAt"]?new Date(matchResponse["expiredAt"]).getDate():null;
+            matchResponse["createdAt"] = matchResponse["createdAt"]?new Date(matchResponse["createdAt"]).getDate():null;
+            console.log(matchResponse);
+            return matchResponse as Match;
+        } else {
+            throw Error(response.statusText);
+        }
+    }
 
     public async getMatchById(id: number): Promise<Match> {
         console.log(id)

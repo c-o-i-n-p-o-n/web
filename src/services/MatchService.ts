@@ -11,6 +11,11 @@ export class MatchService {
         return await this.matchDataSource.getMatchById(id);
     }
 
+    public async getMatchByOptionId(optionId: number): Promise<Match> {
+        console.log(optionId)
+        return await this.matchDataSource.getMatchByOptionId(optionId);
+    }
+
     public async createMatch(match: MatchCreation): Promise<Match> {
         return this.matchDataSource.createMatch(match);
     };
@@ -23,4 +28,9 @@ export class MatchService {
         }
         return this.matchDataSource.updateMatch(matchCreation);
     };
+    
+    public async getMatchs(page: number, size: number): Promise<Match[]> {
+        console.log(page)
+        return this.matchDataSource.getMatchs(page, size);
+    }
 }

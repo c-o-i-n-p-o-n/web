@@ -127,7 +127,7 @@ const CreateVoucherForm = () => {
           return undefined;
         }
         const fetchCurrencies = async () => {
-            setCurrencies(await currencyService.getMyCurrencies(currencyQueryStr));
+            setCurrencies(await currencyService.getCurrenciesWithFunds(currencyQueryStr));
             console.log(currencies);
         }
 

@@ -129,3 +129,6 @@ export const TypeButton = styled("a")({
     padding: ".5rem",
     margin: "5px"
 })
+
+
+

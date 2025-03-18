@@ -4,6 +4,27 @@ import useSecurityStore from "../stores/SecurityStore";
 export class HttpClient {
 
     private _baseUrl = process.env.NEXT_PUBLIC_API_URL;
+    private _uRL = process.env.NEXT_PUBLIC_BASE_URL;
+
+    getFullUrl(uRL: string, params?: any): string {
+        let uRLAux = `${this._uRL}/${uRL}`;
+        //console.log(uRLAux)
+        //console.log(params)
+        if (!!params) {
+            let pair:string|null = null;
+            Object.entries(params).forEach(([key, value]) => {
+                if(!pair){
+                    pair = `?${key}=${value}`;
+                }else{
+                    pair = `${pair}&${key}=${value}`;
+                }
+                uRLAux = `${uRLAux}/${pair}`;
+                //console.log(`${key} ${value}`);
+            });
+            //console.log(uRLAux);
+        }
+        return uRLAux;
+    }
 
     async get(endpoint: string, params?: any, options?: any): Promise<Response> {
         let url = `${this._baseUrl}/${endpoint}`;
@@ -11,7 +32,7 @@ export class HttpClient {
             for (const property in params) {
                 url = `${url}/${params[property]}`;
             }
-            console.log(url);
+            //console.log(url);
         }
 
         return fetch(url, {
@@ -22,7 +43,7 @@ export class HttpClient {
 
     async getById(endpoint: string, id?: number, options?: any): Promise<Response> {
         let url = `${this._baseUrl}/${endpoint}`;
-        console.log(id)
+        //console.log(id)
         if (id) {
             url = `${url}/${id}`;
         }
@@ -38,9 +59,9 @@ export class HttpClient {
 
         const requestBody = options && options["Content-Type"] != "application/json" ? new URLSearchParams(body) : JSON.stringify(body);
 
-        console.log(`${this._baseUrl}/${endpoint}`);
-        console.log(headers);
-        console.log(requestBody);
+        //console.log(`${this._baseUrl}/${endpoint}`);
+        //console.log(headers);
+        //console.log(requestBody);
 
         return fetch(`${this._baseUrl}/${endpoint}`, {
             method: "PUT",
@@ -55,9 +76,9 @@ export class HttpClient {
 
         const requestBody = options && options["Content-Type"] != "application/json" ? new URLSearchParams(body) : JSON.stringify(body);
 
-        console.log(`${this._baseUrl}/${endpoint}`);
-        console.log(headers);
-        console.log(requestBody);
+        //console.log(`${this._baseUrl}/${endpoint}`);
+        //console.log(headers);
+        //console.log(requestBody);
 
         return fetch(`${this._baseUrl}/${endpoint}`, {
             method: "POST",
@@ -111,12 +132,12 @@ export class HttpClient {
     async _refreshToken() {
         const authStorageString = window.localStorage.getItem("auth_store");
         
-        console.log(authStorageString);
-        console.log(!!authStorageString ? JSON.parse(authStorageString).state:null);
+        //console.log(authStorageString);
+        //console.log(!!authStorageString ? JSON.parse(authStorageString).state:null);
 
         const refreshToken = !!authStorageString ? JSON.parse(authStorageString).state.refreshToken : null;
         
-        console.log(refreshToken)
+        //console.log(refreshToken)
         if(!!refreshToken){
             const expiresIn = !!authStorageString ? JSON.parse(authStorageString).state.expiresIn : null;
             if(!expiresIn || expiresIn < Date.now()){

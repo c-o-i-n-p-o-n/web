@@ -1,5 +1,5 @@
 import {styled, Typography} from "@mui/material";
-import MostRequestedBetCard from "../components/BetCard/BetCard";
+import MostRequestedBetCard from "../components/MatchCard/FullMatchCard";
 import Bet from "../models/Bet";
 
 interface MostRequestedBetsProps {

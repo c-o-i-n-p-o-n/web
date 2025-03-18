@@ -30,7 +30,7 @@ export class AuthService implements IAuthService {
     if (useSecurityStore.getState().logged) {
       const token = useSecurityStore.getState().token;
       const decoded = jwt_decode(token || "") as any;
-      console.log(decoded["bookmakers_id"]);
+      //console.log(decoded["bookmakers_id"]);
       return dataSource.getBookmakersById(useSecurityStore.getState().bookmakersId);
     }
     return Promise.resolve(null);

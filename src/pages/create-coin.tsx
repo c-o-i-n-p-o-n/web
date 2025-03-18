@@ -285,7 +285,8 @@ const CreateCoinForm = () => {
                         name="minAmount"
                         key="minAmount"
                         id="minAmount"
-                        placeholder="Limite mínimo de saldo por usuário? (aceitar saldo negativo é útil para promover apostas valendo cumpons)"
+                        // placeholder="Limite mínimo de saldo por usuário? (aceitar saldo negativo é útil para promover apostas valendo cumpons)"
+                        placeholder="Limite mínimo de saldo por usuário? (aceitar saldo negativo só é seguro para clientes conhecidos)"
                         className="form-field"
                         variant="outlined"
                         error={formik.touched.minAmount && Boolean(formik.errors.minAmount)}
@@ -293,7 +294,7 @@ const CreateCoinForm = () => {
                         onChange={(event: any)=>{formik.values.minAmount = (event.target.value as unknown) as number || 1}}
                         defaultValue={"placeholder"}
                         >
-                            <MenuItem disabled value={"placeholder"}>Saldo negativo é útil para promover apostas valendo cumpons</MenuItem>
+                            <MenuItem disabled value={"placeholder"}>Saldo negativo só é seguro para clientes conhecidos</MenuItem>
                             <MenuItem value={0}>Não</MenuItem>
                             <MenuItem value={-1}>Sim, de menos um cupom</MenuItem>
                             <MenuItem value={-2}>Sim, de menos dois cupons</MenuItem>

@@ -1,11 +1,17 @@
 import { Endpoints } from "../core/constants/endpoints";
 import { HttpClient } from "../core/http-client-adapter";
+import Bookmaker from "../models/Bookmaker";
+import Capsule from "../models/Capsule";
 import Currency from "../models/Currency";
 import CurrencyCreation from "../models/CurrencyCreation";
 
 export class CurrenciesDataSource {
 
     private http: HttpClient = new HttpClient();
+
+    public getURLRescue(currency: Currency, bookmaker: Bookmaker, amount: Number) {
+        return this.http.getFullUrl(Endpoints.CURRENCY_CHECK_RESCUE,{currency:currency.id, bookmaker:bookmaker.id, amount:amount});
+    }
 
     public async getCurrencyByVoucherId(voucherId: number): Promise<Currency> {
         console.log(voucherId)
@@ -16,6 +22,42 @@ export class CurrenciesDataSource {
             currencyResponse["createdAt"] = currencyResponse["createdAt"]?new Date(currencyResponse["createdAt"]).getDate():null;
             console.log(currencyResponse);
             return currencyResponse as Currency;
+        } else {
+            throw Error(response.statusText);
+        }
+    }
+
+    public async getCurrencies(page: number, size: number): Promise<Currency[]> {
+        let params:any = {page:page, size:size};
+        console.log(params);
+        const response = await this.http.get(Endpoints.CURRENCIES_ME_FILTER, params);
+        if (response.ok) {
+            const currenciesResponse = await response.json();
+            console.log(currenciesResponse);
+            if(!!currenciesResponse["_embedded"] && !!currenciesResponse["_embedded"]["currencies"]){
+                console.log(currenciesResponse["_embedded"]["currencies"]);
+                return currenciesResponse["_embedded"]["currencies"] as Currency[];
+            }else{
+                return [];
+            }
+        } else {
+            throw Error(response.statusText);
+        }
+    }
+
+    public async getMyCurrencies(page: number, size: number): Promise<Currency[]> {
+        let params:any = {page:page, size:size};
+        console.log(params);
+        const response = await this.http.get(Endpoints.CURRENCIES_MY_FILTER, params);
+        if (response.ok) {
+            const currenciesResponse = await response.json();
+            console.log(currenciesResponse);
+            if(!!currenciesResponse["_embedded"] && !!currenciesResponse["_embedded"]["currencies"]){
+                console.log(currenciesResponse["_embedded"]["currencies"]);
+                return currenciesResponse["_embedded"]["currencies"] as Currency[];
+            }else{
+                return [];
+            }
         } else {
             throw Error(response.statusText);
         }
@@ -37,6 +79,53 @@ export class CurrenciesDataSource {
             }else{
                 return [];
             }
+        } else {
+            throw Error(response.statusText);
+        }
+    }
+
+    public async getMaxAmountByCurrencyId(id: number): Promise<number> {
+        console.log(id)
+        const response = await this.http.getById(Endpoints.CURRENCY_AMOUNT, id);
+        if (response.ok) {
+            const capsule = await response.json() as Capsule;
+            console.log(capsule);
+            if(capsule.code == "00000"){
+                return capsule.data as number;
+            }else{
+                throw Error(capsule.message);
+            }
+        } else {
+            throw Error(response.statusText);
+        }
+
+
+        
+        // console.log(currencyId);
+        // const response = await this.http.get(Endpoints.CURRENCY_AMOUNT, transference);
+        // console.log(response);
+        // if (response.ok) {
+        //     const capsule = await response.json() as Capsule;
+        //     console.log(capsule);
+        //     if(capsule.code == "00000"){
+        //         return capsule.data as Transference;
+        //     }else{
+        //         throw Error(capsule.message);
+        //     }
+        // } else {
+        //     throw Error(response.statusText);
+        // }
+    }
+    
+    public async getCurrencyById(id: number): Promise<Currency> {
+        console.log(id)
+        const response = await this.http.getById(Endpoints.CURRENCIES, id);
+        if (response.ok) {
+            const currenciesResponse = await response.json();
+            console.log(currenciesResponse);
+            currenciesResponse["createdAt"] = currenciesResponse["createdAt"]?new Date(currenciesResponse["createdAt"]):null;
+            console.log(currenciesResponse);
+            return currenciesResponse as Currency;
         } else {
             throw Error(response.statusText);
         }

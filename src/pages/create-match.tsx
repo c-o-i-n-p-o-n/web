@@ -232,7 +232,7 @@ const CreateMatchForm = () => {
           return undefined;
         }
         const fetchCurrencies = async () => {
-            setCurrencies(await currencyService.getCurrencies(currencyQueryStr));
+            setCurrencies(await currencyService.getCurrenciesByQuery(currencyQueryStr));
             console.log(currencies);
         }
 
