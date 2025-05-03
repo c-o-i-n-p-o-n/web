@@ -19,8 +19,8 @@ import ServerError from "../models/ServerError";
 import CustomButton from "../components/CustomButton";
 import Alert from "../components/Alert/Alert";
 import VoucherCreation from "../models/VoucherCreation";
-import Voucher from "../models/Voucher";
-import { VoucherService } from "../services/VoucherService";
+import RecurrentVoucher from "../models/RecurrentVoucher";
+import { RecurrentVoucherService } from "../services/RecurrentVoucherService";
 import Currency from "../models/Currency";
 import { CurrencyService } from "../services/CurrencyService";
 import { useQuery } from "react-query";
@@ -75,7 +75,7 @@ const StyledFields = styled("div")({
 
 const validationSchema = yup.object({});
 
-const initialValues: VoucherCreation = {
+const initialValues: RecurrentVoucherCreation = {
     hid: "",
     description: "",
     vouchersType: 1,
@@ -83,14 +83,14 @@ const initialValues: VoucherCreation = {
     amount: 1
 };
 
-const CreateVoucherPage = () => {
+const CreateRecurrentVoucherPage = () => {
     return (
         <StyledPageContainer>
             <CustomHeader/>
             <StyledContainer>
                 <SectionTitle
-                    title={"Criar Vale Cupom"} description="Este Vale Cupom é um lote de cupons dedicados a uma campanha e que passarão a poder ser distribuídos via link ou compartilhados via rede social."/>
-                <CreateVoucherForm/>
+                    title={"Criar Vale Cupom Recorrente"} description="Este Vale Cupom é um lote de cupons contradados por assinatura periódica."/>
+                <CreateRecurrentVoucherForm/>
             </StyledContainer>
         </StyledPageContainer>
     );
@@ -98,7 +98,7 @@ const CreateVoucherPage = () => {
 
 const authService = new AuthService();
 
-const CreateVoucherForm = () => {
+const CreateRecurrentVoucherForm = () => {
 
     const currencyService = new CurrencyService();
     const [errorMessage, setErrorMessage] = useState("");      
@@ -149,20 +149,20 @@ const CreateVoucherForm = () => {
 
 
     const onSubmit = (
-        voucher: VoucherCreation,
-        {setSubmitting, resetForm}: FormikHelpers<VoucherCreation>
+        recurrentVoucher: VoucherRecurrentCreation,
+        {setSubmitting, resetForm}: FormikHelpers<VoucherRecurrentCreation>
     ) => {
     
         console.log(setSubmitting, resetForm);
-        console.log(voucher);
+        console.log(recurrentVoucher);
         setSubmitting(true);
-        const voucherService = new VoucherService();
-        voucherService.createVoucher(voucher)
-            .then((_res: Voucher) => {
+        const recurrentVoucherService = new RecurrentVoucherService();
+        recurrentVoucherService.createRecurrentVoucher(recurrentVoucher)
+            .then((_res: RecurrentVoucher) => {
                 setSubmitting(false);
                 resetForm();
                 //router.push("voucher-created");
-                router.push({ pathname: "voucher-created", query: { voucherId: _res.id }} );
+                router.push({ pathname: "voucher-recurrent-created", query: { recurrentVoucherId: _res.id }} );
             })
             .catch((err: ServerError) => {
                 setSubmitting(false);
@@ -230,16 +230,16 @@ const CreateVoucherForm = () => {
                               error={formik.touched.photo && Boolean(formik.errors.photo)}
                               helperText={formik.touched.photo && formik.errors.photo}/> 
 
-                        <InputLabel id="demo-expiredAt-select-label">Prazo de validade</InputLabel>
+                        <InputLabel id="demo-expiredAt-select-label">Prazo de validade da oferta</InputLabel>
                         <Field as={Select}
                         
                         labelId="demo-expiredAt-select-label"
                         value={formik.touched.expiredAt}
-                        label="Prazo de validade"
+                        label="Prazo de validade da oferta"
                         name="expiredAt"
                         key="expiredAt"
                         id="expiredAt"
-                        placeholder="Prazo de validade"
+                        placeholder="Prazo de validade da oferta"
                         className="form-field"
                         variant="outlined"
                         error={formik.touched.expiredAt && Boolean(formik.errors.expiredAt)}
@@ -247,7 +247,7 @@ const CreateVoucherForm = () => {
                         onChange={(event: any)=>{formik.values.expiredAt = (event.target.value as unknown) as number || 0}}
                         defaultValue={"placeholder"}
                         >
-                            <MenuItem disabled value={"placeholder"}>Após a emissão, valerá por</MenuItem>
+                            <MenuItem disabled value={"placeholder"}>Pretende oferecer esta opção de assinatura por</MenuItem>
                             <MenuItem value={1800000}>30 minutos</MenuItem>
                             <MenuItem value={3600000}>1 hora</MenuItem>
                             <MenuItem value={86400000}>1 dia</MenuItem>
@@ -257,8 +257,67 @@ const CreateVoucherForm = () => {
                             <MenuItem value={5184000000}>60 dias</MenuItem>
                             <MenuItem value={7776000000}>90 dias</MenuItem>
                             <MenuItem value={23328000000}>1 ano</MenuItem>
+                            <MenuItem value={2332800000000}>Indefinido</MenuItem>
                         </Field>
+
+
+                        <InputLabel id="demo-duration-select-label">Duração da Assinatura</InputLabel>
+                        <Field as={Select}
                         
+                        labelId="demo-duration-select-label"
+                        value={formik.touched.duration}
+                        label="Duração da Assinatura"
+                        name="duration"
+                        key="duration"
+                        id="duration"
+                        placeholder="Duração da Assinatura"
+                        className="form-field"
+                        variant="outlined"
+                        error={formik.touched.duration && Boolean(formik.errors.duration)}
+                        helperText={formik.touched.duration && formik.errors.duration}
+                        onChange={(event: any)=>{formik.values.duration = (event.target.value as unknown) as number || 0}}
+                        defaultValue={"placeholder"}
+                        >
+                            <MenuItem disabled value={"placeholder"}>Esta Assinatura está sendo contratada por</MenuItem>
+                            
+                            <MenuItem value={864000000}>15 dias</MenuItem>
+                            <MenuItem value={2592000000}>30 dias</MenuItem>
+                            <MenuItem value={5184000000}>60 dias</MenuItem>
+                            <MenuItem value={7776000000}>90 dias</MenuItem>
+                            <MenuItem value={23328000000}>1 ano</MenuItem>
+                            <MenuItem value={2332800000000}>Indefinido</MenuItem>
+                        </Field>
+
+
+
+                        <InputLabel id="demo-recurrence-select-label">Vencimento da Assinatura</InputLabel>
+                        <Field as={Select}
+                        
+                        labelId="demo-recurrence-select-label"
+                        value={formik.touched.recurrence}
+                        label="Vencimento da Assinatura"
+                        name="recurrence"
+                        key="recurrence"
+                        id="recurrence"
+                        placeholder="Vencimento da Assinatura"
+                        className="form-field"
+                        variant="outlined"
+                        error={formik.touched.recurrence && Boolean(formik.errors.recurrence)}
+                        helperText={formik.touched.recurrence && formik.errors.recurrence}
+                        onChange={(event: any)=>{formik.values.recurrence = (event.target.value as unknown) as number || 0}}
+                        defaultValue={"placeholder"}
+                        >
+                            <MenuItem disabled value={"placeholder"}>Vencimento a cada</MenuItem>
+                            
+                            <MenuItem value={864000000}>7 dias</MenuItem>
+                            <MenuItem value={864000000}>15 dias</MenuItem>
+                            <MenuItem value={2592000000}>30 dias</MenuItem>
+                            <MenuItem value={5184000000}>60 dias</MenuItem>
+                            <MenuItem value={7776000000}>90 dias</MenuItem>
+                            <MenuItem value={23328000000}>1 ano</MenuItem>
+                        </Field>
+
+
                         <InputLabel id="demo-vouchersType-select-label">Ocultar da busca?</InputLabel>
                         <Field as={Select}
                         
@@ -343,16 +402,16 @@ const CreateVoucherForm = () => {
                         <StyledButton onClick={createCoinHandler}>{"Crie seu cupom +"}</StyledButton>
                         </RowFlex>
                         
-                        <InputLabel id="demo-amount-select-label">Pretende disponibilizar quantos cupons neste vale?</InputLabel>
+                        <InputLabel id="demo-amount-select-label">Pretende disponibilizar quantos cupons nesta oferta?</InputLabel>
                         <Field as={Select}
                         
                         labelId="demo-amount-select-label"
                         value={formik.touched.amount}
-                        label="Pretende disponibilizar quantos cupons neste vale?"
+                        label="Pretende disponibilizar quantos cupons nesta oferta?"
                         name="amount"
                         key="amount"
                         id="amount"
-                        placeholder="Pretende disponibilizar quantos cupons neste vale?"
+                        placeholder="Pretende disponibilizar quantos cupons nesta oferta?"
                         className="form-field"
                         variant="outlined"
                         error={formik.touched.amount && Boolean(formik.errors.amount)}
@@ -360,7 +419,7 @@ const CreateVoucherForm = () => {
                         onChange={(event: any)=>{formik.values.amount = (event.target.value as unknown) as number || 1}}
                         defaultValue={"placeholder"}
                         >
-                            <MenuItem disabled value={"placeholder"}>Quando se esgotar, não terá mais efeito para quem acessar</MenuItem>
+                            <MenuItem disabled value={"placeholder"}>Quando se esgotar, não terá mais efeito para os assinantes. Isto serve para dosar sua capacidade de produção</MenuItem>
                             <MenuItem value={1}>1 cupom</MenuItem>
                             <MenuItem value={2}>2 cupons</MenuItem>
                             <MenuItem value={5}>5 cupons</MenuItem>
@@ -372,18 +431,20 @@ const CreateVoucherForm = () => {
                             <MenuItem value={500}>500 cupons</MenuItem>
                             <MenuItem value={1000}>1.000 cupons</MenuItem>
                             <MenuItem value={10000}>10.000 cupons</MenuItem>
+                            <MenuItem value={100000}>100.000 cupons</MenuItem>
+                            <MenuItem value={100000000000}>Indefinido</MenuItem>
                         </Field>
                         
-                        <InputLabel id="demo-amountPerUser-select-label">Cada vale dá direito a quantos cupons?</InputLabel>
+                        <InputLabel id="demo-amountPerUser-select-label">Cada vencimento dá direito a quantos cupons?</InputLabel>
                         <Field as={Select}
                         
                         labelId="demo-amountPerUser-select-label"
                         value={formik.touched.amountPerUser}
-                        label="Cada vale dá direito a quantos cupons?"
+                        label="Cada vencimento dá direito a quantos cupons?"
                         name="amountPerUser"
                         key="amountPerUser"
                         id="amountPerUser"
-                        placeholder="Cada vale dá direito a quantos cupons?"
+                        placeholder="Cada vencimento dá direito a quantos cupons?"
                         className="form-field"
                         variant="outlined"
                         error={formik.touched.amountPerUser && Boolean(formik.errors.amountPerUser)}
@@ -392,13 +453,13 @@ const CreateVoucherForm = () => {
                         defaultValue={"placeholder"}
                         >
                             <MenuItem disabled value={"placeholder"}>Transferir</MenuItem>
-                            <MenuItem value={1}>1 cupom por usuário</MenuItem>
-                            <MenuItem value={2}>2 cupons por usuário</MenuItem>
-                            <MenuItem value={5}>5 cupons por usuário</MenuItem>
-                            <MenuItem value={10}>10 cupons por usuário</MenuItem>
-                            <MenuItem value={20}>20 cupons por usuário</MenuItem>
-                            <MenuItem value={50}>50 cupons por usuário</MenuItem>
-                            <MenuItem value={100}>100 cupons por usuário</MenuItem>
+                            <MenuItem value={1}>1 cupom por vencimento</MenuItem>
+                            <MenuItem value={2}>2 cupons por vencimento</MenuItem>
+                            <MenuItem value={5}>5 cupons por vencimento</MenuItem>
+                            <MenuItem value={10}>10 cupons por vencimento</MenuItem>
+                            <MenuItem value={20}>20 cupons por vencimento</MenuItem>
+                            <MenuItem value={50}>50 cupons por vencimento</MenuItem>
+                            <MenuItem value={100}>100 cupons por vencimento</MenuItem>
                         </Field>
 
                     </StyledFields>
@@ -423,4 +484,4 @@ const CreateVoucherForm = () => {
     );
 }
 
-export default CreateVoucherPage;
+export default CreateRecurrentVoucherPage;

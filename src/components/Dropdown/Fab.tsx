@@ -9,6 +9,9 @@ import EventIcon from '@mui/icons-material/Event';
 import CasinoIcon from '@mui/icons-material/Casino';
 import LocalActivityIcon from '@mui/icons-material/LocalActivity';
 import BatchPredictionIcon from '@mui/icons-material/BatchPrediction';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+
 
 import {
     StyledUl
@@ -71,12 +74,17 @@ export const FloatingButtonFAB = () => {
     push('create-voucher');
   }
 
+  const newRecurrentVoucher = () => {
+    push('create-recurrent-voucher');
+  }
+
   return (
     <FAB actions={[
-      {label: 'Nova Aposta', icon: <CasinoIcon/>, onClick: newMatch},
-      {label: 'Novo Evento', icon: <EventIcon/>, onClick: newEvent},
+      // {label: 'Nova Aposta', icon: <CasinoIcon/>, onClick: newMatch},
+      // {label: 'Novo Evento', icon: <EventIcon/>, onClick: newEvent},
       {label: 'Novo Cupom', icon: <LocalActivityIcon/>, onClick: newCoin},
-      {label: 'Novo Vale Cupom', icon: <BatchPredictionIcon/>, onClick: newVoucher},
+      {label: 'Novo Vale Cupom', icon: <LocalOfferIcon/>, onClick: newVoucher},
+      {label: 'Nova Assinatura de Cupom', icon: <CalendarMonthIcon/>, onClick: newRecurrentVoucher},
       ]}></FAB>
   );
 };
