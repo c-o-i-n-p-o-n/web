@@ -1,25 +1,22 @@
 import Bookmaker from "./Bookmaker";
 import Currency from "./Currency";
 
-export enum VoucherStatus {
-  OPEN = 0,
-  FINISHED = 1,
-  CANCELED = 2,
-}
-
-export default interface Voucher {
+export default interface SignedRecurrentVoucher {
   id: number;
   hid: string;
   description: string;
-  hash: string;
+  hash?: string;
   createdAt?: Date;
   expiredAt?: number;
   logo?: string;
   photo?: string;
   status?: number;
   score?: number;
-  vouchersType: number;
-  amountPerUser: number;
+  recurrencesType: number;
+  amountPerDue: number;
+  cicles: number;
+  period: number;
+  timeUnit: string;
   bookmakers?: Bookmaker;
   currencies?: Currency;
 }

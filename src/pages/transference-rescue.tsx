@@ -19,8 +19,8 @@ import { CurrencyService } from "../services/CurrencyService";
 
 import Currency from "../models/Currency";
 import { QRCodeSVG } from "qrcode.react";
-import FullCurrencyCard from "../components/CurrencyCard/FullCurrencyCard";
-import AmountAndCheckRescue from "../components/CurrencyCard/AmountAndCheckRescue";
+//import FullCurrencyCard from "../components/CurrencyCard/FullCurrencyCard";
+//import AmountAndCheckRescue from "../components/CurrencyCard/AmountAndCheckRescue";
 import { TransferenceService } from "../services/TransferenceService";
 
 import CheckIcon from "@mui/icons-material/Check";

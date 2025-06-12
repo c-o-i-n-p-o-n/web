@@ -41,12 +41,12 @@ export class AuthDataSource {
             throw Error("Bookmaker id is null.");
         }
         const response = await this.http.getById(Endpoints.BOOKMAKERS, id);
-        //console.log(response);
+        console.log(response);
         if (response.ok) {
             const bookmakerResponse = await response.json();
             return bookmakerResponse as Bookmaker;
         } else {
-            throw Error("Fail to fecth bookmaker data.");
+            throw Error("Usuário não encontrado.");
         }
     }
 

@@ -4,6 +4,14 @@ import Voucher from "../models/Voucher";
 import VoucherCreation, { voucherToVoucherCreation } from "../models/VoucherCreation";
 
 export class VoucherService {
+    
+    private vouchersDataSource: VouchersDataSource = new VouchersDataSource();
+
+    public async assignMoreCoin(id: number, amount: number) {
+        console.log(id)
+        console.log(amount)
+        return await this.vouchersDataSource.assignMoreCoin(id,amount);
+    }
 
     public async cancelVoucher(hash: string): Promise<number> {
         console.log(hash)
@@ -25,10 +33,18 @@ export class VoucherService {
         return await this.vouchersDataSource.getVoucherById(id);
     }
     
-    private vouchersDataSource: VouchersDataSource = new VouchersDataSource();
+    public async getTotalAmountAvailableById(id: number): Promise<number> {
+        console.log(id)
+        return await this.vouchersDataSource.getTotalAmountAvailableById(id);
+    }
     
-    public async getVouchers(query?:String): Promise<Voucher[]> {
-        return this.vouchersDataSource.getVouchersByQuery(query);
+    public async getTotalAmountById(id: number): Promise<number> {
+        console.log(id)
+        return await this.vouchersDataSource.getTotalAmountById(id);        
+    }
+
+    public async getVouchers( page: number, size: number, query?:String,): Promise<Voucher[]> {
+        return this.vouchersDataSource.getVouchers(page,size,query);
     }
 
     public async createVoucher(voucher: VoucherCreation): Promise<Voucher> {

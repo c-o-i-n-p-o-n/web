@@ -12,6 +12,7 @@ export class GenericDataSource {
         if(query){
             params = {query: query,...params};
         }
+        console.log(params);
         const response = await this.http.get(Endpoints.GENERIC, params);
         if (response.ok) {
             const genericResponse = await response.json();

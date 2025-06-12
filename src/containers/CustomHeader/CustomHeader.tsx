@@ -31,6 +31,10 @@ export default function CustomHeader({children, ...style}: { children?: React.Re
     setAnchorEl(event.currentTarget);
   };
 
+  const handleBalances = () => {
+    router.push('balances');
+  };
+
   const handleClose = () => {
     setAnchorEl(null);
 
@@ -111,6 +115,7 @@ export default function CustomHeader({children, ...style}: { children?: React.Re
                   open={Boolean(anchorEl)}
                   onClose={handleClose}
                 >
+                  <MenuItem onClick={handleBalances}>Saldos</MenuItem>
                   <MenuItem onClick={handleClose}>Sair</MenuItem>
                 </Menu>
               </Row>}

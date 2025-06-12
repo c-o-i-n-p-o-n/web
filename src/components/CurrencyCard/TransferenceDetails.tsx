@@ -29,7 +29,7 @@ import { StyledAvatar } from "../StyledAvatar/StyledAvatar";
 import Option from "../../models/Option";
 import Currency from "../../models/Currency";
 import RescueCoinButton from "../buttons/RescueCoinButton";
-import AmountAndCheckRescue from "./AmountAndCheckRescue";
+//import AmountAndCheckRescue from "./AmountAndCheckRescue";
 import { CurrencyService } from "../../services/CurrencyService";
 import CenteredComponent from "../CenteredComponent";
 import Transference from "../../models/Transference";
@@ -55,18 +55,24 @@ const CheckPaymentCompoment = ({hash, chekPayment, ...style}: { hash:string, che
     };
 
     return (
+        
+                      <CenteredComponent>
         <DescriptionLine {...style}>
             <Column>
+            
+                        <Typography variant="body2">
+                            Verificar
+                            
+                        </Typography>
                 <StyledButton onClick={irParaProximaPagina}>
                     <RefreshIcon style={{backgroundColor: "#6B61F5", borderRadius: "20px", fontSize: "35px", padding: "5px", color: "white"}}>
-                        Verificar pagamento
+                        Verificar
                     </RefreshIcon>
                 </StyledButton> 
 
             </Column>
-            <Description> </Description> 
 
-        </DescriptionLine>
+        </DescriptionLine></CenteredComponent>
     );
 }
 
@@ -78,6 +84,7 @@ const Coinpom = ({description, ...style}: { description: string, style?: {} }) =
         <DescriptionLine {...style}>
             <Description>
                 <Typography paragraph={true}>
+                    <strong>Como usar:</strong><br/>
                     {description?.slice(0, 300)}
                 </Typography>
             </Description> 
@@ -93,13 +100,19 @@ export default function TransferneceDetails({transference,key,chekPayment}: Curr
 
     //const {id, acronym, description, logo, photo, createdAt, expiredAt, type, maxAmount, validAmount, expiredAmount, isOwner } = transference.currency;
 
+    // const convertdateAndTime = (myDate?:Date, myTime?:number) => {
+    //     let result1 = !!myDate ? format(myDate, "'Criado em ' dd/MM/yyyy', às' H:mm; "): "";
+    //     let result2 = !!myTime ? "Duração: " + (myTime / (1000 * 60 * 60)) + " horas": "";
+    //     return result1 + result2
+    // };
+    
+
     const convertdateAndTime = (myDate?:Date, myTime?:number) => {
         let result1 = !!myDate ? format(myDate, "'Criado em ' dd/MM/yyyy', às' H:mm; "): "";
-        let result2 = !!myTime ? "Duração: " + (myTime / (1000 * 60 * 60)) + " horas": "";
+        let result2 = !!myTime ? "Duração: " + ((myTime / (1000 * 60 * 60)) > 24?(myTime / (1000 * 60 * 60 * 24)) + " dias": (myTime / (1000 * 60 * 60)) + 
+        " horas"):"";
         return result1 + result2
     };
-    
-    
 
     //mostRequested: { createdAt, expiredAt, options }
     //const { isLoading, error, data } = useQuery(['getMatchById',id], () => {return betService.getMatchById(id);});
@@ -134,7 +147,7 @@ export default function TransferneceDetails({transference,key,chekPayment}: Curr
                     <StyledAvatar photoUrl={transference?.currencies?.logo} size={35} name={!!transference?.currencies?.acronym?transference?.currencies?.acronym[0]:"C"} />
                     <Column>
                         <StyledTypographyTitle variant="body2">
-                            {transference?.currencies?.acronym}
+                            <strong>{transference?.currencies?.acronym + "$ " + transference?.amount}</strong>
                         </StyledTypographyTitle>
                     </Column>
                     <EventTimeAndExpandMore>
@@ -151,12 +164,9 @@ export default function TransferneceDetails({transference,key,chekPayment}: Curr
 
             {
                     <Collapse in={expanded} timeout="auto" unmountOnExit>
-                        <StyledTypographyData paragraph={true}>
+                        {/* <StyledTypographyData paragraph={true}>
                             {transference?.currencies?.description}
-                        </StyledTypographyData>
-                        <StyledTypographyData>
-                            { convertdateAndTime(createAtVar,transference?.currencies?.expiredAt) }
-                        </StyledTypographyData>
+                        </StyledTypographyData> */}
                         <BodyCardContent>
                             
                             <Coinpom
@@ -165,7 +175,7 @@ export default function TransferneceDetails({transference,key,chekPayment}: Curr
                                     marginBottom: '5px'
                                 }}
                                 description={transference?.currencies?.description}/>
-                                                    
+                                               
                         </BodyCardContent>
                     </Collapse> 
             }
@@ -177,6 +187,10 @@ export default function TransferneceDetails({transference,key,chekPayment}: Curr
                     }}
                     hash={transference.hash}
                     chekPayment={chekPayment}/>
+                         
+                        <StyledTypographyData>
+                            { convertdateAndTime(createAtVar,transference?.currencies?.expiredAt) }
+                        </StyledTypographyData>
                 {/* <TitleExpiration
                     style={{
                         marginBottom: '5px'

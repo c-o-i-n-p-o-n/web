@@ -3,12 +3,12 @@ import Container from "@mui/material/Container";
 import {styled} from "@mui/system";
 import {Form, Formik, FormikHelpers, FormikProps} from "formik";
 import * as yup from 'yup';
-import CustomHeader from "../components/CustomHeader";
-import SectionTitle from "../components/SectionTitle";
+//import CustomHeader from "../components/CustomHeader";
+//import SectionTitle from "../components/SectionTitle";
 import * as React from "react";
 import {useEffect, useState} from "react";
 import {AutocompleteChangeDetails, AutocompleteChangeReason} from "@mui/base/AutocompleteUnstyled/useAutocomplete";
-import {Category} from "../models/Category";
+import Category from "../models/Category";
 import {BetService} from "../services/BetService";
 
 const StyledPageContainer = styled("div")({
@@ -62,12 +62,12 @@ const onSubmit = (
 const CreateBetPage = () => {
     return (
         <StyledPageContainer>
-            <CustomHeader/>
+            {/* <CustomHeader/>
             <StyledContainer>
                 <SectionTitle
                     title={"Criar Matches"} description="Preencha os campos abaixo para criar sua aposta."/>
                 <CreateBetForm/>
-            </StyledContainer>
+            </StyledContainer> */}
         </StyledPageContainer>
     );
 };
@@ -80,7 +80,7 @@ const CreateBetForm = () => {
 
     useEffect(() => {
         const fetchCategories = async () => {
-            setCategories(await betService.getCategories());
+            //setCategories(await betService.getCategories());
             console.log(categories);
         }
 
@@ -110,7 +110,7 @@ const CreateBetForm = () => {
 
                         <Autocomplete
                             multiple
-                            options={categories.map((option) => option.name)}
+                            options={categories.map((option) => option.hid)}
                             freeSolo
                             autoSelect
                             className="form-field"
@@ -121,9 +121,9 @@ const CreateBetForm = () => {
                                 details?: AutocompleteChangeDetails<string>,
                             ) => {
                                 const option = details?.option;
-                                let category = categories.find(category => category.name === option);
+                                let category = categories.find(category => category.hid === option);
                                 console.log(category);
-                                formik.values.categories.push(category || {id: undefined, name: option || ""});
+                                formik.values.categories.push(category || {id: undefined, hid: option || ""});
                             }}
                             renderInput={(params) => (
                                 <TextField

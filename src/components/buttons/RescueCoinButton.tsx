@@ -3,7 +3,7 @@ import {Button} from "@mui/material";
 import { DescriptionLine, TypeButton } from "../CurrencyCard/FullCurrencyCard.styles";
 import { Column } from "../../styles/shared-styles";
 
-const RescueCoinButton = ({children, style, ...props}: any) => {
+const RescueCoinButton = ({children, amount, onClick, style, ...props}: any) => {
 
     const StyledButton = styled(Button)({
         width: "100%",
@@ -14,13 +14,16 @@ const RescueCoinButton = ({children, style, ...props}: any) => {
             
         <DescriptionLine {...style}>
             <Column>
-                <TypeButton {...props}>
+                <Button variant="contained" onClick={onClick} {...props} >
                     {children}
-                </TypeButton>
+                </Button>
+                {/* <TypeButton {...props} onClick={onClick}>
+                    {children}
+                </TypeButton> */}
             </Column>
-            <Column>
+            {/* <Column>
             
-            </Column>
+            </Column> */}
         </DescriptionLine>
         
     );

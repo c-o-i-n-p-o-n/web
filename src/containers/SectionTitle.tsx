@@ -16,7 +16,7 @@ export default function SectionTitle(props: SectionTitleProps) {
     fontStyle: "normal",
     fontWeight: 400,
     fontSize: 16,
-    color: "white"
+    //color: "white"
   });
 
   const StyledDescription = styled(Typography)({
@@ -24,7 +24,7 @@ export default function SectionTitle(props: SectionTitleProps) {
     fontStyle: "normal",
     fontWeight: 400,
     fontSize: 14,
-    color: "white"
+    //color: "white"
   });
 
 

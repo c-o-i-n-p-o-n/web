@@ -11,7 +11,7 @@ export default function SearchBets(props: ISearchProps) {
   const SearchInput = styled(TextField)({
     display: "flex",
     justifyContent: "space-between",
-    color: "#ffffff",
+    //color: "#ffffff",
   });
   
   const theme = createTheme({
@@ -49,10 +49,10 @@ export default function SearchBets(props: ISearchProps) {
         onKeyUp={onKeyUp}
         defaultValue={queryStr}
         onChange={onTextChange}
-        sx={{ input: { color: "#ffffff" }, outline: { color: "#ffffff" }, background: "linear-gradient(108.8deg, rgba(255, 255, 255, 0.2) 14.74%, rgba(0, 0, 0, 0) 97.96%)", borderRadius: '25px 25px', }}
+        //sx={{ input: { color: "#cccccc" }, outline: { color: "#cccccc" }, background: "linear-gradient(108.8deg, rgba(255, 255, 255, 0.2) 14.74%, rgba(0, 0, 0, 0) 97.96%)", borderRadius: '25px 25px', }}
         InputProps={{
           startAdornment: (
-            <InputAdornment position="start" sx={{ color: "#ffffff" }}>
+            <InputAdornment position="start" sx={{ color: "#cccccc" }}>
               <Search />
             </InputAdornment>
           ),

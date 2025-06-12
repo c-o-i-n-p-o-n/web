@@ -22,6 +22,7 @@ import CustomButton from "../components/CustomButton";
 import Alert from "../components/Alert/Alert";
 import Currency from "../models/Currency";
 import CurrencyCreation from "../models/CurrencyCreation";
+import { FloatingButtonFAB } from "../components/Dropdown/Fab";
 
 const StyledPageContainer = styled("div")({
     height: "100vh"
@@ -319,6 +320,7 @@ const CreateCoinForm = () => {
                                     <Alert type="error" show={!!errorMessage} closeAll={()=> setErrorMessage("")}>
                                         <p>{errorMessage}</p>
                                     </Alert>
+                                    
                 </StyledForm>
             )}
 

@@ -40,7 +40,7 @@ const ExpandeMoreIcon = (props: ExpandMoreProps) => {
 
 
 
-export const BookmakerAndExpandMore = styled("div")({
+export const CoinAndExpandMore = styled("div")({
     backgroundColor: "transparent",
     display: "flex",
     flexDirection: "row",
@@ -93,7 +93,7 @@ export const StyledCardContentHeader = styled(CardContent)({
 
 
 export const StyledTypographyData = styled(Typography)({
-    height: "24px",
+    //height: "24px",
     maxWidth: "200px",
     paddingTop: "22px",
     fontSize: "12px",

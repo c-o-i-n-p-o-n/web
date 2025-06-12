@@ -4,4 +4,7 @@ export enum Types {
   CATEGORIES = "Categories",
   EVENTS = "Events",
   MATCHES = "Matches",
+  CURRENCIES = "Currencies",
+  VOUCHERS = "Vouchers",
+  RECURRENCIES = "Recurrences",
 }

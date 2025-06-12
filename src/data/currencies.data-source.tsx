@@ -45,6 +45,39 @@ export class CurrenciesDataSource {
         }
     }
 
+    
+    public async getCurrenciesReceived(page: number, size: number): Promise<Currency[]> {
+        let params:any = {page:page, size:size};
+        console.log(params);
+        const response = await this.http.get(Endpoints.CURRENCIES_RECEIVED_FILTER, params);
+
+        if (response.ok) {
+            const capsule = await response.json() as Capsule;
+            console.log(capsule);
+            if(capsule.code == "00000"){
+                console.log(capsule.data as Currency[]);
+                return capsule.data as Currency[];
+            }else{
+                throw Error(capsule.message);
+            }
+        } else {
+            throw Error(response.statusText);
+        }
+
+        // if (response.ok) {
+        //     const currenciesResponse = await response.json();
+        //     console.log(currenciesResponse);
+        //     if(!!currenciesResponse["_embedded"] && !!currenciesResponse["_embedded"]["currencies"]){
+        //         console.log(currenciesResponse["_embedded"]["currencies"]);
+        //         return currenciesResponse["_embedded"]["currencies"] as Currency[];
+        //     }else{
+        //         return [];
+        //     }
+        // } else {
+        //     throw Error(response.statusText);
+        // }
+    }
+
     public async getMyCurrencies(page: number, size: number): Promise<Currency[]> {
         let params:any = {page:page, size:size};
         console.log(params);
@@ -77,10 +110,11 @@ export class CurrenciesDataSource {
                 console.log(currenciesResponse["_embedded"]["currencies"]);
                 return currenciesResponse["_embedded"]["currencies"] as Currency[];
             }else{
-                return [];
+                //return [];
+                throw Error("Você não tem cupons para distribuir. Crie seus cupons ou adquira novos cupons");
             }
         } else {
-            throw Error(response.statusText);
+            throw Error(response.statusText + " " + response.statusText);
         }
     }
 

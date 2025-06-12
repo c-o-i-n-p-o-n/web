@@ -126,7 +126,7 @@ export default function MostRequestedEventCard({event}: EventCardProps) {
                 <HeaderButton>
                     {/* <SportsVolleyballOutlinedIcon style={{backgroundColor: "#6B61F5", borderRadius: "20px", fontSize: "35px", padding: "5px", color: "white"}}></SportsVolleyballOutlinedIcon> */}
                     
-                    <StyledAvatar photoUrl={data?.logo} size={35} name={!!data?.hid?data.hid[0]:"M"} />
+                    <StyledAvatar photoUrl={data?.logo} size={35} name={!!data?.hid?data.hid[0]:"E"} />
                     <Column>
                         <StyledTypographyTitle variant="body2">
                             {data?.hid}
@@ -137,7 +137,7 @@ export default function MostRequestedEventCard({event}: EventCardProps) {
                             expand={expanded}
                             onClick={handleExpandClick}
                             aria-expanded={expanded}
-                            aria-label="show more">
+                            aria-label="Ver mais">
                             <ExpandMoreIcon/>
                         </ExpandMore> }
                     </EventTimeAndExpandMore>
@@ -193,7 +193,7 @@ export function EventCard({event}: {event?:Event}) {
         <StyledCard>
             <StyledCardContentHeader onClick={handleExpandClick}>
                 <HeaderButton>
-                    <StyledAvatar photoUrl={event?.logo} size={35} name={!!event?.hid?event.hid[0]:"M"} />
+                    <StyledAvatar photoUrl={event?.logo} size={35} name={!!event?.hid?event.hid[0]:"E"} />
                     <Column>
                         <StyledTypographyTitle variant="body2">
                             {event?.hid}

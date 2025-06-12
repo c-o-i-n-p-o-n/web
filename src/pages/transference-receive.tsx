@@ -19,8 +19,8 @@ import { CurrencyService } from "../services/CurrencyService";
 
 import Currency from "../models/Currency";
 import { QRCodeSVG } from "qrcode.react";
-import FullCurrencyCard from "../components/CurrencyCard/FullCurrencyCard";
-import AmountAndCheckRescue from "../components/CurrencyCard/AmountAndCheckRescue";
+//import FullCurrencyCard from "../components/CurrencyCard/FullCurrencyCard";
+//import AmountAndCheckRescue from "../components/CurrencyCard/AmountAndCheckRescue";
 import { TransferenceService } from "../services/TransferenceService";
 
 import CheckIcon from "@mui/icons-material/Check";
@@ -119,7 +119,7 @@ const CurrencyRescue: NextPage = () => {
     if (!loading) {
       return undefined;
     }
-    if(!!transference){
+    if(!!transference&&!!(transference.currencies.id)){
       currencyService.getMaxAmountByCurrencyId(transference.currencies.id).then((amount)=>{
         setFunds(amount)
       }).catch((erro)=>{

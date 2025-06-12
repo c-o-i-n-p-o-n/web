@@ -38,6 +38,10 @@ export class CurrencyService {
         return this.currenciesDataSource.getCurrencies(page, size);
     }
     
+    public async getCurrenciesReceived(page: number, size: number): Promise<Currency[]> {
+        return this.currenciesDataSource.getCurrenciesReceived(page, size);
+    }
+    
     public async getMyCurrencies(page: number, size: number): Promise<Currency[]> {
         return this.currenciesDataSource.getMyCurrencies(page, size);
     }
