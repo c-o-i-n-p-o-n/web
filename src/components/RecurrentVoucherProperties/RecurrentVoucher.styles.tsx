@@ -8,8 +8,8 @@ interface ExpandMoreProps extends IconButtonProps {
 const contrastBackgroundColor = "#503071";
 
 export const StyledCard = styled(Card)({
-    backgroundColor: "#333333",
-    //backgroundColor: "white",
+    //backgroundColor: "#333333",
+    backgroundColor: "white",
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-evenly",
@@ -56,7 +56,7 @@ export const StyledTypographyTitle = styled(Typography)({
     height: "24px",
     paddingTop: "2px",
     fontSize: "15px",
-    color: "white",
+    color: "Highlight",
     
     display: "flex",
     flexDirection: "column",

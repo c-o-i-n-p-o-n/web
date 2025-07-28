@@ -13,6 +13,8 @@ export default interface VoucherCreation {
   amount: number;
   amountPerUser: number;
   currency?: Currency;
+  currenciesReceived: Currency;
+  cost: number;
   
 }
 
@@ -28,6 +30,8 @@ export function voucherToVoucherCreation (voucher:Voucher): VoucherCreation{
       expiredAt: voucher.expiredAt,
       vouchersType: voucher.vouchersType,
       amount: 0,
-      amountPerUser: voucher.amountPerUser
+      amountPerUser: voucher.amountPerUser,
+      currenciesReceived: voucher.currenciesReceived,
+      cost: voucher.cost
   }
 }

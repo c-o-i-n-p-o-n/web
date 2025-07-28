@@ -25,4 +25,7 @@ export default interface RecurrentVoucher {
   timeUnit: string;
   bookmakers?: Bookmaker;
   currencies?: Currency;
+  currenciesReceived: Currency;
+  isOwner?: number;
+  cost: number;
 }

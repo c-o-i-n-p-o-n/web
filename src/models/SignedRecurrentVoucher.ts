@@ -1,16 +1,17 @@
 import Bookmaker from "./Bookmaker";
 import Currency from "./Currency";
+import RecurrentVoucher from "./RecurrentVoucher";
 
 export default interface SignedRecurrentVoucher {
   id: number;
   hid: string;
   description: string;
   hash?: string;
-  createdAt?: Date;
+  createdAt: Date;
   expiredAt?: number;
   logo?: string;
   photo?: string;
-  status?: number;
+  status: number;
   score?: number;
   recurrencesType: number;
   amountPerDue: number;
@@ -19,4 +20,7 @@ export default interface SignedRecurrentVoucher {
   timeUnit: string;
   bookmakers?: Bookmaker;
   currencies?: Currency;
+  currenciesReceived?: Currency;
+  cost?:number;
+  recurrences: RecurrentVoucher;
 }

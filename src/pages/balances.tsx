@@ -94,8 +94,8 @@ const Balances: NextPage = () => {
     () => {return currencyService.getCurrenciesReceived(currencyPage,currencyListSize)});
   
   const { isLoading: isLoadingMyVouchers, error: myVoucherError, data: mostRequestedMyVouchers } = 
-    useQuery(['getVouchers',myVoucherPage,myVoucherListSize], 
-    () => {return voucherService.getVouchers(myVoucherPage,myVoucherListSize)});
+    useQuery(['getMyVouchers',myVoucherPage,myVoucherListSize], 
+    () => {return voucherService.getMyVouchers(myVoucherPage,myVoucherListSize)});
   
   const { isLoading: isLoadingRecurrentVouchers, error: recurrentVoucherError, data: mostRequestedRecurrentVouchers } = 
     useQuery(['getRecurrentVouchers',recurrentVoucherPage,recurrentVoucherListSize], 

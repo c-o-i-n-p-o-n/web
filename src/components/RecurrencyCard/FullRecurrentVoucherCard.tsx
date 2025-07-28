@@ -228,7 +228,7 @@ const ImpruveVoucher = ({recurrentVoucher, isOwner, setErrorMessage, ...style}: 
 
     const handleManaging = () => {
         //router.push('recurrent-voucher-created');
-        router.push({ pathname: "recurrent-voucher-created", query: { recurrentVoucherHash: recurrentVoucher.id }} );
+        router.push({ pathname: "recurrent-voucher-created", query: { recurrentVoucherHash: recurrentVoucher.hash }} );
     };
 
     return (

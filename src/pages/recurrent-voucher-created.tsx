@@ -12,6 +12,8 @@ import {
   ListItemSecondaryAction,
   Drawer,
   Divider,
+  CircularProgress,
+  Container,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import RecurrentVoucher from "../models/RecurrentVoucher";
@@ -21,6 +23,22 @@ import { useQuery } from "react-query";
 import { RecurrentVoucherService } from "../services/RecurrentVoucherService";
 import { AuthService } from "../services/AuthService";
 import { SignedRecurrentVoucherService } from "../services/SignedRecurrentVoucherService";
+import { TransferenceService } from "../services/TransferenceService";
+import Transference from "../models/Transference";
+import CenteredComponent from "../components/CenteredComponent";
+import Alert from "../components/Alert/Alert";
+import Head from "next/head";
+import CustomHeader from "../containers/CustomHeader/CustomHeader";
+import HomePageItem from "../components/HomePageItem";
+import { FloatingButtonFAB } from "../components/Dropdown/Fab";
+import { Column } from "../styles/shared-styles";
+import ItemProperty from "../components/ItemProperty";
+import ShareButtons from "../components/ShareButtons";
+import PromoImage from "../components/PromoImage";
+import ServerError from "../models/ServerError";
+import AvatarImage from "../components/AvatarImage";
+import VoucherRules from "../components/VoucherProperties/VoucherRules";
+import RecurrentVoucherData from "../components/RecurrentVoucherProperties/RecurrentVoucherData";
 
 // interface Proposal {
 //   id: number;
@@ -45,17 +63,12 @@ interface ProposalListProps {
 }
 
 interface SubscriptionListProps {
-
-    setSelectedSignedRecurrentVoucher: Function;
-    getSelectedSignedRecurrentVoucher: Function;
-    mySignedRecurrentVouchers: SignedRecurrentVoucher[];
-    onCancel?: (id: number) => void;
+    subscriptions: SignedRecurrentVoucher[]
 }
 
 interface CreatorTabsProps {
-    setSelectedRecurrentVoucher: Function;
-    getSelectedRecurrentVoucher: Function;
-    myRecurrentVouchers: RecurrentVoucher[]
+    recurrentVoucher: RecurrentVoucher;
+    subscribers: SignedRecurrentVoucher[]
     //setRecurrentVoucher: Function
   //userType: "creator" | "subscriber";
 }
@@ -81,282 +94,414 @@ const assinaturasMock: Subscription[] = [
 const authService = new AuthService();
 const recurrentVoucherService = new RecurrentVoucherService();
 const signedRecurrentVoucherService = new SignedRecurrentVoucherService();
+const transferenceService = new TransferenceService();
 
 const RecurrentVoucheCreated: NextPage = () => {
-
+  const router = useRouter();
     
+  const [successMessage, setSuccessMessage] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [recurrentVoucher, setRecurrentVoucher] = useState<RecurrentVoucher | undefined>(undefined);
 
-    const router = useRouter();
+  const { push,query } = useRouter();
+  const recurrentVoucherHash = !!(query.recurrentVoucherHash)?String(query.recurrentVoucherHash):undefined;
+
+  
+  
+  const [subscribersListSize, setSubscribersListSize] = useState(5);
+  const [subscribersPage, setSubscribersPage] = useState(0);
+  const [subscribers, setSubscribers] = useState<SignedRecurrentVoucher[] | undefined>(undefined);
+   
+  const [logged, setLogged] = useState<Boolean>(authService.isLogged);
+
+  const { isLoading, error, data: bookmaker, isSuccess } = useQuery(['getBookmaker'], authService.getBookmaker);
+  
+  
+  console.log(query.recurrentVoucherHash);
+  console.log(recurrentVoucherHash);
+  
+  const loading = !!!recurrentVoucher || !!!subscribers;
     
-    const [successMessage, setSuccessMessage] = useState("");
-    const [errorMessage, setErrorMessage] = useState("");
-    //const [recurrentVoucher, setRecurrentVoucher] = useState<RecurrentVoucher | undefined>(undefined);
-
-    const [myRecurrentVoucherListSize, setMyRecurrentVoucherListSize] = useState(5);
-    const [myRecurrentVoucherPage, setMyRecurrentVoucherPage] = useState(0);
-    const [mySignedRecurrentVoucherListSize, setMySignedRecurrentVoucherListSize] = useState(5);
-    const [mySignedRecurrentVoucherPage, setMySignedRecurrentVoucherPage] = useState(0);
-    
-    const [selectedRecurrentVoucher, setSelectedRecurrentVoucher] = useState<RecurrentVoucher | null>(null);
-    const [selectedSignedRecurrentVoucher, setSelectedSignedRecurrentVoucher] = useState<SignedRecurrentVoucher | null>(null);
-    
-    
-    const { isLoading: isLoadingMyRecurrentVouchers, error: myRecurrentVoucherError, data: myRecurrentVouchers } = 
-    useQuery(['getMyRecurrentVouchers',myRecurrentVoucherPage,myRecurrentVoucherListSize], 
-    () => {return recurrentVoucherService.getMyRecurrentVouchers(myRecurrentVoucherPage,myRecurrentVoucherListSize)});
-
-    const { isLoading: isLoadingMySignedRecurrentVouchers, error: mySignedRecurrentVoucherError, data: mySignedRecurrentVouchers } = 
-    useQuery(['getMyRecurrentVouchers',mySignedRecurrentVoucherPage,mySignedRecurrentVoucherListSize], 
-    () => {return signedRecurrentVoucherService.getMySignedRecurrentVouchers(mySignedRecurrentVoucherPage,mySignedRecurrentVoucherListSize)});
-
-
-    
-
-
-    const [logged, setLogged] = useState<Boolean>(authService.isLogged);
-
-    const { isLoading, error, data: bookmaker, isSuccess } = useQuery(['getBookmaker'], authService.getBookmaker);
-    
-    useEffect(() => {
-        setLogged(authService.isLogged);
-    }, [authService.isLogged, bookmaker]);
-
-    if(!logged && !isLoading && (!!isSuccess || !!error)){
-        router.push('login')
+  useEffect(() => {
+    let active = true;
+    //console.log(loading);
+    console.log(bookmaker);
+    console.log(query.recurrentVoucherHash);
+    console.log(recurrentVoucherHash);
+    // if (!loading) {
+    //   return undefined;
+    // }
+    if(!!recurrentVoucherHash){
+      console.log(recurrentVoucherHash);
+      recurrentVoucherService.getRecurrentVoucherByHash(recurrentVoucherHash).then((rec)=>{
+        setRecurrentVoucher(rec)
+      }).catch((erro)=>{
+        if(!!setErrorMessage){
+          setErrorMessage(erro.message)
+        }
+      })
     }
+
+    return () => {
+        active = false;
+    };
+  }, [recurrentVoucherHash]);
     
-    let userType: "creator" | "subscriber" = "creator";
+
+
+  const onEditHandler = (recurrentVoucher: RecurrentVoucher, changes: any, alertMessage: string) => {
+
+      console.log(recurrentVoucher);
+      console.log(changes);
+      
+      recurrentVoucherService.updateRecurrentVoucher(recurrentVoucher, changes)
+          .then((_res: RecurrentVoucher) => {
+            setSuccessMessage(alertMessage)
+            setRecurrentVoucher(_res)
+          })
+          .catch((err: ServerError) => {
+            console.log("Erro interno");
+            console.log(err.detail);
+            setErrorMessage("Erro interno")
+          });
+  };
+
+  // 
+  useEffect(() => {
+    let active = true;
+    //console.log(loading);
+    console.log(bookmaker);
+    console.log(recurrentVoucher);
+    
+    if (!!!recurrentVoucher) {
+      return undefined;
+    }
+
+    signedRecurrentVoucherService.getSignedRecurrentVouchersByRecurrentId(recurrentVoucher.id,subscribersPage,subscribersListSize).then((sigs)=>{
+      setSubscribers(sigs)
+    }).catch((erro)=>{
+      //if(!!setErrorMessage){
+      console.log(erro.message);
+      setErrorMessage(erro.message)
+      //}
+    })
+
+    return () => {
+        active = false;
+    };
+  }, [recurrentVoucher,subscribersPage,subscribersListSize]);
+
+  console.log(recurrentVoucher);
+
+  useEffect(() => {
+      setLogged(authService.isLogged);
+  }, [authService.isLogged, bookmaker]);
+
+  if(!logged && !isLoading && (!!isSuccess || !!error)){
+      router.push('login')
+  }
+    
     return (
-        <Box sx={{ maxWidth: 600, mx: "auto", p: 3 }}>
-            {userType === "creator" ? 
-            <CreatorTabs 
-            setSelectedRecurrentVoucher={setSelectedRecurrentVoucher} 
-            getSelectedRecurrentVoucher={() => selectedRecurrentVoucher}
-            myRecurrentVouchers={myRecurrentVouchers}/> 
-            : 
-            <SubscriberTabs 
-            setSelectedSignedRecurrentVoucher={setSelectedSignedRecurrentVoucher} 
-            getSelectedSignedRecurrentVoucher={() => selectedSignedRecurrentVoucher}
-            mySignedRecurrentVouchers={mySignedRecurrentVouchers} />}
-        </Box>
+      
+      <div>
+        <Head>
+          <title>{recurrentVoucher?.hid}</title>
+        </Head>
+        <CustomHeader />
+       {/* <Box sx={{ maxWidth: 600, mx: "auto", p: 3 }}> */}
+       <Container>
+        
+
+            { (loading) ? <CenteredComponent>
+            <CircularProgress />
+          </CenteredComponent> :
+          <div>
+
+
+          <HomePageItem>
+            <Typography variant="h5" gutterBottom>{recurrentVoucher.hid}</Typography>
+          </HomePageItem>
+          <HomePageItem>
+            {/* <MatchPromoImage/> com botões de edição e compartilhamento*/}
+            
+            <Column>
+              <ItemProperty>
+                <PromoImage entity={recurrentVoucher} bookmaker={bookmaker || undefined} onEditHandler={onEditHandler}/>
+              </ItemProperty>
+            </Column>
+          </HomePageItem>
+
+          
+          <HomePageItem>
+              
+            <Column>
+              <ItemProperty>
+                <AvatarImage entity={recurrentVoucher} bookmaker={bookmaker || undefined} onEditHandler={onEditHandler}/>
+              </ItemProperty>
+            </Column>
+          </HomePageItem>
+          <HomePageItem>
+            <ItemProperty>
+              <VoucherRules voucher={recurrentVoucher} title={"Leia as Regras (Importante!)"}/> {/* descricao (nao editavel) */}
+            </ItemProperty>
+          </HomePageItem>
+
+          <HomePageItem>
+            <ItemProperty>
+              <RecurrentVoucherData recurrentVoucher={recurrentVoucher} bookmaker={bookmaker || undefined} onEditHandler={onEditHandler} title={"Dados da Proposta de Assinatura"}/> {/* informacoes editaveis do voucer (talvez seja visivel apenas para o owner) */}
+            </ItemProperty>
+          </HomePageItem>
+
+          <RecurrenceTabs 
+            recurrentVoucher={recurrentVoucher} 
+            subscribers={subscribers} />
+          </div>
+            
+            }
+
+            
+
+          <HomePageItem>
+          <FloatingButtonFAB/>
+          </HomePageItem>
+            
+          <Alert type="error" show={!!errorMessage} closeAll={()=> setErrorMessage("")}>
+              <p>{errorMessage}</p>
+          </Alert>
+          <Alert type="alert" show={!!alertMessage} closeAll={()=> setAlertMessage("")}>
+              <p>{alertMessage}</p>
+          </Alert>
+          <Alert type="success" show={!!successMessage} closeAll={()=> setSuccessMessage("")}>
+              <p>{successMessage}</p>
+          </Alert>
+        {/* </Box> */}
+        </Container>
+      </div>
     );
 }
 
-function CreatorTabs({ 
-    setSelectedRecurrentVoucher,
-    getSelectedRecurrentVoucher,
-    myRecurrentVouchers//, isCreator = false, onSubscribe, onManage 
+function RecurrenceTabs({ 
+    recurrentVoucher,
+    subscribers
+    //myRecurrentVouchers//, isCreator = false, onSubscribe, onManage 
     }: CreatorTabsProps) {
 
-
-    const router = useRouter();
-
     //const [logged, setLogged] = useState<Boolean>(false);
-    const [tabIndex, setTabIndex] = useState<number>(0);
+    //const [tabIndex, setTabIndex] = useState<number>(0);
 
+    //const handleChange = (event: React.SyntheticEvent, newValue: number) => setTabIndex(newValue);
 
-    const handleChange = (event: React.SyntheticEvent, newValue: number) => setTabIndex(newValue);
-
-  
-    useEffect(() => {
-    if (!router.isReady) return;
-
-    // Ler parâmetro de aba
-    const tab = router.query.tab;
-    if (tab === "assinaturas") setTabIndex(2);
-    else if(tab === "assinantes") setTabIndex(1);
-    else setTabIndex(0);
-
-    // Ler parâmetro de proposta
-    const recurrentVoucherHash = router.query.recurrentVoucherHash;
-    if (recurrentVoucherHash) {
-        //const found = propostasMock.find(p => p.id === Number(recurrentVoucherId));
-        const found = myRecurrentVouchers.find(p => p.hash === recurrentVoucherHash);
-        if (found) setSelectedRecurrentVoucher(found);
-    }
-    }, [router.isReady, router.query]);
-
-    const recurrentVoucher:RecurrentVoucher = getSelectedRecurrentVoucher();
-    
-    // useEffect(() => {
-    // if (!router.isReady) return;
-
-    // const proposalId = router.query.proposalId;
-    // if (proposalId) {
-    //     const found = propostasMock.find(p => p.id === Number(proposalId));
-    //     if (found) setSelectedProposal(found);
-    // }
-    // }, [router.isReady, router.query.proposalId]);
 
   return (
-    <>
-      <Typography variant="h5" gutterBottom>Área do Criador</Typography>
-      <Tabs value={tabIndex} onChange={handleChange} aria-label="abas do criador" sx={{ mb: 2 }}>
-        <Tab label="Minhas Propostas" />
-        <Tab label="Meus Assinantes" />
-        <Tab label="Minhas Assinaturas" />
-      </Tabs>
-
-      {tabIndex === 0 && (
-        <>
+    <Container>
 
 
-          <MyRecurrentVouchersList
-            myRecurrentVouchers={myRecurrentVouchers}
-            onManage={(proposal: RecurrentVoucher) => setSelectedRecurrentVoucher(proposal)}
-          />
-          <Box mt={2}>
-            <Button variant="contained" onClick={() => alert("Criar nova proposta")}>Criar Nova Proposta</Button>
-          </Box>
-        </>
-      )}
+      {!!(recurrentVoucher.isOwner)?
 
-      {tabIndex === 2 && <SubscriptionList subscriptions={assinaturasMock} />}
+        <SubscriptionList subscriptions={subscribers} />
 
-      <Drawer
-        anchor="right"
-        open={!!recurrentVoucher}
-        onClose={() => setSelectedRecurrentVoucher(null)}
-      >
-        <Box sx={{ width: 300, p: 2 }}>
-          {recurrentVoucher && (
-            <>
-              <Typography variant="h6">{recurrentVoucher.hid}</Typography>
-              <Typography variant="body2" color="textSecondary" gutterBottom>
-                R$ {recurrentVoucher.price} / mês
-              </Typography>
-              <Divider sx={{ my: 1 }} />
-              <Typography variant="body1">{recurrentVoucher.description}</Typography>
-              <Box mt={2}>
-                <Button variant="contained" fullWidth onClick={() => alert("Editar proposta")}>Editar</Button>
-              </Box>
-            </>
-          )}
+      :
+
+        <></>
+      }
+
+      {!!(recurrentVoucher.isOwner)?
+      
+        <Box mt={2}>
+          <Button variant="contained" onClick={() => alert("Criar nova proposta")}>Criar Nova Proposta</Button>
         </Box>
-      </Drawer>
-    </>
-  );
-}
-
-function SubscriberTabs({ 
-    setSelectedSignedRecurrentVoucher,
-    getSelectedSignedRecurrentVoucher,
-    mySignedRecurrentVouchers//, isCreator = false, onSubscribe, onManage 
-    
-    }: SubscriberTabsProps) {
-  const [tabIndex, setTabIndex] = useState<number>(0);
-  //const userSubscriptions: Subscription[] = [assinaturasMock[0]];
-
-  const router = useRouter();
-
-    useEffect(() => {
-    if (!router.isReady) return;
-
-    const tab = router.query.tab;
-    if (tab === "minhas") setTabIndex(0);
-    else setTabIndex(0);
-    }, [router.isReady, router.query]);
-
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => setTabIndex(newValue);
-
-
-  return (
-    <>
-      <Typography variant="h5" gutterBottom>Área do Assinante</Typography>
-      <Tabs value={tabIndex} onChange={handleChange} aria-label="abas do assinante" sx={{ mb: 2 }}>
-        {/* <Tab label="Propostas Disponíveis" /> */}
-        <Tab label="Minhas Assinaturas" />
-      </Tabs>
-
-      {/* {tabIndex === 0 && (
-        <ProposalList
-          proposals={propostasMock}
-          onSubscribe={(id) => alert(`Assinar proposta ${id}`)}
-        />
-      )} */}
-
-      {tabIndex === 0 && (
-        <SubscriptionList
-          getSelectedSignedRecurrentVoucher={getSelectedSignedRecurrentVoucher}
-          setSelectedSignedRecurrentVoucher={setSelectedSignedRecurrentVoucher}
-          mySignedRecurrentVouchers={mySignedRecurrentVouchers}
-          onCancel={(id) => alert(`Cancelar assinatura ${id}`)}
-        />
-      )}
+      :
+      
+        <Box mt={2}>
+          <Button variant="contained" onClick={() => alert("Contratar proposta")}>Contratar</Button>
+        </Box>
+      }
 
       
-    </>
+      <HomePageItem>
+        {/* <MatchPromoImage/> com botões de edição e compartilhamento*/}
+        <Column>
+          <ItemProperty>
+            <ShareButtons link={window.location.href} bannerLink={recurrentVoucher?.photo || recurrentVoucher?.logo}/>
+          </ItemProperty>
+        </Column>
+      </HomePageItem>
+    </Container>
   );
 }
 
-function MyRecurrentVouchersList({ myRecurrentVouchers, onManage }: ProposalListProps) {
-  return (
-    <List>
-      {myRecurrentVouchers.map((p) => (
-        <ListItem key={p.id} divider>
-          <ListItemText
-            primary={p.hid}
-            secondary={`Valor: R$ ${p.price} / mês`}
-          />
-          {p.isOwner && (
-            <ListItemSecondaryAction>
-              <Button variant="outlined" onClick={() => onManage && onManage(p)}>
-                Gerenciar
-              </Button>
-            </ListItemSecondaryAction>
-          )}
-          {/* {!p.isOwner && onSubscribe && (
-            <ListItemSecondaryAction>
-              <Button variant="outlined" onClick={() => onSubscribe(p.id)}>
-                Assinar
-              </Button>
-            </ListItemSecondaryAction>
-          )} */}
-        </ListItem>
-      ))}
-    </List>
-  );
-}
+// function SubscriberTabs({ 
+//     setSelectedSignedRecurrentVoucher,
+//     getSelectedSignedRecurrentVoucher,
+//     mySignedRecurrentVouchers//, isCreator = false, onSubscribe, onManage 
+    
+//     }: SubscriberTabsProps) {
+//   const [tabIndex, setTabIndex] = useState<number>(0);
+//   //const userSubscriptions: Subscription[] = [assinaturasMock[0]];
+
+//   const router = useRouter();
+
+//     useEffect(() => {
+//     if (!router.isReady) return;
+
+//     const tab = router.query.tab;
+//     if (tab === "minhas") setTabIndex(0);
+//     else setTabIndex(0);
+//     }, [router.isReady, router.query]);
+
+//   const handleChange = (event: React.SyntheticEvent, newValue: number) => setTabIndex(newValue);
+
+
+//   return (
+//     <>
+//       <Typography variant="h5" gutterBottom>Área do Assinante</Typography>
+//       <Tabs value={tabIndex} onChange={handleChange} aria-label="abas do assinante" sx={{ mb: 2 }}>
+//         {/* <Tab label="Propostas Disponíveis" /> */}
+//         <Tab label="Minhas Assinaturas" />
+//       </Tabs>
+
+//       {/* {tabIndex === 0 && (
+//         <ProposalList
+//           proposals={propostasMock}
+//           onSubscribe={(id) => alert(`Assinar proposta ${id}`)}
+//         />
+//       )} */}
+
+//       {tabIndex === 0 && (
+//         <SubscriptionList
+//           getSelectedSignedRecurrentVoucher={getSelectedSignedRecurrentVoucher}
+//           setSelectedSignedRecurrentVoucher={setSelectedSignedRecurrentVoucher}
+//           mySignedRecurrentVouchers={mySignedRecurrentVouchers}
+//           onCancel={(id) => alert(`Cancelar assinatura ${id}`)}
+//         />
+//       )}
+
+      
+//     </>
+//   );
+// }
+
+// function MyRecurrentVouchersList({ myRecurrentVouchers, onManage }: ProposalListProps) {
+//   return (
+//     <List>
+//       {myRecurrentVouchers.map((p) => (
+//         <ListItem key={p.id} divider>
+//           <ListItemText
+//             primary={p.hid}
+//             secondary={`Valor: R$ ${p.price} / mês`}
+//           />
+//           {p.isOwner && (
+//             <ListItemSecondaryAction>
+//               <Button variant="outlined" onClick={() => onManage && onManage(p)}>
+//                 Gerenciar
+//               </Button>
+//             </ListItemSecondaryAction>
+//           )}
+//           {/* {!p.isOwner && onSubscribe && (
+//             <ListItemSecondaryAction>
+//               <Button variant="outlined" onClick={() => onSubscribe(p.id)}>
+//                 Assinar
+//               </Button>
+//             </ListItemSecondaryAction>
+//           )} */}
+//         </ListItem>
+//       ))}
+//     </List>
+//   );
+// }
 
 function SubscriptionList({ 
-    setSelectedSignedRecurrentVoucher,
-    getSelectedSignedRecurrentVoucher,
-    mySignedRecurrentVouchers,//, isCreator = false, onSubscribe, onManage 
-    onCancel
+    subscriptions
     }: SubscriptionListProps) {
     
-    const router = useRouter();
+  const router = useRouter();
+  
+  const [signedRecurrentVoucher, setSignedRecurrentVoucher] = useState<SignedRecurrentVoucher | undefined>(undefined);
 
-    useEffect(() => {
+  function onManage(id: number): void {
     if (!router.isReady) return;
+    router.push({ pathname: "signed-recurrent-voucher-created", query: { signedRecurrentVoucherId: id }} );
+  }
+  
+  function onView(s: SignedRecurrentVoucher|undefined): void {
+    setSignedRecurrentVoucher(s)
+  }
 
-    // Ler parâmetro de proposta
-    const signedRecurrentVoucherId = router.query.signedRecurrentVoucherId;
-    if (signedRecurrentVoucherId) {
-        //const found = propostasMock.find(p => p.id === Number(recurrentVoucherId));
-        const found = mySignedRecurrentVouchers.find(p => p.id === Number(signedRecurrentVoucherId));
-        if (found) setSelectedSignedRecurrentVoucher(found);
+  function nextPaymentDate(
+    
+    quantidade: number,
+    unidade: string,
+    pagamentoEmDia: boolean,
+    dataContratacao: Date
+  ): { dataProximoPagamento: Date; dataFormatada: string } {
+    const dataBase = new Date(dataContratacao);
+
+    // Se não estiver em dia, o vencimento é o atual
+    if (!pagamentoEmDia) {
+      return {
+        dataProximoPagamento: dataBase,
+        dataFormatada: formatarData(dataBase),
+      };
     }
-    }, [router.isReady, router.query]);
 
-    const signedRecurrentVoucher:SignedRecurrentVoucher = getSelectedSignedRecurrentVoucher();
+    switch (unidade.toLowerCase()) {
+      case "dia":
+      case "dias":
+        dataBase.setDate(dataBase.getDate() + quantidade);
+        break;
+      case "semana":
+      case "semanas":
+        dataBase.setDate(dataBase.getDate() + 7 * quantidade);
+        break;
+      case "quinzena":
+      case "quinzenas":
+        dataBase.setDate(dataBase.getDate() + 15 * quantidade);
+        break;
+      case "mês":
+      case "mes":
+      case "meses":
+        dataBase.setMonth(dataBase.getMonth() + quantidade);
+        break;
+      case "ano":
+      case "anos":
+        dataBase.setFullYear(dataBase.getFullYear() + quantidade);
+        break;
+      default:
+        throw new Error("Unidade de tempo inválida.");
+    }
+
+    return {
+      dataProximoPagamento: dataBase,
+      dataFormatada: formatarData(dataBase),
+    };
+  }
+
+function formatarData(data: Date): string {
+  return data.toLocaleDateString("pt-BR", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
 
   return (<>
   
     <List>
-      {mySignedRecurrentVouchers.map((s) => (
-        <ListItem key={s.id} divider>
+      {subscriptions.map((s) => (
+        !!s && <ListItem key={s.id} divider>
           <ListItemText
             primary={s.hid}
-            secondary={`Status: ${s.status} — Próxima cobrança: ${s.nextPaymentDate}`}
+            secondary={`Status: ${s.status} — Próxima cobrança: ${nextPaymentDate(s.period,s.timeUnit,s.status==2,s.createdAt)}`}
           />
-          {onCancel && (
+          {
             <ListItemSecondaryAction>
-              <Button variant="outlined" color="error" onClick={() => onCancel(s.id)}>
-                Cancelar
+              <Button variant="outlined" color="error" onClick={() => onView(s)}>
+                Visualizar
               </Button>
             </ListItemSecondaryAction>
-          )}
+          }
         </ListItem>
       ))}
     </List>
@@ -364,19 +509,19 @@ function SubscriptionList({
       <Drawer
         anchor="right"
         open={!!signedRecurrentVoucher}
-        onClose={() => setSelectedSignedRecurrentVoucher(null)}
+        onClose={() => onView(undefined)}
       >
         <Box sx={{ width: 300, p: 2 }}>
           {signedRecurrentVoucher && (
             <>
-              <Typography variant="h6">{signedRecurrentVoucher.name}</Typography>
+              <Typography variant="h6">{signedRecurrentVoucher.hid}</Typography>
               <Typography variant="body2" color="textSecondary" gutterBottom>
-                R$ {signedRecurrentVoucher.price} / mês
+                R$ {signedRecurrentVoucher.cost} / mês
               </Typography>
               <Divider sx={{ my: 1 }} />
               <Typography variant="body1">{signedRecurrentVoucher.description}</Typography>
               <Box mt={2}>
-                <Button variant="contained" fullWidth onClick={() => alert("Editar proposta")}>Editar</Button>
+                <Button variant="contained" fullWidth onClick={() => signedRecurrentVoucher && onManage(signedRecurrentVoucher.id)}>Editar</Button>
               </Box>
             </>
           )}

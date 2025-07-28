@@ -47,6 +47,12 @@ export class VoucherService {
         return this.vouchersDataSource.getVouchers(page,size,query);
     }
 
+    public async getMyVouchers( page: number, size: number): Promise<Voucher[]> {
+        return this.vouchersDataSource.getMyVouchers(page,size);
+    }
+
+    
+
     public async createVoucher(voucher: VoucherCreation): Promise<Voucher> {
         return this.vouchersDataSource.createVoucher(voucher);
     };    

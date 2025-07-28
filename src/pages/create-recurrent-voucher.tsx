@@ -26,6 +26,7 @@ import Currency from "../models/Currency";
 import { CurrencyService } from "../services/CurrencyService";
 import { useQuery } from "react-query";
 import { AuthService } from "../services/AuthService";
+import { NumberFormatBase } from "react-number-format";
 
 const StyledPageContainer = styled("div")({
     height: "100vh"
@@ -83,7 +84,12 @@ const initialValues: RecurrentVoucherCreation = {
     amountPerDue: 1,
     cicles: 12,
     period: 86400000,
-    timeUnit: "DAY"
+    timeUnit: "DAY",
+    cost: 1,
+    currenciesReceived: {
+        acronym: "BRL",
+        description: ""
+    },
 };
 
 const CreateRecurrentVoucherPage = () => {
@@ -182,7 +188,7 @@ const CreateRecurrentVoucherForm = () => {
                 setSubmitting(false);
                 resetForm();
                 //router.push("voucher-created");
-                router.push({ pathname: "voucher-recurrent-created", query: { recurrentVoucherId: _res.id }} );
+                router.push({ pathname: "recurrent-voucher-created", query: { recurrentVoucherHash: _res.hash }} );
             })
             .catch((err) => {
                 setSubmitting(false);
@@ -435,16 +441,16 @@ const CreateRecurrentVoucherForm = () => {
                         <StyledButton onClick={createCoinHandler}>{"Crie seu cupom +"}</StyledButton>
                         </RowFlex>
                         
-                        <InputLabel id="demo-amount-select-label">Quantidade por vencimento?</InputLabel>
+                        <InputLabel id="demo-amount-select-label">Quantidade de tokens por vencimento?</InputLabel>
                         <Field as={Select}
                         
                         labelId="demo-amountPerDue-select-label"
                         value={formik.touched.amountPerDue}
-                        label="Pretende disponibilizar quantos cupons nesta oferta?"
+                        label="Pretende disponibilizar quantos tokens nesta oferta?"
                         name="amountPerDue"
                         key="amountPerDue"
                         id="amountPerDue"
-                        placeholder="Pretende disponibilizar quantos cupons nesta oferta?"
+                        placeholder="Pretende disponibilizar quantos tokens nesta oferta?"
                         className="form-field"
                         variant="outlined"
                         error={formik.touched.amountPerDue && Boolean(formik.errors.amountPerDue)}
@@ -452,7 +458,7 @@ const CreateRecurrentVoucherForm = () => {
                         onChange={(event: any)=>{formik.values.amountPerDue = (event.target.value as unknown) as number || 1}}
                         defaultValue={"placeholder"}
                         >
-                            <MenuItem disabled value={"placeholder"}>A cada vencimento, o cliente terá direito a quanto do serviço ou produto ou cupom oferecido?</MenuItem>
+                            <MenuItem disabled value={"placeholder"}>Dá direito a quantos tokens a cada pagamento?</MenuItem>
                             <MenuItem value={1}>1</MenuItem>
                             <MenuItem value={2}>2</MenuItem>
                             <MenuItem value={5}>5</MenuItem>
@@ -467,6 +473,42 @@ const CreateRecurrentVoucherForm = () => {
                             <MenuItem value={100000}>100.000</MenuItem>
                             <MenuItem value={100000000000}>A vontade</MenuItem>
                         </Field>
+
+
+                        <InputLabel id="demo-cost-select-label">Quanto cada vencimento deve custar?</InputLabel>
+                        
+                            {!!formik.values.currenciesReceived && (
+                                <Field as={NumberFormatBase}
+                                key="cost"
+                                id="cost"
+                                name="cost"
+                                label="Quanto cada vencimento deve custar?"
+                                className="form-field"
+                                variant="outlined"
+                                fullWidth
+                                
+                                format={(numStr:string) => {
+                                    if (numStr === '') return '';
+                                    return new Intl.NumberFormat("pt-BR", {
+                                    style: 'currency',
+                                    currency: 'BRL',
+                                    }).format(Number(numStr)/100);
+                                }} 
+                                onKeyDown={(e: { key?: any; preventDefault?: any; target?: any; }) => {
+                                    const { target } = e;
+                                    const { value, selectionStart } = target;
+                                    console.log(e.key);
+                                    console.log(value);
+                                    console.log(value[selectionStart]);
+                                    console.log(selectionStart);
+                                    if(value!=""){
+                                        target.selectionStart = value.length;
+                                    }
+                                }} 
+                                error={formik.touched.cost && Boolean(formik.errors.cost)}
+                                helperText={formik.touched.cost && formik.errors.cost}
+                                /> 
+                            )}
 {/*                         
                         <InputLabel id="demo-amountPerUser-select-label">Cada vencimento dá direito a quantos cupons?</InputLabel>
                         <Field as={Select}

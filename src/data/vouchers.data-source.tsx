@@ -183,6 +183,34 @@ export class VouchersDataSource {
         }
     }
 
+    public async getMyVouchers(page: number, size: number): Promise<Voucher[]> {
+        let params:any = {page:page|0, size:size|15};
+        console.log(params);
+        const response = await this.http.get(Endpoints.VOUCHERS_MY, params);
+        if (response.ok) {
+            //const vouchersResponse = await response.json();
+            const capsule  = await response.json() as Capsule;
+            console.log(capsule);
+            //console.log(vouchersResponse);
+            if(capsule.code == "00000"){
+                console.log(capsule.data["_embedded"]["vouchers"]);
+                const vouchers = capsule.data["_embedded"]["vouchers"] as Voucher[];
+                console.log(vouchers);
+                return vouchers;
+            }else{
+                throw Error(capsule.message);
+            }
+            // if(!!vouchersResponse["_embedded"] && !!vouchersResponse["_embedded"]["vouchers"]){
+            //     console.log(vouchersResponse["_embedded"]["vouchers"]);
+            //     return vouchersResponse["_embedded"]["vouchers"] as Voucher[];
+            // }else{
+            //     return [];
+            // }
+        } else {
+            throw Error(response.statusText);
+        }
+    }
+
     public async getVouchers(page: number, size: number,query?: String): Promise<Voucher[]> {
         let params:any = {page:page|0, size:size|15};
         if(query){
@@ -225,7 +253,8 @@ export class VouchersDataSource {
             vouchersType: voucher.vouchersType,
             amount: voucher.amount,
             amountPerUser: voucher.amountPerUser,
-            currenciesId: voucher.currency?.id
+            currenciesId: voucher.currency?.id,
+            cost: Number(voucher.cost)
         };
 
         console.log(voucher);

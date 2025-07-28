@@ -11,9 +11,10 @@ import {
 import { MatchService } from "../../services/MatchService";
 import Voucher from "../../models/Voucher";
 import { Column } from "../../styles/shared-styles";
+import RecurrentVoucher from "../../models/RecurrentVoucher";
 
 interface DataProps {
-    voucher?: Voucher;
+    voucher?: Voucher | RecurrentVoucher;
     title: string;
 }
 
@@ -34,7 +35,7 @@ export default function VoucherRules({voucher,title}: DataProps) {
             <BodyCardContent>
             <DescriptionLine >
                 <Description>
-                    <StyledTypographyTitle variant="body2">
+                    <StyledTypographyTitle variant="body2" >
                         {voucher?.description}
                     </StyledTypographyTitle> 
                 </Description> 

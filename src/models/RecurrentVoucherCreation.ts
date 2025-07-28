@@ -15,6 +15,8 @@ export default interface RecurrentVoucherCreation {
   period: number;
   timeUnit:string;
   currency?: Currency;
+  currenciesReceived: Currency;
+  cost: number;
   
 }
 
@@ -33,5 +35,7 @@ export function RecurrentVoucherToRecurrentVoucherCreation (recurrentVoucher:Rec
       amountPerDue: recurrentVoucher.amountPerDue,
       period: recurrentVoucher.period,
       timeUnit: recurrentVoucher.timeUnit,
+      currenciesReceived: recurrentVoucher.currenciesReceived,
+      cost: recurrentVoucher.cost,
   }
 }

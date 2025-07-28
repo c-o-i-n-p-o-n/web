@@ -5,6 +5,7 @@ import {Field, Form, Formik, FormikHelpers, FormikProps} from "formik";
 import * as yup from 'yup';
 import CustomHeader from "../containers/CustomHeader/CustomHeader";
 import SectionTitle from "../containers/SectionTitle";
+import { NumberFormatBase, NumberFormatValues, NumericFormat } from "react-number-format";
 import * as React from "react";
 import {useEffect, useState} from "react";
 import {AutocompleteChangeDetails, AutocompleteChangeReason} from "@mui/base/AutocompleteUnstyled/useAutocomplete";
@@ -80,7 +81,12 @@ const initialValues: VoucherCreation = {
     description: "",
     vouchersType: 1,
     amountPerUser: 1,
-    amount: 1
+    amount: 1,
+    currenciesReceived: {
+        acronym: "BRL",
+        description: ""
+    },
+    cost: 1
 };
 
 const CreateVoucherPage = () => {
@@ -400,7 +406,124 @@ const CreateVoucherForm = () => {
                             <MenuItem value={50}>50 cupons por usuário</MenuItem>
                             <MenuItem value={100}>100 cupons por usuário</MenuItem>
                         </Field>
+{/* <TextField
+                    value={amount}
+                    defaultValue={url}
+                    type="text"
+                    label="Valor"
+                    placeholder={amount+""}
+                    variant="standard"
+                    onChange={changeAmountHandler}
+                    fullWidth
+                    slotProps={{
+                        input: {
+                          startAdornment: <InputAdornment position="start">R$</InputAdornment>,
+                        },
+                      }}
+                    />  */}
 
+
+                       
+                        
+                        <InputLabel id="demo-cost-select-label">Quanto cada vale deve custar?</InputLabel>
+                         {/* <Field as={TextField}
+                              key="cost"
+                              id="cost"
+                              name="cost"
+                              label="Quanto cada vale deve custar?"
+                              placeholder={formik.touched.cost}
+                              className="form-field"
+                              variant="outlined"
+                              //onChange={changeAmountHandler}
+                              fullWidth
+                              error={formik.touched.cost && Boolean(formik.errors.cost)}
+                              helperText={formik.touched.cost && formik.errors.cost}
+                            />  */}
+                        
+                            {!!formik.values.currenciesReceived && (
+                                <Field as={NumberFormatBase}
+                                key="cost"
+                                id="cost"
+                                name="cost"
+                                label="Quanto cada vale deve custar?"
+                                //placeholder={formik.touched.cost}
+                                className="form-field"
+                                variant="outlined"
+                                //onChange={changeAmountHandler}
+                                fullWidth
+                                
+                                format={(numStr:string) => {
+                                    if (numStr === '') return '';
+                                    return new Intl.NumberFormat("pt-BR", {
+                                    style: 'currency',
+                                    currency: 'BRL',
+                                    }).format(Number(numStr)/100);
+                                }} 
+                                onKeyDown={(e: { key?: any; preventDefault?: any; target?: any; }) => {
+                                    const { target } = e;
+                                    const { value, selectionStart } = target;
+                                    console.log(e.key);
+                                    console.log(value);
+                                    console.log(value[selectionStart]);
+                                    console.log(selectionStart);
+                                    if(value!=""){
+                                        target.selectionStart = value.length;
+                                    }
+                                }} 
+                                //thousandSeparator="."
+                                //decimalSeparator=","
+                                //prefix={formik.values.currenciesReceived.acronym+"$ "}
+                                //decimalScale={2}
+                                //fixedDecimalScale
+                                //allowNegative={false}
+                                error={formik.touched.cost && Boolean(formik.errors.cost)}
+                                helperText={formik.touched.cost && formik.errors.cost}
+                                /> 
+                                
+                            //     <NumericFormat
+                            //     value={formik.touched.cost+""}
+                            //     customInput={TextField}
+                            //     label="Quanto cada vale deve custar?"
+                            //     variant="outlined"
+                            //     fullWidth
+                            //   key="cost"
+                            //   id="cost"
+                            //   name="cost"
+                            //     thousandSeparator="."
+                            //     decimalSeparator=","
+                            //     prefix={formik.values.currenciesReceived.acronym+"$ "}
+                            //     decimalScale={2}
+                            //     fixedDecimalScale
+                            //     valueIsNumericString
+                            //     allowNegative={false}
+                            //   error={formik.touched.cost && Boolean(formik.errors.cost)}
+                            //   helperText={formik.touched.cost && formik.errors.cost}
+                            //     // onValueChange={changeAmountHandler}
+                            // />
+                            // <NumberFormatBase
+                            //     format={(numStr:string) => {
+                            //         if (numStr === '') return '';
+                            //         return new Intl.NumberFormat("pt-BR", {
+                            //         style: 'currency',
+                            //         currency: 'BRL',
+                            //         }).format(Number(numStr)/100);
+                            //     }} 
+                            //     onKeyDown={(e: { key?: any; preventDefault?: any; target?: any; }) => {
+                            //         const { target } = e;
+                            //         const { value, selectionStart } = target;
+                            //         console.log(e.key);
+                            //         console.log(value);
+                            //         console.log(value[selectionStart]);
+                            //         console.log(selectionStart);
+                            //         if(value!=""){
+                            //             target.selectionStart = value.length;
+                            //         }
+                            //     }} 
+                            // />
+                            
+                            
+                            
+                            )}
                     </StyledFields>
 
                     <CustomButton

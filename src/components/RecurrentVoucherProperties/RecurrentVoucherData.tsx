@@ -17,7 +17,7 @@ import {
     StyledButton,
     StyledFields,
     StyledTypographyTitle
-} from "./Voucher.styles";
+} from "./RecurrentVoucher.styles";
 import { Column, Row } from "../../styles/shared-styles";
 import Bookmaker from "../../models/Bookmaker";
 import Voucher from "../../models/Voucher";
@@ -45,11 +45,12 @@ const Edit = ({owner, data, setData, onClickHandler, ...style}: { owner: boolean
             <DescriptionLine>
                 <Column>
                     <StyledFields>
-                        <InputLabel id="amountPerUser-simple-select-label">Cada vale dá direito a quantos cupons?</InputLabel>
+                        <InputLabel id="amountPerUser-simple-select-label" style={{color: "Highlight"}}>Cada vale dá direito a quantos cupons?</InputLabel>
                         <Select
                             labelId="amountPerUser-simple-select-label"
                             id="amountPerUser-simple-select"
                             //value={data.amountPerUser}
+                            variant="standard"
                             defaultValue={data.amountPerUser}
                             label="amountPerUser"
                             onChange={changeAmountPerUserHandler}
@@ -64,10 +65,11 @@ const Edit = ({owner, data, setData, onClickHandler, ...style}: { owner: boolean
                         </Select>
                     </StyledFields> 
                     <StyledFields>
-                        <InputLabel id="expiredAt-simple-select-label">Prazo de validade</InputLabel>
+                        <InputLabel id="expiredAt-simple-select-label" style={{color: "Highlight"}}>Prazo de validade</InputLabel>
                         <Select
                             labelId="expiredAt-simple-select-label"
                             id="expiredAt-simple-select"
+                            variant="standard"
                             //value={data.expiredAt}
                             defaultValue={data.expiredAt}
                             label="expiredAt"
@@ -88,7 +90,7 @@ const Edit = ({owner, data, setData, onClickHandler, ...style}: { owner: boolean
                 </Column>
                     <Column>
                         <StyledButton onClick={onClickHandler}>
-                            <SaveIcon style={{backgroundColor: "#6B61F5", borderRadius: "20px", fontSize: "35px", padding: "5px", color: "white"}}></SaveIcon>
+                            <SaveIcon style={{backgroundColor: "Highlight", borderRadius: "20px", fontSize: "35px", padding: "5px", color: "white"}}></SaveIcon>
                         </StyledButton> 
                     </Column>
             </DescriptionLine>
@@ -100,7 +102,7 @@ const Edit = ({owner, data, setData, onClickHandler, ...style}: { owner: boolean
 }
 
 interface DataProps {
-    voucher?: Voucher;
+    recurrentVoucher?: RecurrentVoucher;
     bookmaker?:Bookmaker;
     title: string;
     onEditHandler:Function
@@ -108,38 +110,39 @@ interface DataProps {
 
 const currencyService = new CurrencyService();
 
-export default function VoucherData({voucher,bookmaker,title,onEditHandler}: DataProps) {
+export default function RecurrentVoucherData({recurrentVoucher,bookmaker,title,onEditHandler}: DataProps) {
 
     const [expanded, setExpanded] = useState(false);
-    const [currency, setCurrency] = useState<Currency | undefined>(undefined);
+    //const [currency, setCurrency] = useState<Currency | undefined>(undefined);
     const [errorMessage, setErrorMessage] = useState("");
     const [data, setData] = useState({
-        expiredAt:voucher?.expiredAt,
-        amountPerUser:voucher?.amountPerUser
+        expiredAt:recurrentVoucher?.expiredAt,
+        amountPerDue:recurrentVoucher?.amountPerDue
     });
     
-    const owner = !!voucher && !!bookmaker && !!bookmaker.id?voucher.bookmakers?.id === bookmaker.id:false;
+    const owner = !!(recurrentVoucher?.isOwner);//!!voucher && !!bookmaker && !!bookmaker.id?voucher.bookmakers?.id === bookmaker.id:false;
     
-    useEffect(() => {
-        let active = true;
-        console.log(voucher);
+    // useEffect(() => {
+    //     let active = true;
+    //     console.log(recurrentVoucher);
 
-        if(!!voucher){
-            const fetchMatch = async () => {
-                setCurrency(await currencyService.getCurrencyByVoucherId(voucher.id));
-                console.log(currency);
-            }
+    //     if(!!recurrentVoucher){
+    //         const fetchMatch = async () => {
+    //             //setCurrency(await currencyService.getCurrencyByVoucherId(voucher.id));
+    //             setCurrency(recurrentVoucher.currencies)
+    //             console.log(currency);
+    //         }
     
-            fetchMatch().catch(()=>{
-                console.log(currency?.id);
-            });
-        }
+    //         fetchMatch().catch(()=>{
+    //             console.log(currency?.id);
+    //         });
+    //     }
         
 
-        return () => {
-            active = false;
-        };
-    }, [voucher]);
+    //     return () => {
+    //         active = false;
+    //     };
+    // }, [recurrentVoucher]);
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
@@ -150,7 +153,7 @@ export default function VoucherData({voucher,bookmaker,title,onEditHandler}: Dat
         }
         
         const fetchUrl = async () => {
-            onEditHandler(voucher,{amountPerUser:data.amountPerUser,expiredAt:data.expiredAt},"Dados atualizados!");
+            onEditHandler(recurrentVoucher,{amountPerDue:data.amountPerDue,expiredAt:data.expiredAt},"Dados atualizados!");
         }
 
         fetchUrl().catch(console.log);
@@ -163,7 +166,7 @@ export default function VoucherData({voucher,bookmaker,title,onEditHandler}: Dat
                 <><StyledCardContentHeader onClick={handleExpandClick}>
                     <HeaderButton>
                         <Column>
-                            <StyledTypographyTitle variant="body2">
+                            <StyledTypographyTitle variant="body2" style={{color: "white"}}>
                                 {title}
                             </StyledTypographyTitle>
                         </Column>
@@ -205,28 +208,28 @@ export default function VoucherData({voucher,bookmaker,title,onEditHandler}: Dat
                 
                     <Column>
                         <Description>
-                            <StyledTypographyTitle variant="body2">
-                                {"Token: " + currency?.acronym}
+                            <StyledTypographyTitle variant="body2" >
+                                {"Token: " + recurrentVoucher?.currencies?.acronym}
                             </StyledTypographyTitle> 
                         </Description> 
                     </Column>
                     <Column>
                         <StyledTypographyTitle variant="body2">
-                            {"Status: " + ((voucher?.status == 0)?"Ativo":(voucher?.status == 1)?"Cancelado":"Encerrado")}
+                            {"Status: " + ((recurrentVoucher?.status == 0)?"Ativo":(recurrentVoucher?.status == 1)?"Cancelado":"Encerrado")}
                         </StyledTypographyTitle> 
                     </Column>
                     <Column>
                         <StyledTypographyTitle variant="body2">
-                            {"Vale: " + voucher?.amountPerUser + " tokens"}
+                            {"Vale: " + recurrentVoucher?.amountPerDue + " tokens a cada vencimento"}
                         </StyledTypographyTitle> 
                     </Column>
                     <DescriptionLine >
                         <Description>
                             <StyledTypographyTitle variant="body2">
-                                {voucher?.createdAt?"Criado em: " + format(voucher?.createdAt, " dd/MM/yyyy', às' H:mm"):"" }
+                                {recurrentVoucher?.createdAt?"Criado em: " + format(recurrentVoucher?.createdAt, " dd/MM/yyyy', às' H:mm"):"" }
                             </StyledTypographyTitle> 
                             <StyledTypographyTitle variant="body2">
-                                {"Expira em: " + (voucher?.expiredAt || 0) / (24*3600*1000) + " dias " + ((voucher?.expiredAt || 0) / (24*3600*1000)<1?"e " + (voucher?.expiredAt || 0) / (3600*1000) + " horas":"")}
+                                {"Expira em: " + (recurrentVoucher?.expiredAt || 0) / (24*3600*1000) + " dias " + ((recurrentVoucher?.expiredAt || 0) / (24*3600*1000)<1?"e " + (recurrentVoucher?.expiredAt || 0) / (3600*1000) + " horas":"")}
                             </StyledTypographyTitle> 
                         </Description> 
                     </DescriptionLine>

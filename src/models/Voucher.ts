@@ -22,4 +22,7 @@ export default interface Voucher {
   amountPerUser: number;
   bookmakers?: Bookmaker;
   currencies?: Currency;
+  currenciesReceived: Currency;
+  isOwner?: number;
+  cost: number;
 }

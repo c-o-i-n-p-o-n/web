@@ -1,4 +1,4 @@
-import {Collapse, TextField} from "@mui/material";
+import {Collapse, colors, TextField} from "@mui/material";
 import React, {MouseEventHandler, useState} from "react";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SaveIcon from '@mui/icons-material/Save';
@@ -23,6 +23,7 @@ import { StyledButton } from "./AvatarImage.styles";
 import Voucher from "../models/Voucher";
 import { ImagePromo } from "./ImagePromo";
 import Alert from "./Alert/Alert";
+import RecurrentVoucher from "../models/RecurrentVoucher";
 
 
 
@@ -44,11 +45,12 @@ const Edit = ({owner, url, setUrl, onClickHandler, ...style}: { owner: boolean, 
                         label="Endereço da imagem"
                         placeholder="https://www.banners.com/banner"
                         variant="standard"
+                        
                         onChange={changeUrlHandler}
                         fullWidth
                         />
                     <StyledButton onClick={onClickHandler}>
-                        <SaveIcon style={{backgroundColor: "#6B61F5", borderRadius: "20px", fontSize: "35px", padding: "5px", color: "white"}}></SaveIcon>
+                        <SaveIcon style={{backgroundColor: "#056ad7", borderRadius: "20px", fontSize: "35px", padding: "5px", color: "white"}}></SaveIcon>
                     </StyledButton> 
                 </Description> 
             </DescriptionLine>
@@ -60,7 +62,7 @@ const Edit = ({owner, url, setUrl, onClickHandler, ...style}: { owner: boolean, 
 }
 
 interface DataProps {
-    entity?: Match | Voucher;
+    entity?: Match | Voucher | RecurrentVoucher;
     bookmaker?: Bookmaker;
     onEditHandler:Function
 }

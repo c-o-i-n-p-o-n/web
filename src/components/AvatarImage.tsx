@@ -22,6 +22,7 @@ import Match from "../models/Match";
 import Bookmaker from "../models/Bookmaker";
 import Voucher from "../models/Voucher";
 import Alert from "./Alert/Alert";
+import RecurrentVoucher from "../models/RecurrentVoucher";
 
 
 
@@ -66,7 +67,7 @@ const Edit = ({owner, url, setUrl, onClickHandler, ...style}: { owner: boolean, 
                         fullWidth
                         />
                     <StyledButton onClick={onClickHandler}>
-                        <SaveIcon style={{backgroundColor: "#6B61F5", borderRadius: "20px", fontSize: "35px", padding: "5px", color: "white"}}></SaveIcon>
+                        <SaveIcon style={{backgroundColor: "Highlight", borderRadius: "20px", fontSize: "35px", padding: "5px", color: "white"}}></SaveIcon>
                     </StyledButton> 
                 </Description> 
             </DescriptionLine>
@@ -78,7 +79,7 @@ const Edit = ({owner, url, setUrl, onClickHandler, ...style}: { owner: boolean, 
 }
 
 interface DataProps {
-    entity?: Match | Voucher;
+    entity?: Match | Voucher | RecurrentVoucher;
     bookmaker?: Bookmaker;
     onEditHandler:Function
 }

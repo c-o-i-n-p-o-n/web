@@ -8,6 +8,26 @@ export class SignedRecurrentVouchersDataSource {
 
     private http: HttpClient = new HttpClient();
 
+    public async getMySignedRecurrentVouchers(page: number, size: number): Promise<SignedRecurrentVoucher[]> {        
+        let params:any = {page:page|0, size:size|15};
+        console.log(params);
+        const response = await this.http.get(Endpoints.MY_SIGNED_RECURRENT_VOUCHERS, params);
+        if (response.ok) {
+            const capsule  = await response.json() as Capsule;
+            console.log(capsule);
+            if(capsule.code == "00000"){
+                console.log(capsule.data["_embedded"]["signedRecurrences"]);
+                const signedRecurrences = capsule.data["_embedded"]["signedRecurrences"] as SignedRecurrentVoucher[];
+                console.log(signedRecurrences);
+                return signedRecurrences;
+            }else{
+                throw Error(capsule.message);
+            }
+        } else {
+            throw Error(response.statusText);
+        }
+    }
+
     // public async cancelRecurrentVoucher(hash: string): Promise<number> {
     //     console.log(hash)
     //     let params:any = {hash: hash};
@@ -67,21 +87,26 @@ export class SignedRecurrentVouchersDataSource {
     // }
 
     public async getSignedRecurrentVouchersByRecurrentId(recurrentVoucherId: number, page: number, size: number): Promise<SignedRecurrentVoucher[]> {        
-        let params:any = {signedRecurrencesId:recurrentVoucherId,page:page|0, size:size|15};
+        let params:any = {recurrencesId:recurrentVoucherId,page:page|0, size:size|15};
         console.log(params);
         const response = await this.http.get(Endpoints.SIGNED_RECURRENT_VOUCHERS, params);
         if (response.ok) {
             const capsule  = await response.json() as Capsule;
             console.log(capsule);
             if(capsule.code == "00000"){
-                console.log(capsule.data["_embedded"]["signedRecurrences"]);
-                const signedRecurrences = capsule.data["_embedded"]["signedRecurrences"] as SignedRecurrentVoucher[];
-                console.log(signedRecurrences);
-                return signedRecurrences;
+                if(!!capsule.data["_embedded"]){
+                    console.log(capsule.data["_embedded"]["signedRecurrences"]);
+                    const signedRecurrences = capsule.data["_embedded"]["signedRecurrences"] as SignedRecurrentVoucher[];
+                    console.log(signedRecurrences);
+                    return signedRecurrences;
+                }else{
+                    return [] as SignedRecurrentVoucher[];
+                }
             }else{
                 throw Error(capsule.message);
             }
         } else {
+            console.log(response);
             throw Error(response.statusText);
         }
     }

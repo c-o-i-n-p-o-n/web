@@ -30,13 +30,13 @@ const Buttons = ({shareHandler, copyOrShareLinkHandler, shareQRCodeHandler, ...s
         <DescriptionLine {...style}>
             <Description>
                 <StyledButton onClick={shareHandler}>
-                    <ShareIcon style={{backgroundColor: "#6B61F5", borderRadius: "20px", fontSize: "35px", padding: "5px", color: "white"}}/>
+                    <ShareIcon style={{backgroundColor: "Highlight", borderRadius: "20px", fontSize: "35px", padding: "5px", color: "white"}}/>
                 </StyledButton>
                 <StyledButton onClick={copyOrShareLinkHandler}>
-                    <LinkIcon style={{backgroundColor: "#6B61F5", borderRadius: "20px", fontSize: "35px", padding: "5px", color: "white"}}/>
+                    <LinkIcon style={{backgroundColor: "Highlight", borderRadius: "20px", fontSize: "35px", padding: "5px", color: "white"}}/>
                 </StyledButton> 
                 <StyledButton onClick={shareQRCodeHandler}>
-                    <QrCode2Icon style={{backgroundColor: "#6B61F5", borderRadius: "20px", fontSize: "35px", padding: "5px", color: "white"}}/>
+                    <QrCode2Icon style={{backgroundColor: "Highlight", borderRadius: "20px", fontSize: "35px", padding: "5px", color: "white"}}/>
                 </StyledButton>
             </Description> 
         </DescriptionLine>

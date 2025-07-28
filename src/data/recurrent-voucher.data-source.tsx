@@ -63,6 +63,28 @@ export class RecurrentVouchersDataSource {
         }
     }
 
+    public async getRecurrentVoucherByHash(hash: string): Promise<RecurrentVoucher> {
+        console.log(hash)
+        let params:any = {recurrencesHash: hash};
+        console.log(params);
+        const response = await this.http.get(Endpoints.RECURRENT_VOUCHERS_HASH, params);
+        console.log(response);
+        if (response.ok) {
+            const capsule  = await response.json() as Capsule;
+            console.log(capsule.code);
+            console.log(capsule.data);
+            if(capsule.code == "00000"){
+                capsule.data["createdAt"] = capsule.data["createdAt"]?new Date(capsule.data["createdAt"]):null;
+                const recurrentVoucher = capsule.data as RecurrentVoucher;                
+                return recurrentVoucher;
+            }else{
+                throw Error(capsule.message);
+            }
+        } else {
+            throw Error(response.statusText);
+        }
+    }
+
     public async getRecurrentVoucherById(id: number): Promise<RecurrentVoucher> {
         console.log(id)
         const response = await this.http.getById(Endpoints.RECURRENT_VOUCHERS, id);
@@ -115,6 +137,28 @@ export class RecurrentVouchersDataSource {
         }
     }
 
+    public async getMyRecurrentVouchers(page: number, size: number): Promise<RecurrentVoucher[]> {        
+        let params:any = {page:page|0, size:size|15};
+
+        console.log(params);
+        const response = await this.http.get(Endpoints.RECURRENT_MY_VOUCHERS, params);
+        if (response.ok) {
+            //const recurrentVouchersResponse = await response.json();
+            const capsule  = await response.json() as Capsule;
+            console.log(capsule);
+            if(capsule.code == "00000"){
+                console.log(capsule.data["_embedded"]["recurrences"]);
+                const recurrences = capsule.data["_embedded"]["recurrences"] as RecurrentVoucher[];
+                console.log(recurrences);
+                return recurrences;
+            }else{
+                throw Error(capsule.message);
+            }
+        } else {
+            throw Error(response.statusText);
+        }
+    }
+
     public async getRecurrentVouchersByQuery(page: number, size: number, query?: String): Promise<RecurrentVoucher[]> {        
         let params:any = {page:page|0, size:size|15};
         if(query){
@@ -152,7 +196,9 @@ export class RecurrentVouchersDataSource {
             amountPerDue: recurrentVoucher.amountPerDue,
             period: recurrentVoucher.period,
             timeUnit: recurrentVoucher.timeUnit,
-            currenciesId: recurrentVoucher.currency?.id
+            currenciesId: recurrentVoucher.currency?.id,
+            currenciesReceivedId: recurrentVoucher.currenciesReceived.id,
+            cost: Number(recurrentVoucher.cost)
         };
 
         console.log(recurrentVoucher);

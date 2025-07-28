@@ -17,6 +17,28 @@ export class TransferenceDataSource {
         return this.http.getFullUrl(Endpoints.TRANSFERENCE_RECEIVE,{hash:hash});
     }
 
+    public async getPeriodlyTransferenceBySignedRecurrentVoucherIdandPeriod
+            (signedRecurrentVoucherId: number, signedRecurrentVoucherPeriod: number): Promise<Transference>{
+        let params:any = {
+            signedRecurrentVoucherId:signedRecurrentVoucherId,
+            signedRecurrentVoucherPeriod:signedRecurrentVoucherPeriod
+        };
+        //console.log(params);
+        const response = await this.http.get(Endpoints.TRANSFERENCES_BY_HASH, params);
+        if (response.ok) {
+            const capsule  = await response.json() as Capsule;
+            //console.log(capsule);
+            if(capsule.code == "00000"){
+                const transference = capsule.data as Transference;
+                return transference;
+            }else{
+                throw Error(capsule.message);
+            }
+        } else {
+            throw Error(response.statusText);
+        }
+    }
+
     public async pay(hash: string): Promise<boolean> {
         const params = {
             hash: hash

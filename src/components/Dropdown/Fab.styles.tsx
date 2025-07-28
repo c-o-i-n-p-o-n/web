@@ -29,7 +29,9 @@ export const StyledUl = styled("ul")({
   },
 
   ".fab-button": {
-    "background-color": "#503071",
+    //"background-color": "#503071",
+    "background-color": "#056ad7",
+
 
     "svg": {
       fill: "white",
@@ -40,7 +42,8 @@ export const StyledUl = styled("ul")({
     transform: "translateY(50px) scale(0)",
     transition: "transform 300ms, opacity 300ms",
     opacity: 0,
-    "background-color": "#503071",
+    //"background-color": "#503071",
+    "background-color": "#056ad7",
 
     "svg": {
       fill: "white",

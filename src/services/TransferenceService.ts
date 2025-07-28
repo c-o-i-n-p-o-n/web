@@ -28,4 +28,10 @@ export class TransferenceService {
     public async getTransferenceByHash(hash: string): Promise<Transference> {
         return this.transferencesDataSource.getTransferenceByHash(hash);
     }
+
+    
+    public async getPeriodlyTransferenceBySignedRecurrentVoucherIdandPeriod
+        (signedRecurrentVoucherId: number, signedRecurrentVoucherPeriod: number): Promise<Transference> {
+        return this.transferencesDataSource.getPeriodlyTransferenceBySignedRecurrentVoucherIdandPeriod(signedRecurrentVoucherId,signedRecurrentVoucherPeriod);
+    }
 }

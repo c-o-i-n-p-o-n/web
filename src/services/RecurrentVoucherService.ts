@@ -7,6 +7,10 @@ export class RecurrentVoucherService {
     
     private recurrentVouchersDataSource: RecurrentVouchersDataSource = new RecurrentVouchersDataSource();
     
+    public async getMyRecurrentVouchers(page: number, size: number): Promise<RecurrentVoucher[]> {
+        return this.recurrentVouchersDataSource.getMyRecurrentVouchers(page,size);
+    }
+
     public async getRecurrentVouchers(page: number, size: number, query?:String): Promise<RecurrentVoucher[]> {
         return this.recurrentVouchersDataSource.getRecurrentVouchersByQuery(page,size,query);
     }
@@ -78,5 +82,10 @@ export class RecurrentVoucherService {
     public async getRecurrentVoucherById(id: number): Promise<RecurrentVoucher> {
         console.log(id)
         return await this.recurrentVouchersDataSource.getRecurrentVoucherById(id);
+    }
+
+    public async getRecurrentVoucherByHash(hash: string) {
+        console.log(hash)
+        return await this.recurrentVouchersDataSource.getRecurrentVoucherByHash(hash);
     }
 }
