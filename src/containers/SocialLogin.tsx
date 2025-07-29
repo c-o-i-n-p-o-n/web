@@ -97,7 +97,8 @@ const SocialLoginPage = ({ setShowSignUpForm }: SocialLoginProps) => {
         </SimpleButton>
         <Typography variant="body1">
           Já possui uma conta?{" "}
-          <StyledLink onClick={(_e) => router.push("/login")}>
+          <StyledLink onClick={(_e) => router.push("/")//router.push("/login")
+          }>
             Faça Login
           </StyledLink>
         </Typography>

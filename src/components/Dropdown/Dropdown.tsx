@@ -58,7 +58,8 @@ export function Dropdown() {
                     <MenuItem>Meu perfil</MenuItem>
                     <MenuItem  onClick={() => {
                       authService.signOut();
-                      router.push("/login");
+                      //router.push("/login");
+                      router.push("/");
                     }}>Sair</MenuItem>
                   </MenuList>
                 </ClickAwayListener>
