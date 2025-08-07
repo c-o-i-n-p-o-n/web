@@ -151,7 +151,7 @@ const SignedRecurrentVoucheCreated: NextPage = () => {
     return () => {
         active = false;
     };
-  }, [signedRecurrentVoucherId]);
+  });//, [signedRecurrentVoucherId]);
     
   useEffect(() => {
     let active = true;
@@ -175,7 +175,7 @@ const SignedRecurrentVoucheCreated: NextPage = () => {
     return () => {
         active = false;
     };
-  }, [signedRecurrentVoucher]);
+  });//, [signedRecurrentVoucher]);
     
 
     
@@ -187,10 +187,11 @@ const SignedRecurrentVoucheCreated: NextPage = () => {
 
   useEffect(() => {
       setLogged(authService.isLogged);
-  }, [authService.isLogged, bookmaker]);
+  }, [bookmaker]);
 
   if(!logged && !isLoading && (!!isSuccess || !!error)){
-      router.push('login')
+        //router.push('login')
+        router.push('/')
   }
     
     let userType: "creator" | "subscriber" = "creator";

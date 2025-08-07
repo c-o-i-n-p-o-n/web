@@ -205,7 +205,7 @@ const CreateEventForm = () => {
         return () => {
             active = false;
         };
-    }, [loadingCategory]);
+    });//, [loadingCategory]);
 
     React.useEffect(() => {
       if (!openCategory) {

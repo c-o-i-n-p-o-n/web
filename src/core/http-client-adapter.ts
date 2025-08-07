@@ -91,12 +91,15 @@ export class HttpClient {
     async exchangeCodeForToken(code: string, codeVerifier: string, options?: any): Promise<Response> {
         const body = new URLSearchParams();
         body.set('grant_type', 'authorization_code');
-        body.set('code', code);
-        body.set('redirect_uri', "/callback");
+        body.set('code', code!);
+        body.set('redirect_uri', process.env.NEXT_PUBLIC_BASE_URL+"/callback");
         body.set('client_id', process.env.NEXT_PUBLIC_AUTHORIZATION_CODE_CLIENT_ID || "");
-        body.set('code_verifier', codeVerifier);
-
-        return await fetch(`${this._baseUrl}/oauth2/token`, {
+        body.set('client_secret', process.env.NEXT_PUBLIC_AUTHORIZATION_CODE_CLIENT_SECRET || "");
+        body.set('code_verifier', codeVerifier!);
+        console.log(body);
+        console.log(`${this._baseUrl}/oauth2/token`);
+        //return await fetch(`${this._baseUrl}/oauth2/token`, {
+        return fetch(`${this._baseUrl}/oauth2/token`, {
             method: 'POST',
             headers: { 
                 ...options,
@@ -105,12 +108,6 @@ export class HttpClient {
             },
             body,
         });
-
-        // if (!res.ok) {
-        //     throw new Error(`Token exchange failed: ${res.status}`);
-        // }
-        // return res;
-        //return await res.json();
     }
 
     async login(endpoint: string, body: any, options?: any): Promise<Response> {
@@ -145,7 +142,9 @@ export class HttpClient {
         this._refreshToken();
 
         const authStorageString = window.localStorage.getItem("auth_store");
+        console.log(authStorageString);
         const token = !!authStorageString ? JSON.parse(authStorageString).state.token : null;
+        console.log(token);
 
         return {
             ...options,

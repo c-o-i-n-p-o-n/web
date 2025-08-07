@@ -121,10 +121,11 @@ const CreateVoucherForm = () => {
 
     useEffect(() => {
         setLogged(authService.isLogged);
-    }, [authService.isLogged, user]);
+    }, [user]);
 
     if(!logged && !isLoading && (!!isSuccess || !!error)){
-        router.push('login')
+        //router.push('login')
+        router.push('/')
     }
     
     useEffect(() => {
@@ -141,7 +142,7 @@ const CreateVoucherForm = () => {
         return () => {
             active = false;
         };
-    }, [loadingCurrency]);
+    });//, [loadingCurrency]);
 
     React.useEffect(() => {
       if (!openCurrency) {

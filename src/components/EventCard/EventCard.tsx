@@ -93,7 +93,7 @@ export default function MostRequestedEventCard({event}: EventCardProps) {
 
     const [expanded, setExpanded] = useState(false);
 
-    const {id, name, description, photo, logo} = event;
+    const {id, hid, description, photo} = event;
 
     const convertdate = (myDate?:Date,myDuration?:Number) => {
         if(typeof myDate == 'object') {

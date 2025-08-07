@@ -136,7 +136,7 @@ export default function FullBetCard({bet}: BetCardProps) {
                     {/* <SportsVolleyballOutlinedIcon style={{backgroundColor: "#6B61F5", borderRadius: "20px", fontSize: "35px", padding: "5px", color: "white"}}></SportsVolleyballOutlinedIcon> */}
                     
                     
-                    <StyledAvatar photoUrl={match.events?.logo} size={35} name={!!hid?hid[0]:"B"} />
+                    <StyledAvatar photoUrl={match?.events?.logo} size={35} name={!!hid?hid[0]:"B"} />
                     <Column>
                         <StyledTypographyTitle variant="body2">
                             {hid}

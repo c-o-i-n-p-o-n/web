@@ -85,7 +85,7 @@ export default function TakeVoucherButton({voucher,bookmaker}: DataProps) {
         return () => {
             active = false;
         };
-    }, [voucher]);
+    }, [voucher,voucherTaken]);
 
     useEffect(() => {
         let active = true;
@@ -103,7 +103,7 @@ export default function TakeVoucherButton({voucher,bookmaker}: DataProps) {
         return () => {
             active = false;
         };
-    }, [voucher]);
+    }, [currency,voucher]);
 
     const takeVoucherHandler = () => {
         setLoading(true);

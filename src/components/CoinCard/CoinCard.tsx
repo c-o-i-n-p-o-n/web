@@ -35,7 +35,7 @@ export default function CoinCard({currency}: CurrencyCardProps) {
 
     const [expanded, setExpanded] = useState(false);
 
-    const {id, name, description, photo, logo} = currency;
+    const {id, hid, description, photo} = currency;
 
     const convertdateAndTime = (myDate?:Date, myTime?:number) => {
         let result1 = !!myDate ? format(myDate, "'Criado em ' dd/MM/yyyy', às' H:mm; "): "";

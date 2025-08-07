@@ -64,7 +64,7 @@ export default function Login() {
     if (securityStore.logged) {
       router.push("/");
     }
-  }, []);
+  });//, []);
   
   useEffect(() => {
     setIsConfirmBtnDisabled(

@@ -139,7 +139,7 @@ export default function VoucherData({voucher,bookmaker,title,onEditHandler}: Dat
         return () => {
             active = false;
         };
-    }, [voucher]);
+    }, [voucher,currency]);
 
     const handleExpandClick = () => {
         setExpanded(!expanded);

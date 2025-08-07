@@ -16,9 +16,12 @@ export class CurrencyService {
         return await this.currenciesDataSource.getCurrencyByVoucherId(voucherId);
     }
 
-    public async getCurrencyById(id: number): Promise<Currency> {
+    public async getCurrencyById(id?: number): Promise<Currency | null> {
         console.log(id)
-        return await this.currenciesDataSource.getCurrencyById(id);
+        if(!!id){
+            return await this.currenciesDataSource.getCurrencyById(id);
+        }
+        return null;
     }
     
     public async getMaxAmountByCurrencyId(id: number): Promise<number> {

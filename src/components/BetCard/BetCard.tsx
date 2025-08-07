@@ -95,7 +95,7 @@ export default function MostRequestedBetCard({match}: MatchCardProps) {
 
     const [expanded, setExpanded] = useState(false);
 
-    const {id, name, description, photo} = match;
+    const {id, hid, description, photo} = match;
 
     const convertdate = (myDate?:Date) => {
         return !!myDate ? format(myDate, "'finaliza ' dd/MM/yyyy', às' H:mm"): ""
@@ -171,7 +171,7 @@ export default function MostRequestedBetCard({match}: MatchCardProps) {
                                                         marginBottom: '5px'
                                                     }}
                                                     description={description}
-                                                    name={name}
+                                                    name={hid}
                                                     odd={odd}/>
                                             )
                                         }) : null}

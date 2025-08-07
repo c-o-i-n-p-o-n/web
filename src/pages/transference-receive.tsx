@@ -86,10 +86,11 @@ const CurrencyRescue: NextPage = () => {
   
   useEffect(() => {
     setLogged(authService.isLogged);
-    }, [authService.isLogged, bookmaker]);
+    }, [bookmaker]);
 
     if(!logged && !isLoading && (!!isSuccess || !!error)){
-        push('login')
+        //push('login')
+        push('/')
   }
 
   useEffect(() => {
@@ -134,7 +135,7 @@ const CurrencyRescue: NextPage = () => {
     return () => {
         active = false;
     };
-  }, [loading]);
+  }, [transference,loading]);
 
   
   

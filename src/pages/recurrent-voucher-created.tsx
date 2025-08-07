@@ -146,7 +146,7 @@ const RecurrentVoucheCreated: NextPage = () => {
     return () => {
         active = false;
     };
-  }, [recurrentVoucherHash]);
+  });//, [recurrentVoucherHash]);
     
 
 
@@ -190,16 +190,17 @@ const RecurrentVoucheCreated: NextPage = () => {
     return () => {
         active = false;
     };
-  }, [recurrentVoucher,subscribersPage,subscribersListSize]);
+  }, [recurrentVoucher,bookmaker,subscribersPage,subscribersListSize]);
 
   console.log(recurrentVoucher);
 
   useEffect(() => {
       setLogged(authService.isLogged);
-  }, [authService.isLogged, bookmaker]);
+  }, [bookmaker]);
 
   if(!logged && !isLoading && (!!isSuccess || !!error)){
-      router.push('login')
+        //router.push('login')
+        router.push('/')
   }
     
     return (

@@ -83,7 +83,7 @@ export default function CancelVoucherButton ({voucher,bookmaker}: DataProps) {
         return () => {
             active = false;
         };
-    }, [voucher]);
+    }, [voucher,voucherTaken]);
 
     const cancelVoucherHandler = () => {
         setLoading(true);

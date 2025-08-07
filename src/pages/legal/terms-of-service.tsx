@@ -15,7 +15,7 @@ const TermsOfService = () => {
             <StyledContainer>
                 <h2>1. Termos</h2>
                 <p>
-                    Ao acessar ao site <Link href='\'>matching.bet</Link>,
+                    Ao acessar ao site <Link href='/'>matching.bet</Link>,
                     concorda em cumprir estes termos de serviço, todas as leis e regulamentos aplicáveis ​​e
                     concorda que é responsável pelo cumprimento de todas as leis locais aplicáveis. Se você não
                     concordar com algum desses termos, está proibido de usar ou acessar este site. Os materiais

@@ -35,7 +35,7 @@ export default function MostRequestedRecurrencyCard({recurrency}: RecurrencyCard
 
     const [expanded, setExpanded] = useState(false);
 
-    const {id, name, description, photo, logo} = recurrency;
+    const {id, hid, description, photo} = recurrency;
 
     const convertdateAndTime = (myDate?:Date, myTime?:number) => {
         let result1 = !!myDate ? format(myDate, "'Criado em ' dd/MM/yyyy', às' H:mm; "): "";

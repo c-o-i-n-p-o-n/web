@@ -66,7 +66,7 @@ export default function CustomHeader({children, ...style}: { children?: React.Re
 
   useEffect(() => {
     setLogged(authService.isLogged);
-  }, [authService.isLogged, user]);
+  }, [user]);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     console.log(event.currentTarget);
@@ -84,15 +84,39 @@ export default function CustomHeader({children, ...style}: { children?: React.Re
     authService.signOut();
     router.reload();
   };
+    
+  //let active = true;
 
   useEffect(() => {
+    let active = true;
     const redirectToAuth = async () => {
       const { codeVerifier, codeChallenge } = await authService.generatePKCE();
+      //const verifier = sessionStorage.getItem('pkce_code_verifier')!;
+      //const challenge = sessionStorage.getItem('pkce_code_verifier')!;
+      //console.log(verifier);
+      //console.log(challenge);
+      console.log(codeChallenge);
+      console.log(codeChallenge);
+      //if(!!!verifier || !!!challenge){
+      sessionStorage.setItem('pkce_code_challenge', codeChallenge);
       sessionStorage.setItem('pkce_code_verifier', codeVerifier);
-      setLoginUrl(authService.buildLoginUrl(codeChallenge));
+      const loginUrl = authService.buildLoginUrl(codeChallenge);
+      //alert(codeVerifier);
+      setLoginUrl(loginUrl);
+      //}else{
+      //  setLoginUrl(authService.buildLoginUrl(challenge));
+      //}
+      
     };
-    redirectToAuth();
-  }, [loginUrl]);
+        
+    if(!!active){
+        redirectToAuth();
+    }
+    
+    return () => {
+        active = false;
+    };
+  }, []);
 
 
 

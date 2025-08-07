@@ -51,14 +51,18 @@ export class AuthDataSource {
     }
 
     
-    public async exchangeCodeForToken(code: string, codeVerifier: string, options?: any): Promise<any> {
-        const res = await this.http.exchangeCodeForToken(code,codeVerifier,options);
+    public async exchangeCodeForToken(code: string, codeVerifier: string, options?: any): Promise<Response> {
+        return await this.http.exchangeCodeForToken(code,codeVerifier,options);
+        // if (response.ok) {
+        //     return response;
+        // } else {
+        //     throw new Error(`Token exchange failed: ${response.status}`);
+        // }
+        // if (!res.ok) {
+        //     throw new Error(`Token exchange failed: ${res.status}`);
+        // }
 
-        if (!res.ok) {
-            throw new Error(`Token exchange failed: ${res.status}`);
-        }
-
-        return await res.json();
+        // return await res.json();
     }
 
     public async login(credentials: Credentials): Promise<Response> {

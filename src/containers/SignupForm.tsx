@@ -96,7 +96,9 @@ const SignupForm = () => {
         user: UserCreation,
         { setSubmitting, resetForm }: FormikHelpers<UserCreation>
     ) => {
+        console.log(user);
         setSubmitting(true);
+        console.log(user);
         const userService = new UserService();
         userService.createUser(user)
             .then((_res: User) => {
@@ -205,7 +207,7 @@ const SignupForm = () => {
                                 <Field as={TextField}
                                     id="password"
                                     name="password"
-                                    type="text"
+                                    type="password"
                                     placeholder="Senha"
                                     label="Senha"
                                     className="form-field"

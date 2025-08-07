@@ -35,7 +35,7 @@ export default function MostRequestedVoucherCard({voucher}: VoucherCardProps) {
 
     const [expanded, setExpanded] = useState(false);
 
-    const {id, name, description, photo, logo} = voucher;
+    const {id, hid, description, photo} = voucher;
 
     const convertdateAndTime = (myDate?:Date, myTime?:number) => {
         let result1 = !!myDate ? format(myDate, "'Criado em ' dd/MM/yyyy', às' H:mm; "): "";

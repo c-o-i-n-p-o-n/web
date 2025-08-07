@@ -6,9 +6,12 @@ export class EventService {
     
     private eventsDataSource: EventsDataSource = new EventsDataSource();
 
-    public async getEventById(id: number): Promise<Event> {
+    public async getEventById(id?: number): Promise<Event | undefined> {
         console.log(id)
-        return await this.eventsDataSource.getEventById(id);
+        if(!!id){
+            return await this.eventsDataSource.getEventById(id);
+        }
+        return undefined;
     }
 
     public async getEvents(query?:String): Promise<Event[]> {

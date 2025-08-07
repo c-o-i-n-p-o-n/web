@@ -87,13 +87,13 @@ const VoucheCreated: NextPage = () => {
     return () => {
         active = false;
     };
-  }, [loading,voucherId]);
+  });//, [loading,voucherId]);
 
   console.log(voucher);
 
   useEffect(() => {
     setLogged(authService.isLogged);
-  }, [authService.isLogged, bookmaker]);
+  }, [bookmaker]);
 
   const newVoucher = () => {
     push('create-voucher');

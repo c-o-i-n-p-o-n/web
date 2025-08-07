@@ -6,7 +6,7 @@ import Container from "@mui/material/Container";
 
 const Signup = () => {
 
-    const [showSignUpForm, setShowSignUpForm] = useState(false);
+    const [showSignUpForm, setShowSignUpForm] = useState(true);
 
     return (
         <Container>
