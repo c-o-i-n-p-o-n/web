@@ -66,12 +66,10 @@ export default function ShareButtons({link,bannerLink}: ShareButtonsProps) {
     const [errorMessage, setErrorMessage] = useState("");
     
     console.log(link);
-    if(!link){
-        return(<></>)
-    }
+
     const [qrcode, setQrcode] = useState(new Blob());
     const [banner, setBanner] = useState(new Blob());
-    const convertedLink = encodeURIComponent(link);
+    const convertedLink = encodeURIComponent(!!link?link:'');
 
     
     useEffect(() => {
@@ -79,7 +77,9 @@ export default function ShareButtons({link,bannerLink}: ShareButtonsProps) {
         const size = 150;
         
         const fetchQRCode = async () => {
-            setQrcode(await fetch(`http://api.qrserver.com/v1/create-qr-code/?data=${convertedLink}&size=${size}x${size}&bgcolor=ffffff`).then(r=>r.blob()))
+            if(!!link){
+                setQrcode(await fetch(`http://api.qrserver.com/v1/create-qr-code/?data=${convertedLink}&size=${size}x${size}&bgcolor=ffffff`).then(r=>r.blob()))
+            }
         }
         
         const fetchBanner = async () => {
@@ -95,7 +95,11 @@ export default function ShareButtons({link,bannerLink}: ShareButtonsProps) {
             active = false;
         };
         
-    }, [link]);
+    }, [link,bannerLink,convertedLink]);
+
+    if(!link){
+        return(<></>)
+    }
 
     const share = async ({title, text, url, blob, fileTitle}:SharingPack) => {
 

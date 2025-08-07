@@ -80,13 +80,15 @@ const MatchCreated: NextPage = () => {
     return () => {
         active = false;
     };
-  }, [loading,matchId]);
+  });//, [loading,matchId]);
 
   console.log(match);
 
   useEffect(() => {
+
     setLogged(authService.isLogged);
-  }, [authService.isLogged, bookmaker]);
+    
+  }, [bookmaker]);
 
   const newMatch = () => {
     push('create-match');

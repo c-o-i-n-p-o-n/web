@@ -122,13 +122,14 @@ const Balances: NextPage = () => {
   //   }, [authService.isLogged, bookmaker]);
 
     if(!logged && !isLoading && (!!isSuccess || !!error)){
-        push('login')
+        //push('login')
+        push('/')
     }
   
 
   useEffect(() => {
     setLogged(authService.isLogged);
-  }, [authService.isLogged, bookmaker]);
+  }, [bookmaker]);
 
   // const discountCurrency = (id: number) => {
   //   push({ pathname: "discount-currency", query: { currencyId: id }} );

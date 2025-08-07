@@ -204,10 +204,11 @@ const CreateMatchForm = () => {
 
     useEffect(() => {
         setLogged(authService.isLogged);
-    }, [authService.isLogged, user]);
+    }, [user]);
 
     if(!logged && !isLoading && (!!isSuccess || !!error)){
-        push('login')
+        //push('login')
+        push('/')
     }
 
     useEffect(() => {
@@ -224,7 +225,7 @@ const CreateMatchForm = () => {
         return () => {
             active = false;
         };
-    }, [loadingEvent]);
+    });//, [loadingEvent]);
     
     useEffect(() => {
         let active = true;
@@ -240,7 +241,7 @@ const CreateMatchForm = () => {
         return () => {
             active = false;
         };
-    }, [loadingCurrency]);
+    });//, [loadingCurrency]);
 
     React.useEffect(() => {
       if (!openEvent) {

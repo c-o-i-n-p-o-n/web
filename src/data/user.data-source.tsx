@@ -1,3 +1,4 @@
+import {format} from "date-fns";
 import { Endpoints } from "../core/constants/endpoints";
 import { HttpClient } from "../core/http-client-adapter";
 import { User } from "../models/User";
@@ -8,16 +9,20 @@ export class UserDataSource {
     private http: HttpClient = new HttpClient();
 
     public async createUser(user: UserCreation): Promise<User> {
+        console.log(user);
+        console.log(format(new Date(), "yyyy-MM-dd'T'HH:mm:ss'Z'"));
         const userObj = {
             cryptedPass: user.password,
             userName: `${user.firstName} ${user.lastName}`,
             userEmail: user.email,
             description: "",
             govNumber: user.cpf,
-            birthday: user.birthDate,
+            birthday: format(user.birthDate, "yyyy-MM-dd'T'HH:mm:ss'Z'"),//T00:00:00Z
             photo: ""
         };
+        console.log(userObj);
         const response = await this.http.post(Endpoints.USERS, userObj)
+        console.log(response);
         if (response.ok) {
             const userResponse = await response.json();
             return userResponse as User;

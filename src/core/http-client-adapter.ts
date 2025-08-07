@@ -87,6 +87,29 @@ export class HttpClient {
         });
     }
 
+    
+    async exchangeCodeForToken(code: string, codeVerifier: string, options?: any): Promise<Response> {
+        const body = new URLSearchParams();
+        body.set('grant_type', 'authorization_code');
+        body.set('code', code!);
+        body.set('redirect_uri', process.env.NEXT_PUBLIC_BASE_URL+"/callback");
+        body.set('client_id', process.env.NEXT_PUBLIC_AUTHORIZATION_CODE_CLIENT_ID || "");
+        body.set('client_secret', process.env.NEXT_PUBLIC_AUTHORIZATION_CODE_CLIENT_SECRET || "");
+        body.set('code_verifier', codeVerifier!);
+        console.log(body);
+        console.log(`${this._baseUrl}/oauth2/token`);
+        //return await fetch(`${this._baseUrl}/oauth2/token`, {
+        return fetch(`${this._baseUrl}/oauth2/token`, {
+            method: 'POST',
+            headers: { 
+                ...options,
+                "Accept": "application/json",
+                'Content-Type': options && options["Content-Type"] ? options["Content-Type"] : 'application/x-www-form-urlencoded' 
+            },
+            body,
+        });
+    }
+
     async login(endpoint: string, body: any, options?: any): Promise<Response> {
 
         const requestBody = options && options["Content-Type"] != "application/json" ? new URLSearchParams(body) : JSON.stringify(body);
@@ -119,7 +142,9 @@ export class HttpClient {
         this._refreshToken();
 
         const authStorageString = window.localStorage.getItem("auth_store");
+        console.log(authStorageString);
         const token = !!authStorageString ? JSON.parse(authStorageString).state.token : null;
+        console.log(token);
 
         return {
             ...options,
@@ -144,8 +169,8 @@ export class HttpClient {
                 const basicToken = process.env.NEXT_PUBLIC_BASIC_API_TOKEN;
                 const options = { "Authorization": `Basic ${basicToken}`, "Accept": "application/json", "Content-Type": "application/x-www-form-urlencoded" }
                 const encodedToken = { ...refreshToken, "grant_type": "refresh_token" };
-                const response = await this._refreshPost("/oauth/token", encodedToken, options);
-    
+                const response = await this._refreshPost("/oauth2/token", encodedToken, options);
+                console.log(response);
                 if (response.ok) {
                     const body = await response.json();
                     const authToken = body["access_token"];
@@ -186,9 +211,9 @@ export class HttpClient {
         if(!token || !expiresIn || expiresIn < Date.now()){
             const basicToken = process.env.NEXT_PUBLIC_ANONIMOUS_API_TOKEN;
             const options = { "Authorization": `Basic ${basicToken}`, "Accept": "application/json", "Content-Type": "application/x-www-form-urlencoded" }
-            const encodedToken = { "grant_type": "client_credentials" };
-            const response = await this._refreshPost("/oauth/token", encodedToken, options);
-            
+            const encodedToken = { "grant_type": "client_credentials", "scope": "read write"  };
+            const response = await this._refreshPost("/oauth2/token", encodedToken, options);
+            console.log(response);
             if (response.ok) {
                 const body = await response.json();
                 const authToken = body["access_token"];

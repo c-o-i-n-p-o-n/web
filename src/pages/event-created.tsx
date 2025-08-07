@@ -80,7 +80,7 @@ const EventCreated: NextPage = () => {
     return () => {
         active = false;
     };
-  }, [loading,eventId]);
+  }, [event,loading,eventId]);
 
   const seeMoreHandler = () => {
     setListSize(listSize + 5);
@@ -103,7 +103,9 @@ const EventCreated: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <CustomHeader children={<TypeButton>{"Evento"}</TypeButton>} style={{background: "#34B329"}}/>
+      <CustomHeader style={{background: "#34B329"}}>
+        <TypeButton>{"Evento"}</TypeButton>
+      </CustomHeader>
       <Container>
         <HomePageItem>
 

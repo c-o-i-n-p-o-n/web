@@ -79,9 +79,12 @@ export class RecurrentVoucherService {
         return await this.recurrentVouchersDataSource.hireRecurrentVoucher(hash);
     }
 
-    public async getRecurrentVoucherById(id: number): Promise<RecurrentVoucher> {
+    public async getRecurrentVoucherById(id?: number): Promise<RecurrentVoucher | undefined> {
         console.log(id)
-        return await this.recurrentVouchersDataSource.getRecurrentVoucherById(id);
+        if(!!id){
+            return await this.recurrentVouchersDataSource.getRecurrentVoucherById(id);
+        }
+        return undefined;
     }
 
     public async getRecurrentVoucherByHash(hash: string) {

@@ -7,7 +7,7 @@ export class BookmakerService {
     //private bookamkersDataSource: BookamkersDataSource = new BookamkersDataSource();
     private authDataSource: AuthDataSource = new AuthDataSource();
 
-    public async getBookmakerById(id: number): Promise<Bookmaker> {
+    public async getBookmakerById(id: number | undefined): Promise<Bookmaker> {
         // return new Promise(resolve => setTimeout(() => {
         //     resolve([{ id: 1, description: "Descrição de um bookmaker", name: "João da Silva" } as Bookmaker]);
         // }, 3000));

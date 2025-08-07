@@ -8,7 +8,15 @@ export interface TransferenceCreation {
     currenciesId: number
 }
 
-export function transferenceToTransferenceCreation (transference:Transference): TransferenceCreation{
+interface TransferenceAux extends Transference {
+    currencies: CurrencyAux;	
+}
+
+interface CurrencyAux extends Currency {
+    id: number;	
+}
+
+export function transferenceToTransferenceCreation (transference:TransferenceAux): TransferenceCreation{
     return {
         amount: transference.amount,
         senderId: transference.sender?.id,

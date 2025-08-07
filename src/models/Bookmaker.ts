@@ -10,4 +10,5 @@ export default interface Bookmaker {
   photo?: string;
   score?: number;
   status?: number;
+  type: string;
 }

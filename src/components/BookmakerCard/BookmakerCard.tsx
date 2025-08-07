@@ -34,9 +34,9 @@ export default function BookmakerCard({bookmaker}: BookmarkerCardProps) {
 
     const [expanded, setExpanded] = useState(false);
 
-    const {id, name, description, photo, logo} = bookmaker;
+    const {id, hid, description, photo} = bookmaker;
 
-    const { isLoading, error, data } = useQuery(['getBookmakerById',id], () => {return bookmakerService.getBookmakerById(id);});
+    const { isLoading, error, data } = useQuery(['getBookmakerById',id], () => {return bookmakerService.getBookmakerById(id?id:undefined);});
     console.log(data)
 
     const handleExpandClick = () => {

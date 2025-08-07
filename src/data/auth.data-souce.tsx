@@ -50,11 +50,26 @@ export class AuthDataSource {
         }
     }
 
+    
+    public async exchangeCodeForToken(code: string, codeVerifier: string, options?: any): Promise<Response> {
+        return await this.http.exchangeCodeForToken(code,codeVerifier,options);
+        // if (response.ok) {
+        //     return response;
+        // } else {
+        //     throw new Error(`Token exchange failed: ${response.status}`);
+        // }
+        // if (!res.ok) {
+        //     throw new Error(`Token exchange failed: ${res.status}`);
+        // }
+
+        // return await res.json();
+    }
+
     public async login(credentials: Credentials): Promise<Response> {
         const basicToken = process.env.NEXT_PUBLIC_BASIC_API_TOKEN;
         const options = {"Authorization": `Basic ${basicToken}`, "Content-Type": "application/x-www-form-urlencoded"}
         const serverCredentials = { ...credentials, "grant_type": "password"};
-        const response = await this.http.login("/oauth/token", serverCredentials, options);
+        const response = await this.http.login("/oauth2/token", serverCredentials, options);
         if (response.ok) {
             return response;
         } else {
@@ -62,16 +77,20 @@ export class AuthDataSource {
         }
     }
 
+
+
     public async loginWithoutCredencials(): Promise<Response> {
         const basicToken = process.env.NEXT_PUBLIC_ANONIMOUS_API_TOKEN;
         const options = {"Authorization": `Basic ${basicToken}`, "Content-Type": "application/x-www-form-urlencoded"}
         const serverCredentials = { "grant_type": "client_credentials"};
-        const response = await this.http.login("/oauth/token", serverCredentials, options);
+        const response = await this.http.login("/oauth2/token", serverCredentials, options);
         if (response.ok) {
             return response;
         } else {
             throw Error(response.statusText);
         }
     }
+
+    
 
 }

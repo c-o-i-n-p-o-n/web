@@ -20,7 +20,7 @@ export function Logo() {
   return (
     
           <Link href="/" className="hover:underline">
-            <Image src="/images/logo.svg" alt="me" width="186" height="31" />
+            <Image src="/images/logo4.png" alt="me" width="186" height="31" />
           </Link>
     
   );

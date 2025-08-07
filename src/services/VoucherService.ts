@@ -28,9 +28,12 @@ export class VoucherService {
         return await this.vouchersDataSource.takeVoucher(hash);
     }
 
-    public async getVoucherById(id: number): Promise<Voucher> {
+    public async getVoucherById(id?: number): Promise<Voucher | undefined> {
         console.log(id)
-        return await this.vouchersDataSource.getVoucherById(id);
+        if(!!id){
+            return await this.vouchersDataSource.getVoucherById(id);
+        }
+        return undefined;
     }
     
     public async getTotalAmountAvailableById(id: number): Promise<number> {

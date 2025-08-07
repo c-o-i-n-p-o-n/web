@@ -6,9 +6,12 @@ export class MatchService {
 
     private matchDataSource: MatchDataSource = new MatchDataSource();
 
-    public async getMatchById(id: number): Promise<Match> {
+    public async getMatchById(id?: number): Promise<Match | undefined> {
         console.log(id)
-        return await this.matchDataSource.getMatchById(id);
+        if(!!id){
+            return await this.matchDataSource.getMatchById(id);
+        }
+        return undefined;
     }
 
     public async getMatchByOptionId(optionId: number): Promise<Match> {

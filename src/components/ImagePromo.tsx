@@ -21,9 +21,12 @@ export function ImagePromo({url,size}: ImagePromoProps) {
   
 
   return (
-    <img src={url || "/default-img.jpg"} alt="banner"
-   
-height={size || 70}
-sizes="100vw"/>
+    <Image src={url || "/default-img.jpg"} 
+    alt="banner" 
+    height={size || 70} 
+    width={0}
+    sizes="100vw"
+    style={{ width: 'auto' }} />
+    // <img src={url || "/default-img.jpg"} alt="banner" height={size || 70} sizes="100vw"/>
   );
 }
