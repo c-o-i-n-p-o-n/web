@@ -58,7 +58,7 @@ export default function CoinCard({currency}: CurrencyCardProps) {
     return (
         <StyledCard>
             <StyledCardContentHeader onClick={handleExpandClick}>
-                    <TypeButton href={`/coin-created?currencyId=${id}`}>
+                    <TypeButton href={`/coin-created?cupomId=${id}`}>
                         {"Cupom"}
                     </TypeButton>
                 <HeaderButton>

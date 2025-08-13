@@ -55,7 +55,7 @@ export const StyledTypographyTitle = styled(Typography)({
     height: "24px",
     paddingTop: "2px",
     fontSize: "15px",
-    color: "white",
+    color: "#333333",
     
     display: "flex",
     flexDirection: "column",

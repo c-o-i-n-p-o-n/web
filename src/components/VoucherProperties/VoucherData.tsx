@@ -111,7 +111,7 @@ const currencyService = new CurrencyService();
 export default function VoucherData({voucher,bookmaker,title,onEditHandler}: DataProps) {
 
     const [expanded, setExpanded] = useState(false);
-    const [currency, setCurrency] = useState<Currency | undefined>(undefined);
+    //const [currency, setCurrency] = useState<Currency | undefined>(undefined);
     const [errorMessage, setErrorMessage] = useState("");
     const [data, setData] = useState({
         expiredAt:voucher?.expiredAt,
@@ -120,26 +120,26 @@ export default function VoucherData({voucher,bookmaker,title,onEditHandler}: Dat
     
     const owner = !!voucher && !!bookmaker && !!bookmaker.id?voucher.bookmakers?.id === bookmaker.id:false;
     
-    useEffect(() => {
-        let active = true;
-        console.log(voucher);
+    // useEffect(() => {
+    //     let active = true;
+    //     console.log(voucher);
 
-        if(!!voucher){
-            const fetchMatch = async () => {
-                setCurrency(await currencyService.getCurrencyByVoucherId(voucher.id));
-                console.log(currency);
-            }
+    //     if(!!voucher){
+    //         const fetchMatch = async () => {
+    //             setCurrency(await currencyService.getCurrencyByVoucherId(voucher.id));
+    //             console.log(currency);
+    //         }
     
-            fetchMatch().catch(()=>{
-                console.log(currency?.id);
-            });
-        }
+    //         fetchMatch().catch(()=>{
+    //             console.log(currency?.id);
+    //         });
+    //     }
         
 
-        return () => {
-            active = false;
-        };
-    }, [voucher,currency]);
+    //     return () => {
+    //         active = false;
+    //     };
+    // }, [voucher,currency]);
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
@@ -206,7 +206,7 @@ export default function VoucherData({voucher,bookmaker,title,onEditHandler}: Dat
                     <Column>
                         <Description>
                             <StyledTypographyTitle variant="body2">
-                                {"Token: " + currency?.acronym}
+                                {"Token: " + voucher?.currencies?.acronym}
                             </StyledTypographyTitle> 
                         </Description> 
                     </Column>

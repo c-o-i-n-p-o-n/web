@@ -16,4 +16,5 @@ export default interface Currency {
   expiredAmount?: number;	
   status?: number;
   isOwner?: number;
+  bookmakers?: Bookmaker;
 }

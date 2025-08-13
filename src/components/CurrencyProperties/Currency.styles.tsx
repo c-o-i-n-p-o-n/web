@@ -8,14 +8,20 @@ interface ExpandMoreProps extends IconButtonProps {
 const contrastBackgroundColor = "#503071";
 
 export const StyledCard = styled(Card)({
-    //backgroundColor: "#333333",
-    backgroundColor: "white",
+    backgroundColor: "white",//"#333333",
+    //color: "#333333",
+    //backgroundColor: "white",
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-evenly",
     margin: "5px 0",
     borderRadius: '25px 25px',
 });
+
+export const BrandWrapper = styled("div")({
+    display: "flex",
+    alignItems: "center"
+})
 
 export const StyledButton = styled(IconButton)({
     display: "flex",
@@ -51,7 +57,7 @@ export const StyledTypographyTitle = styled(Typography)({
     height: "24px",
     paddingTop: "2px",
     fontSize: "15px",
-    color:"#333333",
+    color: "#333333",
     
     display: "flex",
     flexDirection: "column",
@@ -73,7 +79,7 @@ export const StyledTypographyData = styled(Typography)({
 
 export const StyledCardContentHeader = styled(CardContent)({
     //backgroundColor: '#1A1A1A',
-    backgroundColor: "Highlight",
+    backgroundColor: "#056ad7",
     padding: "0 16px",
     cursor: "pointer",
     height: "3.5rem",
@@ -144,6 +150,18 @@ export const Description = styled("div")({
         paddingRight: "10px",
         textAlign: "start",
     },
+})
+
+export const StyledFields = styled("div")({
+    display: "flex",
+    color: "white",
+    flexDirection: "column",
+    ".form-field": {
+        margin: "1vh 0"
+    },
+    ".submit-button-terms": {
+        margin: "2vh 0",
+    }
 })
 
 export const Odd = styled("div")({
