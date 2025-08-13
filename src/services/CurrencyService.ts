@@ -1,7 +1,7 @@
 import { CurrenciesDataSource } from "../data/currencies.data-source";
 import Bookmaker from "../models/Bookmaker";
 import Currency from "../models/Currency";
-import CurrencyCreation from "../models/CurrencyCreation";
+import CurrencyCreation, { currencyToCurrencyCreation } from "../models/CurrencyCreation";
 
 export class CurrencyService {
     
@@ -11,17 +11,31 @@ export class CurrencyService {
         return this.currenciesDataSource.getURLRescue(currency,bookmaker,amount);
     }
 
+    public async updateCurrency(currency: Currency, changes: any) : Promise<Currency> {
+        var currencyCreation: CurrencyCreation = currencyToCurrencyCreation(currency);
+        currencyCreation = {
+            ...currencyCreation,
+            ...changes
+        }
+        return this.currenciesDataSource.updateCurrency(currencyCreation);
+    };
+
+    public async getNonDistributedCurrencyByIdCurrencyId(currencyId: number): Promise<number> {
+        console.log(currencyId)
+        return await this.currenciesDataSource.getNonDistributedCurrencyByIdCurrencyId(currencyId);
+    }
+
     public async getCurrencyByVoucherId(voucherId: number): Promise<Currency> {
         console.log(voucherId)
         return await this.currenciesDataSource.getCurrencyByVoucherId(voucherId);
     }
 
-    public async getCurrencyById(id?: number): Promise<Currency | null> {
+    public async getCurrencyById(id?: number): Promise<Currency | undefined> {
         console.log(id)
         if(!!id){
             return await this.currenciesDataSource.getCurrencyById(id);
         }
-        return null;
+        return undefined;
     }
     
     public async getMaxAmountByCurrencyId(id: number): Promise<number> {

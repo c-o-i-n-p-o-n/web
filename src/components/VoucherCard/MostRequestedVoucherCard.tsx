@@ -58,7 +58,7 @@ export default function MostRequestedVoucherCard({voucher}: VoucherCardProps) {
     return (
         <StyledCard>
             <StyledCardContentHeader onClick={handleExpandClick}>
-                    <TypeButton href={`/coin-created?currencyId=${id}`}>
+                    <TypeButton href={`/voucher-created?voucherId=${id}`}>
                         {"Vale"}&nbsp;{"Cupom"}
                     </TypeButton>
                     <StyledAvatar photoUrl={data?.logo} size={35} name={!!data?.hid?data?.hid[0]:"V"} />

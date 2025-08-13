@@ -80,7 +80,7 @@ export const StyledCardContentHeader = styled(CardContent)({
     //backgroundColor: '#1A1A1A',
     backgroundColor: "#056ad7",
     padding: "0 16px",
-    cursor: "pointer",
+    //cursor: "pointer",
     height: "3.5rem",
     display: "flex",
     alignItems: "center",

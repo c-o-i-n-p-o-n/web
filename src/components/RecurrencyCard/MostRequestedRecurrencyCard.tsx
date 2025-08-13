@@ -86,7 +86,7 @@ export default function MostRequestedRecurrencyCard({recurrency}: RecurrencyCard
     return (
         <StyledCard>
             <StyledCardContentHeader onClick={handleExpandClick}>
-                    <TypeButton href={`/coin-created?currencyId=${id}`}>
+                    <TypeButton href={`/coin-created?cupomId=${id}`}>
                         {"Assinatura"}
                     </TypeButton>
                     <StyledAvatar photoUrl={data?.logo} size={35} name={!!data?.hid?data?.hid[0]:"V"} />

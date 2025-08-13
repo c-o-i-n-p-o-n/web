@@ -33,12 +33,15 @@ const bookmakerService = new BookmakerService();
 export default function BookmakersData({bookmaker}: DataProps) {
 
 
-    return (
+    return (!!bookmaker?
         <>
             
             <DescriptionLine >
                 <Description>
                     <StyledAvatar photoUrl={bookmaker?.logo} size={35} name={!!bookmaker?.hid?bookmaker?.hid[0]:"I"} />
+                    <StyledTypographyTitle variant="body2">
+                        {""}
+                    </StyledTypographyTitle> 
                     <StyledTypographyTitle variant="body2">
                         {bookmaker?.hid}
                     </StyledTypographyTitle> 
@@ -49,6 +52,6 @@ export default function BookmakersData({bookmaker}: DataProps) {
                     {bookmaker?.description}
                 </StyledTypographyTitle> 
             </Column>
-        </>
+        </>:<></>
     );
 }

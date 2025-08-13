@@ -13,6 +13,58 @@ export class CurrenciesDataSource {
         return this.http.getFullUrl(Endpoints.CURRENCY_CHECK_RESCUE,{currency:currency.id, bookmaker:bookmaker.id, amount:amount});
     }
 
+    public async updateCurrency(currency: CurrencyCreation): Promise<Currency> {
+        const currencyObj = {
+            id: currency.id,
+            hid: currency.hid,
+            //description: voucher.description,
+            logo: currency.logo,
+            photo: currency.photo//,
+            //expiredAt: voucher.expiredAt,
+            //vouchersType: voucher.vouchersType,
+            //amountPerUser: voucher.amountPerUser
+        };
+        console.log(currency);
+        console.log(currencyObj);
+        const response = await this.http.put(Endpoints.CURRENCIES, currencyObj);
+        console.log(response);
+        if (response.ok) {
+            const capsule = await response.json() as Capsule;
+            //const currencyResponse = await response.json();
+            console.log(capsule);
+            if(capsule.code == "00000"){
+                console.log(capsule.data as Currency);
+                capsule.data["createdAt"] = capsule.data["createdAt"]?new Date(capsule.data["createdAt"]):null;            
+                return capsule.data as Currency;
+            }else{
+                throw Error(capsule.message);
+            }
+            //currencyResponse["createdAt"] = currencyResponse["createdAt"]?new Date(currencyResponse["createdAt"]):null;            
+            //return currencyResponse as Currency;
+        } else {
+            throw Error(response.statusText);
+        }
+    }
+
+    public async getNonDistributedCurrencyByIdCurrencyId(currencyId: number): Promise<number> {
+        console.log(currencyId)
+        const response = await this.http.getById(Endpoints.CURRENCY_DISTRIBUTED, currencyId);
+        if (response.ok) {
+            const capsule = await response.json() as Capsule;
+            console.log(capsule);
+            if(capsule.code == "00000"){
+                return capsule.data as number;
+            }else{
+                throw Error(capsule.message);
+            }
+        } else {
+            throw Error(response.statusText);
+        }
+
+
+        
+    }
+
     public async getCurrencyByVoucherId(voucherId: number): Promise<Currency> {
         console.log(voucherId)
         const response = await this.http.getById(Endpoints.CURRENCIES_BYVOUCHER, voucherId);

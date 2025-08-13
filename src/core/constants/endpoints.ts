@@ -17,6 +17,7 @@ export enum Endpoints {
   CURRENCY_CHECK_RESCUE = "currencies/receive/check",
   CURRENCIES_RESCUE = "currencies/receive",
   CURRENCY_AMOUNT = "currencies/amount",
+  CURRENCY_DISTRIBUTED = "currencies/distributed",
   TRANSFERENCES = "transferences",
   TRANSFERENCES_CHECK = "transferences/check",
   TRANSFERENCES_BY_HASH = "transferences/hash",
@@ -49,4 +50,5 @@ export enum Endpoints {
   MY_SIGNED_RECURRENT_VOUCHERS = "signed_recurrences/my",
   GENERIC = "generic",
   GENERIC_EVENT = "generic/event",
+  GENERIC_CURRENCY = "generic/currency",
 }

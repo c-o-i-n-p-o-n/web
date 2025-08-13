@@ -24,6 +24,7 @@ import Voucher from "../models/Voucher";
 import { ImagePromo } from "./ImagePromo";
 import Alert from "./Alert/Alert";
 import RecurrentVoucher from "../models/RecurrentVoucher";
+import Currency from "../models/Currency";
 
 
 
@@ -62,7 +63,7 @@ const Edit = ({owner, url, setUrl, onClickHandler, ...style}: { owner: boolean, 
 }
 
 interface DataProps {
-    entity?: Match | Voucher | RecurrentVoucher;
+    entity?: Match | Voucher | RecurrentVoucher | Currency;
     bookmaker?: Bookmaker;
     onEditHandler:Function
 }

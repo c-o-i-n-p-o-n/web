@@ -12,9 +12,10 @@ import { MatchService } from "../../services/MatchService";
 import Voucher from "../../models/Voucher";
 import { Column } from "../../styles/shared-styles";
 import RecurrentVoucher from "../../models/RecurrentVoucher";
+import Currency from "../../models/Currency";
 
 interface DataProps {
-    voucher?: Voucher | RecurrentVoucher;
+    voucher?: Voucher | RecurrentVoucher | Currency;
     title: string;
 }
 

@@ -60,7 +60,7 @@ export default function TakeVoucherButton({voucher,bookmaker}: DataProps) {
     
     const owner = !!voucher && !!bookmaker && (!!bookmaker.id)?voucher.bookmakers?.id === bookmaker.id:false;
     
-    const [currency, setCurrency] = useState<Currency | undefined>(undefined);
+    //const [currency, setCurrency] = useState<Currency | undefined>(undefined);
 
     const [loading, setLoading] = useState<boolean>(false);
     const [voucherTaken, setVoucherTaken] = useState<boolean>(false);
@@ -87,23 +87,23 @@ export default function TakeVoucherButton({voucher,bookmaker}: DataProps) {
         };
     }, [voucher,voucherTaken]);
 
-    useEffect(() => {
-        let active = true;
-        console.log(voucher);
+    // useEffect(() => {
+    //     let active = true;
+    //     console.log(voucher);
 
-        const fetchMatch = async () => {
-            setCurrency(await currencyService.getCurrencyByVoucherId(voucher.id));
-            console.log(currency);
-        }
+    //     const fetchMatch = async () => {
+    //         setCurrency(await currencyService.getCurrencyByVoucherId(voucher.id));
+    //         console.log(currency);
+    //     }
 
-        fetchMatch().catch(()=>{
-            console.log(currency?.id);
-        });
+    //     fetchMatch().catch(()=>{
+    //         console.log(currency?.id);
+    //     });
 
-        return () => {
-            active = false;
-        };
-    }, [currency,voucher]);
+    //     return () => {
+    //         active = false;
+    //     };
+    // }, [currency,voucher]);
 
     const takeVoucherHandler = () => {
         setLoading(true);
@@ -139,7 +139,7 @@ export default function TakeVoucherButton({voucher,bookmaker}: DataProps) {
                             sx={{
                                 background: "#339933"}}
                         >
-                            {"EU QUERO " + (voucher.amountPerUser) + " " + ((voucher.amountPerUser == 1)?"CUPOM ":"CUPONS ") + (currency?.acronym || "...")}
+                            {"EU QUERO " + (voucher.amountPerUser) + " " + ((voucher.amountPerUser == 1)?"CUPOM ":"CUPONS ") + (voucher.currencies?.acronym || "...")}
                         </CustomButton>
 
                     </Description> 
