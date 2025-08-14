@@ -1,7 +1,14 @@
+import Option from "./Option";
+
 export default interface Bet {
-  id: number;
+  id?: number;
+  hid: string;
   description: string;
-  odd: number;
+  odds: number;
+  createdAt?: Date;
+  options: Option;
+  amount?: number;
+  status: number;
   innerBets?: InnerBet[]
 }
 

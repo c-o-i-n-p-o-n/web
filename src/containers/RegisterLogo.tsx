@@ -22,7 +22,7 @@ const RegisterLogo = () => {
             </div>
 
             <Typography variant="subtitle1" textAlign={"center"} sx={{ width: "60vw" }}>
-                Cadastre-se para criar e participar de várias apostas
+                Cadastre-se para ganhar, criar, apostar e negociar cupons
             </Typography>
         </StyledHeaderContainer>
     );

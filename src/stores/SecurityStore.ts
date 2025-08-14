@@ -6,6 +6,7 @@ export const useSecurityStore = create<ISecurityStore>(
   persist(
     (set, _get) => ({
       userId: undefined,
+      bookmakersId: undefined,
       logged: false,
       token: undefined,
       refreshToken: undefined,

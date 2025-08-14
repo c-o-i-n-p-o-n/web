@@ -6,7 +6,7 @@ export default function handler(
     req: NextApiRequest,
     res: NextApiResponse<Bet[]>
 ) {
-    res.status(200).json(mockedBets)
+    //res.status(200).json(mockedBets)
 }
 
 

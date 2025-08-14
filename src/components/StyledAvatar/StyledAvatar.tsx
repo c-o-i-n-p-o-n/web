@@ -5,14 +5,15 @@ interface StyledAvatarProps {
   photoUrl?: string;
   size: number;
   onClick?: MouseEventHandler,
+  name?: String,
 }
 
-export function StyledAvatar({ photoUrl, size, onClick }: StyledAvatarProps) {
+export function StyledAvatar({ photoUrl, size, onClick, name }: StyledAvatarProps) {
   return (
-    <Avatar
+    <Avatar 
       onClick={onClick}
       sx={{ width: size, height: size, cursor: "pointer" }}
       src={photoUrl}
-    />
+    >{name}</Avatar>
   );
 }

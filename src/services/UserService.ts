@@ -15,6 +15,10 @@ export class UserService implements IUserService {
         return this.userDataSource.getUserById(id);
     }
 
+    public async getUser(): Promise<User>{
+        return this.userDataSource.getUser();
+    }
+
     public async updateUser(user: UserCreation): Promise<User> {
         return this.userDataSource.updateUser(user);
     }

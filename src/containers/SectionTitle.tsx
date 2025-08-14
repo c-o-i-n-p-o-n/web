@@ -1,10 +1,9 @@
 import { styled } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import SectionTitleProps from "../types/SectionTitleProps";
-import { Button } from '@mui/material';
 
 export default function SectionTitle(props: SectionTitleProps) {
-  const { title, showSeeMore, seeMoreHandler, description } = props;
+  const { title, description } = props;
 
   const TitleButtonHolder = styled("div")({
     display: "flex",
@@ -17,7 +16,7 @@ export default function SectionTitle(props: SectionTitleProps) {
     fontStyle: "normal",
     fontWeight: 400,
     fontSize: 16,
-    color: "white"
+    //color: "white"
   });
 
   const StyledDescription = styled(Typography)({
@@ -25,23 +24,15 @@ export default function SectionTitle(props: SectionTitleProps) {
     fontStyle: "normal",
     fontWeight: 400,
     fontSize: 14,
-    color: "white"
+    //color: "white"
   });
 
-  const StyledButton = styled(Button)({
-    color: "#6B61F5",
-    fontSize: "10px",
-    textTransform: "capitalize"
-  })
 
   return (
     <div>
       <TitleButtonHolder>
 
         <StyledTitle variant="h1">{title}</StyledTitle>
-
-        {(showSeeMore && seeMoreHandler) &&
-          <StyledButton onClick={seeMoreHandler}>{"VER TODOS"}</StyledButton>}
 
       </TitleButtonHolder>
 

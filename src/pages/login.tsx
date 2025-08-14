@@ -58,13 +58,13 @@ export default function Login() {
   const router = useRouter();
 
   const usernameRef = useRef<HTMLInputElement>();
-
+  console.log('aqui');
 
   useEffect(() => {
     if (securityStore.logged) {
       router.push("/");
     }
-  }, []);
+  });//, []);
   
   useEffect(() => {
     setIsConfirmBtnDisabled(
@@ -91,7 +91,7 @@ export default function Login() {
         if (useSecurityStore.getState().logged) {
           router.push("/");
         } else {
-          setErrorMessage("AJEITAR ISSO!")
+          setErrorMessage("Erro interno")
         }
       })
       .catch((err) => setErrorMessage(err.error_description))

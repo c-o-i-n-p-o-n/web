@@ -1,5 +1,14 @@
 export default interface Bookmaker {
-  id: number;
-  description: string;
-  name: string;
+  id?: number;
+
+  hid: string;
+  description?: string;
+
+  createdAt?: Date;
+
+  logo?: string;
+  photo?: string;
+  score?: number;
+  status?: number;
+  type: string;
 }

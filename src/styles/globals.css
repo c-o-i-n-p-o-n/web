@@ -4,11 +4,13 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  background: radial-gradient(
+  /* background:#06011f; */
+  /* background: linear-gradient(to bottom right, rgba(6,1,31,1) 0%, rgba(55,3,101,1) 100%); */
+  /* background: radial-gradient(
     187.1% 106.34% at 73.12% 48.68%,
     #370365 0%,
     #06011f 52.08%
-  );
+  ); */
   display: flex;
   flex-direction: column;
   height: 100vh;

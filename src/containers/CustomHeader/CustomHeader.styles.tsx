@@ -4,7 +4,8 @@ import { Column } from "../../styles/shared-styles";
 
 export const StyledHeader = styled("header")({
     margin: "0",
-    background: "#370365",
+    //background: "#370365",
+    background: "#056ad7",
     color: "#FFFFFF",
     height: "10vh",
     display: "flex",
@@ -42,7 +43,10 @@ export const AvatarText = styled(Typography)({
 
 export const UserNameColumnText = styled(AvatarText)(({ theme }) => ({
     marginRight: "15px",
-    [theme.breakpoints.down(330)]: {
+    [theme.breakpoints.down(430)]: {
         display: "none"
     },
+    // [theme.breakpoints.down(330)]: {
+    //     display: "none"
+    // },
 }));
