@@ -51,4 +51,5 @@ export enum Endpoints {
   GENERIC = "generic",
   GENERIC_EVENT = "generic/event",
   GENERIC_CURRENCY = "generic/currency",
+  GENERIC_BOOKMAKER = "generic/bookmaker",
 }
