@@ -2,8 +2,8 @@ import Bookmaker from "./Bookmaker";
 import Currency from "./Currency";
 
 export enum VoucherStatus {
-  OPEN = 0,
-  FINISHED = 1,
+  OPEN = 1,
+  FINISHED = 0,
   CANCELED = 2,
 }
 

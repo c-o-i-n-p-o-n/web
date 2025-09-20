@@ -4,6 +4,8 @@ import Capsule from "../models/Capsule";
 import Voucher from "../models/Voucher";
 import VoucherCreation from "../models/VoucherCreation";
 
+import ServerError, {ServerErrorConstructor} from "../models/ServerError";
+
 export class VouchersDataSource {
 
     private http: HttpClient = new HttpClient();
@@ -69,7 +71,7 @@ export class VouchersDataSource {
 
     public async checkVoucherTaken(hash: string): Promise<boolean> {
         console.log(hash)
-        let params:any = {hash: hash};
+        let params:any = {vouchersHash: hash};
         console.log(params);
         const response = await this.http.get(Endpoints.VOUCHERS_TAKEN, params);
         if (response.ok) {
@@ -87,15 +89,81 @@ export class VouchersDataSource {
         }
     }
 
-    public async takeVoucher(hash: string): Promise<boolean> {
+    public async takeVoucher(hash: string): Promise<number> {
         console.log(hash)
         let params:any = {hash: hash};
         console.log(params);
         const response = await this.http.get(Endpoints.VOUCHERS_TAKE, params);
         if (response.ok) {
-            const voucherResponse = await response.json();
-            console.log(voucherResponse);
-            return voucherResponse as boolean;
+
+            const capsule  = await response.json() as Capsule;
+            console.log(capsule);
+            if(capsule.code == "00000"){
+                console.log(capsule.data);
+                const result = Number(capsule.message) as number;//voucherBillingId
+                console.log(result);
+                return result;
+            }else{
+                if(capsule.code == "V0007"){//V0007 Já tem --- //V0003 gratiuto
+                    throw new ServerErrorConstructor("Você já usou este vale",capsule.code);
+                }
+                if(capsule.code == "V0003"){//V0007 Já tem --- //V0003 gratiuto
+                    throw new ServerErrorConstructor("Ester vale é gratuito",capsule.code);
+                }
+                throw new ServerErrorConstructor("Erro desconhecido, tente mais tarde","99999");
+            }
+
+
+            //const voucherResponse = await response.json();
+            //console.log(voucherResponse);
+            //return voucherResponse as boolean;
+
+
+
+
+            //if(!!voucherResponse["_embedded"] && !!voucherResponse["_embedded"]["ack"]){
+            //    console.log(voucherResponse["_embedded"]["ack"]);
+           //     return voucherResponse["_embedded"]["ack"] as boolean;
+            //}else{
+            //    return false;
+            //}
+        } else {
+            throw Error(response.statusText);
+        }
+    }
+
+    public async requestVoucher(hash: string): Promise<number> {
+        console.log(hash)
+        let params:any = {hash: hash};
+        console.log(params);
+        const response = await this.http.get(Endpoints.VOUCHERS_REQUEST, params);
+        if (response.ok) {
+
+            const capsule  = await response.json() as Capsule;
+            console.log(capsule);
+            if(capsule.code == "00000"){
+                console.log(capsule.data);
+                const result = Number(capsule.message) as number;//voucherBillingId
+                console.log(result);
+                return result;
+            }else{
+                if(capsule.code == "V0007"){//V0007 Já tem --- //V0003 gratiuto
+                    throw new ServerErrorConstructor("Você já usou este vale",capsule.code);
+                }
+                if(capsule.code == "V0003"){//V0007 Já tem --- //V0003 gratiuto
+                    throw new ServerErrorConstructor("Ester vale é gratuito",capsule.code);
+                }
+                throw new ServerErrorConstructor("Erro desconhecido, tente mais tarde","99999");
+            }
+
+
+            //const voucherResponse = await response.json();
+            //console.log(voucherResponse);
+            //return voucherResponse as boolean;
+
+
+
+
             //if(!!voucherResponse["_embedded"] && !!voucherResponse["_embedded"]["ack"]){
             //    console.log(voucherResponse["_embedded"]["ack"]);
            //     return voucherResponse["_embedded"]["ack"] as boolean;
@@ -261,12 +329,29 @@ export class VouchersDataSource {
         console.log(voucherObj);
         const response = await this.http.post(Endpoints.VOUCHERS, voucherObj);
         console.log(response);
+
+
         if (response.ok) {
-            const voucherResponse = await response.json();
-            return voucherResponse as Voucher;
+            const capsule  = await response.json() as Capsule;
+            console.log(capsule);
+            if(capsule.code == "00000"){
+                const voucher = capsule.data as Voucher;
+                console.log(voucher);
+                return voucher;
+            }else{
+                throw Error(capsule.message);
+            }
         } else {
-            throw Error(response.statusText);
+            throw Error(response.status + " " + response.statusText);
         }
+
+
+        // if (response.ok) {
+        //     const voucherResponse = await response.json();
+        //     return voucherResponse as Voucher;
+        // } else {
+        //     throw Error(response.statusText);
+        // }
     }
 
 }

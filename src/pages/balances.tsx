@@ -182,9 +182,8 @@ const Balances: NextPage = () => {
           <Container>
 
 
-          <HomePageItem>
-            {/* Saldo em Moeda Corrente */}
-              {/* <CardHeader title="Saldo em Moeda Corrente" /> */}
+          {/*<HomePageItem>
+            
               <Typography variant="h6" gutterBottom>Saldo em Moeda Corrente</Typography>
             <Card>
               <CardContent>
@@ -197,7 +196,7 @@ const Balances: NextPage = () => {
                 <Button variant="outlined">Sacar</Button>
               </CardActions>
             </Card>
-          </HomePageItem>
+          </HomePageItem>*/}
 
             
           {/* <HomePageItem 

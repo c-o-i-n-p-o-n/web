@@ -80,7 +80,7 @@ const Edit = ({owner, url, setUrl, onClickHandler, ...style}: { owner: boolean, 
 }
 
 interface DataProps {
-    entity?: Match | Voucher | RecurrentVoucher | Currency;
+    entity?: any;// Match | Voucher | RecurrentVoucher | Currency | Bookmaker;
     bookmaker?: Bookmaker;
     onEditHandler:Function
 }
@@ -94,7 +94,7 @@ export default function AvatarImage({entity,bookmaker,onEditHandler}: DataProps)
     const [url, setUrl] = useState(entity?.logo);
     const [image, setImage] = useState(entity?.logo);
     
-    const owner = !!entity && !!bookmaker && !!bookmaker.id?entity.bookmakers?.id === bookmaker.id:false;
+    const owner = !!entity && !!bookmaker && !!bookmaker.id?entity.id === bookmaker.id || entity.bookmakers?.id === bookmaker.id:false;
 
     const handleExpandClick = () => {
         setExpanded(!expanded);

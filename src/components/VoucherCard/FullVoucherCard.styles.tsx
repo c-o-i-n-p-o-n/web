@@ -38,6 +38,17 @@ export const StyledTypographyData = styled(Typography)({
     paddingLeft: "20px"
 });
 
+export const TypeButton2 = styled(IconButton)({
+    display: "flex",
+    //color: "white",
+    color: "#060D04",
+    //background: '#234A17',
+    background: '#75F94D',
+    borderRadius: "15px",
+    padding: ".5rem",
+    margin: "5px"
+})
+
 export const StyledButton = styled(IconButton)({
     display: "flex",
     color: "white",
@@ -48,7 +59,7 @@ export const StyledButton = styled(IconButton)({
     ".submit-button-terms": {
         margin: "2vh 0",
     },
-    //background: "#370365",
+    background: '#75F94D',
     borderRadius: "50px",
 
 

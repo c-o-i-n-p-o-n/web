@@ -107,8 +107,14 @@ export class CurrenciesDataSource {
             const capsule = await response.json() as Capsule;
             console.log(capsule);
             if(capsule.code == "00000"){
-                console.log(capsule.data as Currency[]);
-                return capsule.data as Currency[];
+                //console.log(capsule.data as Currency[]);
+                //return capsule.data as Currency[];
+                if(!!capsule.data["_embedded"] && !!capsule.data["_embedded"]["currencies"]){
+                    console.log(capsule.data["_embedded"]["currencies"]);
+                    return capsule.data["_embedded"]["currencies"] as Currency[];
+                }else{
+                    return [];
+                }
             }else{
                 throw Error(capsule.message);
             }
