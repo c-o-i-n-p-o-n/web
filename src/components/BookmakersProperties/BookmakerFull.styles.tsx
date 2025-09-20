@@ -8,9 +8,9 @@ interface ExpandMoreProps extends IconButtonProps {
 const contrastBackgroundColor = "#503071";
 
 export const StyledCard = styled(Card)({
-    //backgroundColor: "#333333",
-    backgroundColor: "white",
-    color: "#333333",
+    backgroundColor: "white",//"#333333",
+    //color: "#333333",
+    //backgroundColor: "white",
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-evenly",
@@ -57,9 +57,8 @@ export const StyledTypographyTitle = styled(Typography)({
     height: "24px",
     paddingTop: "2px",
     fontSize: "15px",
-    //color: "white",
-    
     color: "#333333",
+    
     display: "flex",
     flexDirection: "column",
     ".form-field": {
@@ -82,7 +81,7 @@ export const StyledCardContentHeader = styled(CardContent)({
     //backgroundColor: '#1A1A1A',
     backgroundColor: "#056ad7",
     padding: "0 16px",
-    //cursor: "pointer",
+    cursor: "pointer",
     height: "3.5rem",
     display: "flex",
     alignItems: "center",
@@ -141,8 +140,7 @@ export const DescriptionLine = styled("div")({
 })
 
 export const Description = styled("div")({
-    //color: "white",
-    color: "#333333",
+    color: "white",
     display: "flex",
     alignItems: "center",
     width: "100%",

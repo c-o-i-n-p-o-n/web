@@ -14,7 +14,6 @@ import { useQuery } from "react-query";
 import CenteredComponent from "../components/CenteredComponent";
 //import { BetService } from "../services/BetService";
 import { BookmakerService } from "../services/BookmakerService";
-import { VoucherService } from "../services/VoucherService";
 import { AuthService } from "../services/AuthService";
 import { Column } from "../styles/shared-styles";
 import Bookmakers from "../containers/Bookmakers";
@@ -36,29 +35,33 @@ import VoucherData from "../components/VoucherProperties/VoucherData";
 import TakeVoucherButton from "../components/VoucherProperties/TakeVoucherButton";
 import BookmakersData from "../components/BookmakersProperties/BookmakersData";
 import CancelVoucherButton from "../components/VoucherProperties/CancelVoucherButton";
-import VoucherBillingData from "../components/VoucherProperties/VoucherBillingData";
+import Currency from "../models/Currency";
+import { CurrencyService } from "../services/CurrencyService";
+import CurrencyData from "../components/CurrencyProperties/CurrencyData";
+import Bookmaker from "../models/Bookmaker";
+import BookmakerFullData from "../components/BookmakersProperties/BookmakerFullData";
+import PaymentWaysJoinned from "../components/PaymentWaysProperties/PaymentWaysJoinned";
 
 //const betService = new BetService();
-const bookmakerService = new BookmakerService();
 const authService = new AuthService();
-const voucherService = new VoucherService();
+const bookmakerService = new BookmakerService();
 
-const VoucheCreated: NextPage = () => {
+const BookmakerCreated: NextPage = () => {
 
 
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [voucher, setVoucher] = useState<Voucher | undefined>(undefined);
+  const [bookmakerLocal, setBookmakerLocal] = useState<Bookmaker | undefined>(undefined);
   //const router = useRouter();
-  const router = useRouter();
+  const { push,query } = useRouter();
   const [logged, setLogged] = useState<Boolean>(false);
 
-  const loading = !!!voucher;
-  const voucherId = Number(router.query.voucherId)
+  const loading = !!!bookmakerLocal;
+  const bookmakerLocalId = Number(query.bookmakerId)
 
 
-  console.log(router.query.voucherId);
-  console.log(voucherId);
+  console.log(query.bookmakerId);
+  console.log(bookmakerLocalId);
   //const { isLoading, error, data: user, isSuccess } = useQuery(['getUser'], authService.getUser);
   const { isLoading, error, data: bookmaker, isSuccess } = useQuery(['getBookmaker'], authService.getBookmaker);
 
@@ -67,19 +70,21 @@ const VoucheCreated: NextPage = () => {
   useEffect(() => {
     let active = true;
     console.log(loading);
-    console.log(voucher);
+    console.log(bookmakerLocal);
     console.log(bookmaker);
-    console.log(voucherId);
-    console.log(router.query.voucherId);
-    console.log(Number(router.query.voucherId));
+    console.log(bookmakerLocalId);
+    console.log(query.bookmakerId);
+    console.log(Number(query.bookmakerId));
     if (!loading) {
       return undefined;
     }
-    
-    if(!!voucherId){
-      voucherService.getVoucherById(voucherId).then((res)=>{
+
+    let bId = bookmakerLocalId || bookmaker?.id;
+
+    if(!!bId){
+      bookmakerService.getBookmakerById(bId).then((res)=>{
         console.log(res);
-        setVoucher(res)
+        setBookmakerLocal(res)
       }).catch((erro)=>{
         if(!!setErrorMessage){
           setErrorMessage(erro.message)
@@ -87,52 +92,38 @@ const VoucheCreated: NextPage = () => {
       })
     }
 
-    // const fetchVoucher = async () => {
-    //   setVoucher(await voucherService.getVoucherById(voucherId));
-    //     console.log(voucher);
-    // }
-
-    // fetchVoucher().catch(()=>{
-    //   //push('create-match');
-    //   console.log(voucherId);
-    // });
-
     return () => {
         active = false;
     };
   });//, [loading,voucherId]);
 
-  console.log(voucher);
+  console.log(bookmakerLocal);
 
   useEffect(() => {
     setLogged(authService.isLogged);
   }, [bookmaker]);
 
   const newVoucher = () => {
-    router.push('create-voucher');
+    push('create-voucher');
   }
 
-  const onEditHandler = (voucher: Voucher, changes: any, alertMessage: string) => {
+  const onEditHandler = (currency: Currency, changes: any, alertMessage: string) => {
 
-      console.log(voucher);
+      console.log(currency);
       console.log(changes);
       //const matchService = new MatchService();
-      voucherService.updateVoucher(voucher, changes)
-          .then((_res: Voucher) => {
+      if(!!bookmakerLocal){
+        bookmakerService.updateBookmaker(bookmakerLocal, changes)
+          .then((_res: Bookmaker) => {
             setSuccessMessage(alertMessage)
-            setVoucher(_res)
+            setBookmakerLocal(_res)
           })
           .catch((err: ServerError) => {
             console.log("Erro interno");
             setErrorMessage("Erro interno")
           });
+      }
   };
-
-  
-  //if(!logged && !isLoading && (!isSuccess || !!error)){
-      //router.push('/')
-      //window.location.href = "/"
-  //}
 
   // if(!logged && !isLoading && (!!isSuccess || !!error)){
   //   push('login')
@@ -141,7 +132,7 @@ const VoucheCreated: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>{voucher?.hid}</title>
+        <title>{!!bookmakerLocal?`${"Site"}: ${bookmakerLocal?.hid}`:""}</title>
         <meta name="description" content="Generated by create next app" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -155,7 +146,7 @@ const VoucheCreated: NextPage = () => {
             {/* <MatchPromoImage/> com botões de edição e compartilhamento*/}
             <Column>
               <ItemProperty>
-                <ShareButtons link={window.location.href} bannerLink={voucher?.photo || voucher?.logo}/>
+                <ShareButtons link={window.location.href} bannerLink={bookmakerLocal?.photo || bookmakerLocal?.logo}/>
               </ItemProperty>
             </Column>
           </HomePageItem>
@@ -164,7 +155,7 @@ const VoucheCreated: NextPage = () => {
            
             <Column>
               <ItemProperty>
-                <PromoImage entity={voucher} bookmaker={bookmaker || undefined} onEditHandler={onEditHandler}/>
+                <PromoImage entity={bookmakerLocal} bookmaker={bookmaker || undefined} onEditHandler={onEditHandler}/>
               </ItemProperty>
             </Column>
           </HomePageItem>
@@ -173,46 +164,38 @@ const VoucheCreated: NextPage = () => {
              
             <Column>
               <ItemProperty>
-                <AvatarImage entity={voucher} bookmaker={bookmaker || undefined} onEditHandler={onEditHandler}/>
+                <AvatarImage entity={bookmakerLocal} bookmaker={bookmaker || undefined} onEditHandler={onEditHandler}/>
               </ItemProperty>
             </Column>
           </HomePageItem>
-          <HomePageItem>
-            <ItemProperty>
-              <VoucherRules voucher={voucher} title={"Leia as Regras (Importante!)"}/> {/* descricao (nao editavel) */}
-            </ItemProperty>
-          </HomePageItem>
-          <></>
-          <HomePageItem>
-            <ItemProperty>
-              <VoucherData voucher={voucher} bookmaker={bookmaker || undefined} onEditHandler={onEditHandler} title={"Dados do Vale Cupom"}/> {/* informacoes editaveis do voucer (talvez seja visivel apenas para o owner) */}
-            </ItemProperty>
-          </HomePageItem>
-          <></>
-          {!!bookmaker && voucher.bookmakers?.id === bookmaker.id?
-        
-          <HomePageItem>
-            <ItemProperty>
-              <VoucherBillingData voucher={voucher} bookmaker={bookmaker} title={"Contratos"}/> {/* informacoes editaveis do voucer (talvez seja visivel apenas para o owner) */}
-            </ItemProperty>
-          </HomePageItem>
-
+          {(bookmakerLocal.itIsMe)?            
+            <HomePageItem>
+              <ItemProperty>
+                <PaymentWaysJoinned bookmakerLocal={bookmakerLocal} title={"Meios de recebimento Pix"}/> {/* descricao (nao editavel) */}
+              </ItemProperty>
+            </HomePageItem>
           :
-          
           <></>
-
           }
-          <></>
           <HomePageItem>
+            <ItemProperty>
+              <VoucherRules voucher={bookmakerLocal} title={"Quem somos"}/> {/* descricao (nao editavel) */}
+            </ItemProperty>
+          </HomePageItem>
+          <HomePageItem>
+            <ItemProperty>
+              <BookmakerFullData bookmakerLocal={bookmakerLocal} bookmaker={bookmaker || undefined} title={`Dados do ${"Site"}`} onEditHandler={onEditHandler}/> {/* informacoes editaveis do voucer (talvez seja visivel apenas para o owner) */}
+            </ItemProperty>
+          </HomePageItem>
+          {/* <HomePageItem>
             <TakeVoucherButton voucher={voucher} bookmaker={bookmaker || undefined}/>
-          </HomePageItem>
-          <></>
-          <HomePageItem>
+          </HomePageItem> */}
+          {/* <HomePageItem>
             <BookmakersData bookmaker={bookmaker || undefined}/>
-          </HomePageItem>
-          <HomePageItem>
+          </HomePageItem> */}
+          {/* <HomePageItem>
             <CancelVoucherButton voucher={voucher} bookmaker={bookmaker || undefined}/>
-          </HomePageItem>
+          </HomePageItem> */}
           <Alert type="success" show={!!successMessage} closeAll={()=> setSuccessMessage("")}>
               <p>{successMessage}</p>
           </Alert>
@@ -239,4 +222,4 @@ const VoucheCreated: NextPage = () => {
   );
 };
 
-export default VoucheCreated;
+export default BookmakerCreated;

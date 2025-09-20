@@ -212,7 +212,7 @@ export default function VoucherData({voucher,bookmaker,title,onEditHandler}: Dat
                     </Column>
                     <Column>
                         <StyledTypographyTitle variant="body2">
-                            {"Status: " + ((voucher?.status == 0)?"Ativo":(voucher?.status == 1)?"Cancelado":"Encerrado")}
+                            {"Status: " + ((voucher?.status == 1)?"Ativo":(voucher?.status == 2)?"Cancelado":"Encerrado")}
                         </StyledTypographyTitle> 
                     </Column>
                     <Column>

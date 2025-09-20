@@ -13,9 +13,10 @@ import Voucher from "../../models/Voucher";
 import { Column } from "../../styles/shared-styles";
 import RecurrentVoucher from "../../models/RecurrentVoucher";
 import Currency from "../../models/Currency";
+import Bookmaker from "../../models/Bookmaker";
 
 interface DataProps {
-    voucher?: Voucher | RecurrentVoucher | Currency;
+    voucher?: Voucher | RecurrentVoucher | Currency | Bookmaker;
     title: string;
 }
 

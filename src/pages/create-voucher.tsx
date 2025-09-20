@@ -45,7 +45,7 @@ const StyledForm = styled(Form)({
 
 const StyledButton = styled(Button)({
     display: "flex",
-    color: "white",
+    color: "darkblue",
     flexDirection: "column",
     ".form-field": {
         margin: "1vh 0"
@@ -171,10 +171,11 @@ const CreateVoucherForm = () => {
                 //router.push("voucher-created");
                 router.push({ pathname: "voucher-created", query: { voucherId: _res.id }} );
             })
-            .catch((err: ServerError) => {
+            .catch((err) => {
                 setSubmitting(false);
                 console.log("Erro interno!");
-                setErrorMessage("Erro interno")
+                console.log(err.message);
+                setErrorMessage(err.message)
             });
     };
 

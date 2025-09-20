@@ -6,6 +6,10 @@ export default interface Bookmaker {
 
   createdAt?: Date;
 
+  classification?: string;
+  govNumber?: string;//soh vem sefor o dono
+  itIsMe?: number;
+
   logo?: string;
   photo?: string;
   score?: number;

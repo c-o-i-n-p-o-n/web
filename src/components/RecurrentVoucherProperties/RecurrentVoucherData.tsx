@@ -215,7 +215,7 @@ export default function RecurrentVoucherData({recurrentVoucher,bookmaker,title,o
                     </Column>
                     <Column>
                         <StyledTypographyTitle variant="body2">
-                            {"Status: " + ((recurrentVoucher?.status == 0)?"Ativo":(recurrentVoucher?.status == 1)?"Cancelado":"Encerrado")}
+                            {"Status: " + ((recurrentVoucher?.status == 1)?"Ativo":(recurrentVoucher?.status == 2)?"Cancelado":"Encerrado")}
                         </StyledTypographyTitle> 
                     </Column>
                     <Column>

@@ -14,6 +14,7 @@ export function StyledAvatar({ photoUrl, size, onClick, name }: StyledAvatarProp
       onClick={onClick}
       sx={{ width: size, height: size, cursor: "pointer" }}
       src={photoUrl}
+      
     >{name}</Avatar>
   );
 }

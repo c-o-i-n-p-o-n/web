@@ -26,6 +26,7 @@ import { useQuery } from "react-query";
 import { CurrencyService } from "../../services/CurrencyService";
 import Alert from "../Alert/Alert";
 import ServerError from "../../models/ServerError";
+import { useRouter } from "next/router";
 
 
 
@@ -61,6 +62,8 @@ export default function TakeVoucherButton({voucher,bookmaker}: DataProps) {
     const owner = !!voucher && !!bookmaker && (!!bookmaker.id)?voucher.bookmakers?.id === bookmaker.id:false;
     
     //const [currency, setCurrency] = useState<Currency | undefined>(undefined);
+
+    const { push } = useRouter();
 
     const [loading, setLoading] = useState<boolean>(false);
     const [voucherTaken, setVoucherTaken] = useState<boolean>(false);
@@ -109,13 +112,56 @@ export default function TakeVoucherButton({voucher,bookmaker}: DataProps) {
         setLoading(true);
         if(!!voucher.hash){
             voucherService.takeVoucher(voucher.hash)
-                .then((_res: boolean) => {
-                  setSuccessMessage("Parabéns, os cupons são seus! Confira em na opção 'Meus cupons'")
-                  setLoading(_res);
+                .then((_voucherId: number) => {
+                  //setSuccessMessage("Parabéns, os cupons são seus! Confira na opção 'Meus cupons'")
+                  //setLoading(_res);
+                  setLoading(!!!_voucherId);
+                  push({ pathname: "voucher-created" , query: { voucherId: _voucherId }} );
+                    //push({ pathname: "balances"} );
+                    //push({ pathname: "pay" , query: { voucherBillingId: _voucherBillingId }} );
                 })
                 .catch((err: ServerError) => {
-                  console.log("Erro interno");
-                  setErrorMessage("Erro interno")
+                    setLoading(false);
+                    console.log(err.message);
+                    setErrorMessage(err.message);
+                    // if(err.code == "V0003"){
+                    //     //vai direto tomar o voucher gratuito
+                    //     requestVoucherHandler();
+                    // }else{
+                    //     setLoading(false);
+                    //     console.log(err.message);
+                    //     setErrorMessage(err.message);
+                    // }
+
+                  //console.log("Erro interno");
+                  //setErrorMessage("Erro interno")
+                });
+        }
+    };
+
+    const requestVoucherHandler = () => {
+        setLoading(true);
+        if(!!voucher.hash){
+            voucherService.requestVoucher(voucher.hash)
+                .then((_voucherBillingId: number) => {
+                  //setSuccessMessage("Parabéns, os cupons são seus! Confira na opção 'Meus cupons'")
+                  //setLoading(!!!_voucherBillingId);
+                  
+                  //push({ pathname: "balances"} );
+                  push({ pathname: "pay-voucher" , query: { voucherBillingId: _voucherBillingId }} );
+                })
+                .catch((err: ServerError) => {
+                    if(err.code == "V0003"){
+                        //vai direto tomar o voucher gratuito
+                        takeVoucherHandler();
+                    }else{
+                        setLoading(false);
+                        console.log(err.message);
+                        setErrorMessage(err.message);
+                    }
+
+                  //console.log("Erro interno");
+                  //setErrorMessage("Erro interno")
                 });
         }
     };
@@ -133,8 +179,8 @@ export default function TakeVoucherButton({voucher,bookmaker}: DataProps) {
                             color="primary"
                             variant="outlined"
                             fullWidth
-                            onClick={takeVoucherHandler}
-                            disabled={(voucher?.status != VoucherStatus.OPEN || !!voucherTaken)}
+                            onClick={requestVoucherHandler}
+                            disabled={(voucher?.status != VoucherStatus.OPEN || !!voucherTaken || !!!bookmaker)}
                             loading={loading}
                             sx={{
                                 background: "#339933"}}

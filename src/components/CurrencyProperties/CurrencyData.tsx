@@ -119,7 +119,7 @@ export default function CurrencyData({currency,bookmaker,title}: DataProps) {
     const { isLoading, error, data: mostRequested } = useQuery(['getGenericByCurrencyIdPageAndSize',page,listSize,currency], 
     () => {return genericService.getGenericByCurrencyPageAndSize(page,listSize,currency)});
 
-    const [recurrentVouchers, setRecurrentVouchers] = useState<RecurrentVoucher[] | undefined>(undefined);
+    //const [recurrentVouchers, setRecurrentVouchers] = useState<RecurrentVoucher[] | undefined>(undefined);
     const [errorMessage, setErrorMessage] = useState("");
     const [nonDistributed, setNonDistributed] = useState<number | undefined>(undefined);
     
@@ -266,7 +266,7 @@ export default function CurrencyData({currency,bookmaker,title}: DataProps) {
                     <Column>
                         <Description>
                             <StyledTypographyTitle variant="body2">
-                                {"Token: " + currency?.acronym}
+                                {"Cupom: " + currency?.acronym}
                             </StyledTypographyTitle> 
                         </Description> 
                     </Column>
