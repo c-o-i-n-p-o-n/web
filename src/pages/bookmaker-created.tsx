@@ -40,6 +40,7 @@ import { CurrencyService } from "../services/CurrencyService";
 import CurrencyData from "../components/CurrencyProperties/CurrencyData";
 import Bookmaker from "../models/Bookmaker";
 import BookmakerFullData from "../components/BookmakersProperties/BookmakerFullData";
+import PaymentWaysJoinned from "../components/PaymentWaysProperties/PaymentWaysJoinned";
 
 //const betService = new BetService();
 const authService = new AuthService();
@@ -78,8 +79,10 @@ const BookmakerCreated: NextPage = () => {
       return undefined;
     }
 
-    if(!!bookmakerLocalId){
-      bookmakerService.getBookmakerById(bookmakerLocalId).then((res)=>{
+    let bId = bookmakerLocalId || bookmaker?.id;
+
+    if(!!bId){
+      bookmakerService.getBookmakerById(bId).then((res)=>{
         console.log(res);
         setBookmakerLocal(res)
       }).catch((erro)=>{
@@ -165,6 +168,15 @@ const BookmakerCreated: NextPage = () => {
               </ItemProperty>
             </Column>
           </HomePageItem>
+          {(bookmakerLocal.itIsMe)?            
+            <HomePageItem>
+              <ItemProperty>
+                <PaymentWaysJoinned bookmakerLocal={bookmakerLocal} title={"Meios de recebimento Pix"}/> {/* descricao (nao editavel) */}
+              </ItemProperty>
+            </HomePageItem>
+          :
+          <></>
+          }
           <HomePageItem>
             <ItemProperty>
               <VoucherRules voucher={bookmakerLocal} title={"Quem somos"}/> {/* descricao (nao editavel) */}

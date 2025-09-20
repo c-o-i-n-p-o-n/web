@@ -78,6 +78,10 @@ export default function CustomHeader({children, ...style}: { children?: React.Re
     router.push('balances');
   };
 
+  const handleProfile = () => {
+    router.push('bookmaker-created');
+  };
+
   const handleClose = () => {
     setAnchorEl(null);
 
@@ -173,6 +177,7 @@ export default function CustomHeader({children, ...style}: { children?: React.Re
                   open={Boolean(anchorEl)}
                   onClose={handleClose}
                 >
+                  <MenuItem onClick={handleProfile}>Perfil</MenuItem>
                   <MenuItem onClick={handleBalances}>Saldos</MenuItem>
                   <MenuItem onClick={handleClose}>Sair</MenuItem>
                 </Menu>

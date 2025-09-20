@@ -23,9 +23,14 @@ export class VoucherService {
         return await this.vouchersDataSource.checkVoucherTaken(hash);
     }
 
-    public async takeVoucher(hash: string): Promise<boolean> {
+    public async takeVoucher(hash: string): Promise<number> {
         console.log(hash)
         return await this.vouchersDataSource.takeVoucher(hash);
+    }
+
+    public async requestVoucher(hash: string): Promise<number> {
+        console.log(hash)
+        return await this.vouchersDataSource.requestVoucher(hash);
     }
 
     public async getVoucherById(id?: number): Promise<Voucher | undefined> {

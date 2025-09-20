@@ -44,6 +44,7 @@ export class AuthDataSource {
         console.log(response);
         if (response.ok) {
             const bookmakerResponse = await response.json();
+            bookmakerResponse["createdAt"] = bookmakerResponse["createdAt"]?new Date(bookmakerResponse["createdAt"]):null;    
             return bookmakerResponse as Bookmaker;
         } else {
             throw Error("Usuário não encontrado.");

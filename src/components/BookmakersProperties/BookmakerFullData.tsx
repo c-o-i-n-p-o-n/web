@@ -94,8 +94,7 @@ const Edit = ({owner, data, setData, onSubmit, ...style}: { owner: boolean, data
 
     if(!!owner){
         return (
-            <DescriptionLine>
-                <Column>
+                
 
 
 
@@ -167,13 +166,13 @@ const Edit = ({owner, data, setData, onSubmit, ...style}: { owner: boolean, data
                               className="form-field"
                               variant="outlined"
                               error={formik.touched.photo && Boolean(formik.errors.photo)}
-                              helperText={formik.touched.photo && formik.errors.photo}/>  */}
+                              helperText={formik.touched.photo && formik.errors.photo}/>  
 
 
 
                        
                         
-                        <InputLabel id="demo-cost-select-label">CPF/CNPJ</InputLabel>
+                        <InputLabel id="demo-cost-select-label">CPF/CNPJ</InputLabel>*/}
 
                         <Field as={TextField}
                             id="govNumber"
@@ -198,7 +197,7 @@ const Edit = ({owner, data, setData, onSubmit, ...style}: { owner: boolean, data
                                 >
                                     {/* CONFIRMAR E PROSSEGUIR */}
                                     
-                            <SaveIcon style={{backgroundColor: "#6B61F5", borderRadius: "20px", fontSize: "35px", padding: "5px", color: "white"}}></SaveIcon>
+                            Salvar
                                 </CustomButton>
                                 
                         {/* <StyledButton onClick={onClickHandler}>
@@ -224,9 +223,7 @@ const Edit = ({owner, data, setData, onSubmit, ...style}: { owner: boolean, data
 
 
                     
-                </Column>
 
-            </DescriptionLine>
         );
     }else{
         return (<></>);

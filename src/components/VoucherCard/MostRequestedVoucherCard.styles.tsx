@@ -69,6 +69,12 @@ export const HeaderButton = styled("div")({
     width: "100%",
 })
 
+export const TypeButton2 = styled("a")({
+    color: "white",
+    padding: ".5rem",
+    margin: "5px"
+})
+
 export const TypeButton = styled("a")({
     //color: "white",
     color: "#060D04",

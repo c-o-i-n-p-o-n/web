@@ -75,7 +75,7 @@ export default function PromoImage({entity,bookmaker,onEditHandler}: DataProps) 
     const [expanded, setExpanded] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [url, setUrl] = useState(entity?.photo);
-    const [image, setImage] = useState(entity?.photo);
+    const [image, setImage] = useState(entity?.logo);
     const owner = !!entity && !!bookmaker && !!bookmaker.id?entity.id === bookmaker.id || entity.bookmakers?.id === bookmaker.id:false;
     console.log(entity);
     console.log(entity?.bookmakers);
@@ -175,7 +175,7 @@ export default function PromoImage({entity,bookmaker,onEditHandler}: DataProps) 
                 
                 
                 <BrandWrapper sx={{ flexGrow: 1 }}>
-                    <ImagePromo url={entity?.photo} size = {200}/>
+                    <ImagePromo url={entity?.logo} size = {200}/>
                 </BrandWrapper>
             }
             

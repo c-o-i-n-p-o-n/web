@@ -36,6 +36,7 @@ import VoucherData from "../components/VoucherProperties/VoucherData";
 import TakeVoucherButton from "../components/VoucherProperties/TakeVoucherButton";
 import BookmakersData from "../components/BookmakersProperties/BookmakersData";
 import CancelVoucherButton from "../components/VoucherProperties/CancelVoucherButton";
+import VoucherBillingData from "../components/VoucherProperties/VoucherBillingData";
 
 //const betService = new BetService();
 const bookmakerService = new BookmakerService();
@@ -49,14 +50,14 @@ const VoucheCreated: NextPage = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [voucher, setVoucher] = useState<Voucher | undefined>(undefined);
   //const router = useRouter();
-  const { push,query } = useRouter();
+  const router = useRouter();
   const [logged, setLogged] = useState<Boolean>(false);
 
   const loading = !!!voucher;
-  const voucherId = Number(query.voucherId)
+  const voucherId = Number(router.query.voucherId)
 
 
-  console.log(query.voucherId);
+  console.log(router.query.voucherId);
   console.log(voucherId);
   //const { isLoading, error, data: user, isSuccess } = useQuery(['getUser'], authService.getUser);
   const { isLoading, error, data: bookmaker, isSuccess } = useQuery(['getBookmaker'], authService.getBookmaker);
@@ -69,8 +70,8 @@ const VoucheCreated: NextPage = () => {
     console.log(voucher);
     console.log(bookmaker);
     console.log(voucherId);
-    console.log(query.voucherId);
-    console.log(Number(query.voucherId));
+    console.log(router.query.voucherId);
+    console.log(Number(router.query.voucherId));
     if (!loading) {
       return undefined;
     }
@@ -108,7 +109,7 @@ const VoucheCreated: NextPage = () => {
   }, [bookmaker]);
 
   const newVoucher = () => {
-    push('create-voucher');
+    router.push('create-voucher');
   }
 
   const onEditHandler = (voucher: Voucher, changes: any, alertMessage: string) => {
@@ -126,6 +127,12 @@ const VoucheCreated: NextPage = () => {
             setErrorMessage("Erro interno")
           });
   };
+
+  
+  //if(!logged && !isLoading && (!isSuccess || !!error)){
+      //router.push('/')
+      //window.location.href = "/"
+  //}
 
   // if(!logged && !isLoading && (!!isSuccess || !!error)){
   //   push('login')
@@ -181,6 +188,20 @@ const VoucheCreated: NextPage = () => {
               <VoucherData voucher={voucher} bookmaker={bookmaker || undefined} onEditHandler={onEditHandler} title={"Dados do Vale Cupom"}/> {/* informacoes editaveis do voucer (talvez seja visivel apenas para o owner) */}
             </ItemProperty>
           </HomePageItem>
+          <></>
+          {!!bookmaker && voucher.bookmakers?.id === bookmaker.id?
+        
+          <HomePageItem>
+            <ItemProperty>
+              <VoucherBillingData voucher={voucher} bookmaker={bookmaker} title={"Contratos"}/> {/* informacoes editaveis do voucer (talvez seja visivel apenas para o owner) */}
+            </ItemProperty>
+          </HomePageItem>
+
+          :
+          
+          <></>
+
+          }
           <></>
           <HomePageItem>
             <TakeVoucherButton voucher={voucher} bookmaker={bookmaker || undefined}/>

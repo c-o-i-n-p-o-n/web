@@ -9,6 +9,7 @@ export default interface Transference {
   receiver?: Bookmaker;	
   currencies: Currency;	
   expiredAt: Date;
+  createdAt: Date;
   status: string;
   hash: string;
   type: number;
