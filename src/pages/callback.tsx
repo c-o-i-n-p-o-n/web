@@ -44,13 +44,15 @@ const Callback = () => {
         const handleAuth = async () => {
             const params = new URLSearchParams(window.location.search);
             const code = params.get('code');
-            const verifier = sessionStorage.getItem('pkce_code_verifier')!;
+            //const verifier = sessionStorage.getItem('pkce_code_verifier')!;
+            const verifier = localStorage.getItem('pkce_code_verifier')!;
             console.log(verifier);
             console.log(code);
             console.log(params.toString());
             //alert(verifier);
             if (!!code && !!verifier) {
-                
+                // remover verifier do localStorage depois do uso
+                localStorage.removeItem("pkce_code_verifier");
                 authService
                     .exchangeCodeForToken(code, verifier)
                     .then((json) => {

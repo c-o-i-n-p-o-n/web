@@ -102,8 +102,10 @@ export default function CustomHeader({children, ...style}: { children?: React.Re
       console.log(codeChallenge);
       console.log(codeChallenge);
       //if(!!!verifier || !!!challenge){
-      sessionStorage.setItem('pkce_code_challenge', codeChallenge);
-      sessionStorage.setItem('pkce_code_verifier', codeVerifier);
+      //sessionStorage.setItem('pkce_code_challenge', codeChallenge);
+      localStorage.setItem('pkce_code_challenge', codeChallenge);
+      //sessionStorage.setItem('pkce_code_verifier', codeVerifier);
+      localStorage.setItem('pkce_code_verifier', codeVerifier);
       const loginUrl = authService.buildLoginUrl(codeChallenge);
       //alert(codeVerifier);
       setLoginUrl(loginUrl);
