@@ -45,6 +45,14 @@ export class AuthDataSource {
         if (response.ok) {
             const bookmakerResponse = await response.json();
             bookmakerResponse["createdAt"] = bookmakerResponse["createdAt"]?new Date(bookmakerResponse["createdAt"]):null;    
+            
+            bookmakerResponse["address"] = bookmakerResponse["addressAux"]?bookmakerResponse["addressAux"]:bookmakerResponse["address"];    
+            bookmakerResponse["addressNumber"] = bookmakerResponse["addressNumberAux"]?bookmakerResponse["addressNumberAux"]:bookmakerResponse["addressNumber"];    
+            bookmakerResponse["govNumber"] = bookmakerResponse["govNumberAux"]?bookmakerResponse["govNumberAux"]:bookmakerResponse["govNumber"];    
+            bookmakerResponse["neighborhood"] = bookmakerResponse["neighborhoodAux"]?bookmakerResponse["neighborhoodAux"]:bookmakerResponse["neighborhood"];    
+            bookmakerResponse["zipCode"] = bookmakerResponse["zipCodeAux"]?bookmakerResponse["zipCodeAux"]:bookmakerResponse["zipCode"];    
+        
+            console.log(bookmakerResponse);
             return bookmakerResponse as Bookmaker;
         } else {
             throw Error("Usuário não encontrado.");
