@@ -108,7 +108,10 @@ export class VouchersDataSource {
                     throw new ServerErrorConstructor("Você já usou este vale",capsule.code);
                 }
                 if(capsule.code == "V0003"){//V0007 Já tem --- //V0003 gratiuto
-                    throw new ServerErrorConstructor("Ester vale é gratuito",capsule.code);
+                    throw new ServerErrorConstructor("Este vale é gratuito",capsule.code);
+                }
+                if(capsule.code.startsWith("V")){
+                    throw new ServerErrorConstructor(capsule.message,capsule.code);
                 }
                 throw new ServerErrorConstructor("Erro desconhecido, tente mais tarde","99999");
             }

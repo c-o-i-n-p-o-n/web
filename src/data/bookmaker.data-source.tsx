@@ -20,7 +20,14 @@ export class BookmakerDataSource {
             description: bookmaker.description,
             logo: bookmaker.logo,
             photo: bookmaker.photo,
-            classification: bookmaker.classification
+            classification: bookmaker.classification,
+            //govNumber: bookmaker.govNumber,
+            state: bookmaker.state,
+            city: bookmaker.city,
+            address: bookmaker.address,
+            addressNumber: bookmaker.addressNumber,
+            neighborhood: bookmaker.neighborhood,
+            zipCode: bookmaker.zipCode
         };
         console.log(bookmaker);
         console.log(bookmakerObj);
@@ -32,6 +39,16 @@ export class BookmakerDataSource {
             if(capsule.code == "00000"){
                 console.log(capsule.data as Bookmaker);
                 capsule.data["createdAt"] = capsule.data["createdAt"]?new Date(capsule.data["createdAt"]):null;            
+
+                
+                capsule.data["address"] = capsule.data["addressAux"]?capsule.data["addressAux"]:capsule.data["address"];    
+                capsule.data["addressNumber"] = capsule.data["addressNumberAux"]?capsule.data["addressNumberAux"]:capsule.data["addressNumber"];    
+                capsule.data["govNumber"] = capsule.data["govNumberAux"]?capsule.data["govNumberAux"]:capsule.data["govNumber"];    
+                capsule.data["neighborhood"] = capsule.data["neighborhoodAux"]?capsule.data["neighborhoodAux"]:capsule.data["neighborhood"];    
+                capsule.data["zipCode"] = capsule.data["zipCodeAux"]?capsule.data["zipCodeAux"]:capsule.data["zipCode"];    
+        
+
+
                 return capsule.data as Bookmaker;
             }else{
                 throw Error(capsule.message);

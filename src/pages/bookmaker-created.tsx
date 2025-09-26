@@ -41,6 +41,7 @@ import CurrencyData from "../components/CurrencyProperties/CurrencyData";
 import Bookmaker from "../models/Bookmaker";
 import BookmakerFullData from "../components/BookmakersProperties/BookmakerFullData";
 import PaymentWaysJoinned from "../components/PaymentWaysProperties/PaymentWaysJoinned";
+import BookmakersDetails from "../components/BookmakersProperties/BookmakersDetails";
 
 //const betService = new BetService();
 const authService = new AuthService();
@@ -107,9 +108,8 @@ const BookmakerCreated: NextPage = () => {
     push('create-voucher');
   }
 
-  const onEditHandler = (currency: Currency, changes: any, alertMessage: string) => {
+  const onEditHandler = (changes: any, alertMessage: string) => {
 
-      console.log(currency);
       console.log(changes);
       //const matchService = new MatchService();
       if(!!bookmakerLocal){
@@ -119,8 +119,8 @@ const BookmakerCreated: NextPage = () => {
             setBookmakerLocal(_res)
           })
           .catch((err: ServerError) => {
-            console.log("Erro interno");
-            setErrorMessage("Erro interno")
+            console.log(err.message);
+            setErrorMessage(err.message)
           });
       }
   };
@@ -179,12 +179,12 @@ const BookmakerCreated: NextPage = () => {
           }
           <HomePageItem>
             <ItemProperty>
-              <VoucherRules voucher={bookmakerLocal} title={"Quem somos"}/> {/* descricao (nao editavel) */}
+              <BookmakersDetails bookmakerLocal={bookmakerLocal} title={"Quem somos"} bookmaker={bookmaker || undefined} onEditHandler={onEditHandler}/> {/* descricao (nao editavel) */}
             </ItemProperty>
           </HomePageItem>
           <HomePageItem>
             <ItemProperty>
-              <BookmakerFullData bookmakerLocal={bookmakerLocal} bookmaker={bookmaker || undefined} title={`Dados do ${"Site"}`} onEditHandler={onEditHandler}/> {/* informacoes editaveis do voucer (talvez seja visivel apenas para o owner) */}
+              <BookmakerFullData bookmakerLocal={bookmakerLocal} bookmaker={bookmaker || undefined} title={`Cupons do ${"Site"}`} /> {/* informacoes editaveis do voucer (talvez seja visivel apenas para o owner) */}
             </ItemProperty>
           </HomePageItem>
           {/* <HomePageItem>

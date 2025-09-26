@@ -8,6 +8,13 @@ export default interface Bookmaker {
 
   classification?: string;
   govNumber?: string;//soh vem sefor o dono
+  state?: string;
+  country?: string;
+  city?: string;
+  address?: string;//soh vem sefor o dono
+  addressNumber?: string;//soh vem sefor o dono
+  neighborhood?: string;//soh vem sefor o dono
+  zipCode?: string;//soh vem sefor o dono
   itIsMe?: number;
 
   logo?: string;
